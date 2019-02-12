@@ -4,13 +4,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import cdb.app.Company;
+import cdb.app.Computer;
 
 public class DataBaseConnexion {
 	
 	String url = "jdbc:mysql://localhost:3306/computer-database-db";
 	String username = "admincdb";
 	String password = "qwerty1234";
-	List<Company> list = new ArrayList<>();
+	List<Company> listComp = new ArrayList<>();
+	List<Company> litCpt = new ArrayList<>();
 	
 	
 	
@@ -21,13 +23,21 @@ public class DataBaseConnexion {
 			System.out.println("Databased connected !");
 			Statement myState = connection.createStatement();
 			ResultSet myResult = myState.executeQuery("SELECT * FROM company");
+			ResultSet myResult2 = myState.executeQuery("SELECT * FROM computer");
+			
 			
 			while(myResult.next()){
 				Company com = new Company();
 				com.setId(myResult.getLong("id"));
 				com.setName(myResult.getString("name"));
-				list.add(com);
-				//System.out.println(com.getId()+" "+com.getName());				
+				listComp.add(com);							
+			}
+			
+			while(myResult2.next()) {
+				Computer comp = new Computer();
+				comp.setId(myResult.getLong("id"));
+				comp.setName(myResult.getString("name"));
+				System.out.println(comp.getId()+" "+comp.getName());
 			}
 			
 		}catch(SQLException e){
@@ -36,10 +46,10 @@ public class DataBaseConnexion {
 	}
 	
 	public List<Company> getList(){
-		return this.list;
+		return this.listComp;
 	}
 	
 	public void setList(List<Company> pList){
-		this.list = pList;
+		this.listComp = pList;
 	}
 }
