@@ -1,7 +1,6 @@
 package cdb.persistance;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +19,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	public static final String SELECT_QUERY = "SELECT * FROM computer";
 	public static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	public static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?";
-	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM company WHERE id = ?";
+	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
+	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, discontinued = ? WHERE id = ?";
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
@@ -96,7 +96,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			ResultSet resultSet= statement.getGeneratedKeys();
 			if(resultSet.next()) {
 				int insertId = resultSet.getInt(1);
-				//Object.setId(insertId);
+				object.setId(insertId);
 				return object;
 			}
 			
@@ -114,7 +114,25 @@ public class ComputerDAO implements IDAO<Computer>{
 
 	@Override
 	public Computer update(Computer object) {
-		throw new CustomException();
+		Connection connection;
+	
+		try {
+			connection = DAO.getConnection();
+			
+			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
+			statement.setString(1, object.getName());
+			statement.setInt(2, object.getCompId());
+			statement.setObject(3, object.getOut());
+			statement.setInt(4, object.getId());			
+			statement.executeUpdate();
+			
+			return object;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	@Override
@@ -131,8 +149,9 @@ public class ComputerDAO implements IDAO<Computer>{
 				
 				PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
 				statement.setInt(1, id);
+				statement.executeUpdate();
 				
-				return(statement.executeUpdate() != 0);
+				return(true);
 				
 		}catch(SQLException e) {
 			e.printStackTrace();
