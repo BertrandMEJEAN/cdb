@@ -10,9 +10,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import cdb.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cdb.model.Computer;
 
+/**
+ * classe faisant le liens entre les opération sur les computers et l'application.
+ * @author Bertrand Méjean.
+ */
 public class ComputerDAO implements IDAO<Computer>{
 	
 	public static final String SELECT_BY_ID = "SELECT * FROM computer WHERE id = ?";
@@ -29,6 +35,15 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String COMPANY_ID = "company_id";
 	private static final String COUNT = "count";
 	
+	Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	
+	/**
+	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
+	 * @author Bertrand Méjean.
+	 * @param resultSet Demande un objet de type ResultSet.
+	 * @exception Peut levé une exception de type SQLException.
+	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
+	 */
 	private Computer createResult(ResultSet resultSet)throws SQLException{
 		int id = resultSet.getInt(ID);
 		String name = resultSet.getString(NAME);
@@ -39,6 +54,14 @@ public class ComputerDAO implements IDAO<Computer>{
 		return new Computer(id,name,dateIn,dateOut,companyId);
 	}
 	
+	/**
+	 * Permet de récupérer un computer dans la base de donnée via son id.
+	 * @see cdb.persistance.IDAO#getId(int).
+	 * @author Bertrand Méjean.
+	 * @exception SQLException Renvois une exception custom prévenant l'utilisateur que l'id renseigné n'est pas présent en base.
+	 * @param objectId Demande l'id du computer de type int.
+	 * @return result Retourne un objet de type Computer disposant des données relatives à l'id passé en paramètre.
+	 */
 	@Override
 	public Computer getId(int objectId){
 		Computer result = null;
@@ -54,11 +77,16 @@ public class ComputerDAO implements IDAO<Computer>{
 				result = createResult(resultSet);				
 			}
 		}catch(SQLException e){
-			e.printStackTrace();			
+			logger.info("Cet ordinateur n'est pas disponible en base");
 		}		
 		return result;
 	}
 	
+	/**
+	 * Permet de construire une liste contenant tout les computers de la base de donnée.
+	 * @author Bertrand Méjean.
+	 * @return result Retourne une liste d'objet de type Computer contenant tout les computeurs de la base de donnée.
+	 */
 	@Override
 	public Collection<Computer> getAll(){
 		List<Computer> result = new ArrayList<>();
@@ -73,16 +101,22 @@ public class ComputerDAO implements IDAO<Computer>{
 				result.add(createResult(resultSet));
 			}
 		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		
+			logger.info("problème lors de la récupération de la liste des ordinateur en base de donnée");
+		}		
 		return result;
 	}
 	
+	/**
+	 *Récupère une key auto-incrementée de la base de donnée, puis construit une requete avec les element renseignés par l'utilisateur pour en ensuite insérer un nouveau computer.
+	 *@author Bertrand Méjean.
+	 *@exception Génère une exception custom pour prévenir l'utilisateur que le computer n'a pas été rajouter en base de donnée.
+	 *@param object Demande un objet de type Computer.
+	 *@return object 
+	 *@param null Si l'objet passé en param est null ou echec de la requète SQL.
+	 */
 	@Override
 	public Computer add(Computer object) {
-		Connection connection;
-		
+		Connection connection;		
 		try {
 			connection = DAO.getConnection();
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -97,11 +131,12 @@ public class ComputerDAO implements IDAO<Computer>{
 			if(resultSet.next()) {
 				int insertId = resultSet.getInt(1);
 				object.setId(insertId);
+				System.out.println("L'ordinateur est ajouté");
 				return object;
 			}
 			
 		}catch(SQLException e){
-			e.printStackTrace();
+			logger.info("Problème lors de la creation du nouvel ordinateur en base de donnée");
 		}
 		
 		return null;
@@ -112,6 +147,14 @@ public class ComputerDAO implements IDAO<Computer>{
 		throw new CustomException();
 	}
 
+	/**
+	 * Permet de modifier les détails d'un computer et de les appliquer en base de donnée.
+	 * @author Bertrand Méjean
+	 * @exception Génère une exception prévenant l'utilisateur que ses mise à jours ne sont pas appliquées.
+	 * @param object Demande un objet de type Computer.
+	 * @return object
+	 * @return null Si l'objet passé en paramètre est null ou echec de la requète SQL.
+	 */
 	@Override
 	public Computer update(Computer object) {
 		Connection connection;
@@ -129,17 +172,31 @@ public class ComputerDAO implements IDAO<Computer>{
 			return object;
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.info("Problème lors de la mise à jour des détails de l'ordinateur");
 		}
 		
 		return null;
 	}
 
+	/**
+	 * Permet de supprimer un computer en lui passant un objet de type Computer.
+	 * @see cdb.persistance.ComputerDAO#deleteByID(int id).
+	 * @author Bertrand Méjean.
+	 * @param object Demande un objet de type Computer.
+	 */
 	@Override
 	public boolean delete(Computer object) {
 		return deleteById(object.getId());
 	}
 	
+	/**
+	 * Permet de supprimer un computer dans la base de donnée selon la saisie de l'utilisateur.
+	 * @author Bertrand Méjean.
+	 * @exception Génère une exception custom pour prévenir l'utilisateur que la supression du computer ne s'est pas éxécuter correctement.
+	 * @param id Demande un id de type int.
+	 * @return true Si le computer est correctement supprimé.
+	 * @return false Si aucun computer n'est retrouvé en base ou echec de la requète.
+	 */
 	@Override
 	public boolean deleteById(int id) {
 		Connection connection;
@@ -150,15 +207,23 @@ public class ComputerDAO implements IDAO<Computer>{
 				PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
 				statement.setInt(1, id);
 				statement.executeUpdate();
+				System.out.println("L'ordinateur est bien supprimé");
 				
 				return(true);
 				
 		}catch(SQLException e) {
-			e.printStackTrace();
+			logger.info("Problème lors de la supression de l'ordinateur en base de données");
 		}
 		return false;
 	}
 	
+	/**
+	 * Permet de vérifier si un computer est présent dans la base de donnée via son id.
+	 * @author Bertrand Méjean.
+	 * @exception Génère une exception custom pour prévenir l'utilisateur que ce computer n'est pas présent en base.
+	 * @param id Demande un id de computer de type int.
+	 * @return count Retourne le nombre de computer trouvé corresopndant à l'id renseigné par l'utilisateur.
+	 */
 	@Override
 	public boolean existentById(int id) {
 		int count= 0;
@@ -173,6 +238,9 @@ public class ComputerDAO implements IDAO<Computer>{
 			
 			while(resultSet.next()) {
 				count = resultSet.getInt(COUNT);
+			}
+			if(count == 0) {
+				logger.info("Cet ordinateur n'est pas référencé");
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

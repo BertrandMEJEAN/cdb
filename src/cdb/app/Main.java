@@ -3,6 +3,8 @@ package cdb.app;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cdb.persistance.*;
 
@@ -12,9 +14,10 @@ public class Main {
 
 		
 		boolean loop = true;
-		
+
 		Scanner sc = new Scanner(System.in);
 		ComputorOperator compOp = new ComputorOperator();
+		Logger logger = LoggerFactory.getLogger(Main.class);
 		String str;
 		
 		do{	
@@ -42,7 +45,7 @@ public class Main {
 						if(cmp.existentById(Integer.parseInt(str)) == true) {
 							System.out.println(cmp.getId(Integer.parseInt(str)).toString());
 						}else {
-							System.out.println("Cet ordinateur n'est pas référencé");
+							logger.info("L'ordinateur n'est pas présent en base\n");
 						}
 						break;
 					case "4": 
@@ -59,7 +62,7 @@ public class Main {
 						}else if(str.equals("delete")) {
 							compOp.deleteComputer();
 						}else {
-							System.out.println("Choix non reconnu");
+							logger.info("Operateur non reconnue");
 						}
 						break;
 					case "5": 
@@ -67,7 +70,7 @@ public class Main {
 							loop = false;
 						break;
 					default :
-						System.out.println("Selectionnez entre 1 & 5");					
+						logger.info("Item non reconnu (1 à 5)");
 						break;
 				}
 			

@@ -2,6 +2,10 @@ package cdb.model;
 
 import java.sql.*;
 
+/**
+ * Classe computer
+ * @author Bertrand Méjean
+ */
 public class Computer {
 	
 	private int id;
@@ -10,10 +14,21 @@ public class Computer {
 	private Timestamp out;
 	private int compId;
 	
+	/*
+	 * Constructeur par default de la classe Computer.
+	 */
 	public Computer(){
 		
 	}
 	
+	/**
+	 * Constructeur de la classe Computer.
+	 * @param pId Id du computer.
+	 * @param pName Nom du computer.
+	 * @param pIn Date de mise en circulation.
+	 * @param pOut Date de retour.
+	 * @param pComId Id de l'entreprise liée à ce computer.
+	 */
 	public Computer(int pId, String pName, Timestamp pIn, Timestamp pOut, int pComId) {
 		this.id=pId;
 		this.name=pName;

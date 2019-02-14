@@ -2,6 +2,10 @@ package cdb.persistance;
 
 import java.util.Collection;
 
+/**
+ * @author Bertrand Méjean
+ * @param <T> Correspond au type d'objet à manipuler.
+ */
 public interface IDAO<T> {
 	
 	public T getId(int i);
