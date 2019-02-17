@@ -1,4 +1,4 @@
-package cdb.persistance;
+package fr.excilys.cdb.persistance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,11 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;*/
 
-
-import cdb.model.Company;
+import fr.excilys.cdb.model.Company;
 
 /**
  * classe faisant le liens entre les opération sur les companys et l'application.
@@ -27,7 +26,7 @@ public class CompanyDAO implements IDAO<Company>{
 	private static final String NAME = "name";
 	private static final String COUNT = "count";
 	
-	Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+	//Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	/**
 	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
@@ -62,7 +61,7 @@ public class CompanyDAO implements IDAO<Company>{
 			}
 			
 		}catch(SQLException e) {
-			logger.info("Problème lors de la récupération de la liste des entreprises en base de donnée");
+			//logger.info("Problème lors de la récupération de la liste des entreprises en base de donnée");
 		}
 		
 		return result;
@@ -121,10 +120,10 @@ public class CompanyDAO implements IDAO<Company>{
 				count = resultSet.getInt(COUNT);
 			}			
 			if(count == 0) {
-				logger.info("Cette compagnie n'est pas référencée");
+				//logger.info("Cette compagnie n'est pas référencée");
 			}
 		}catch(SQLException e) {
-			logger.info("Problème lors de l'intérogation de la base de donnée");
+			//logger.info("Problème lors de l'intérogation de la base de donnée");
 		}
 		return count != 0;
 	}	

@@ -1,4 +1,4 @@
-package cdb.exception;
+package fr.excilys.cdb.exception;
 
 /**
  * Class créant une exception custom.

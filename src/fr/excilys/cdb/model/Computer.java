@@ -1,4 +1,4 @@
-package cdb.model;
+package fr.excilys.cdb.model;
 
 import java.sql.*;
 
@@ -80,6 +80,51 @@ public class Computer {
 
 	public void setCompId(int compId) {
 		this.compId = compId;
+	}
+	
+	public static class ComputerBuilder{
+		private int id;
+		private String name;
+		private Timestamp in;
+		private Timestamp out;
+		private int compId;
+		
+		public Computer build() {
+			Computer computer = new Computer();
+			
+			computer.setId(this.id);
+			computer.setName(this.name);
+			computer.setIn(this.in);
+			computer.setOut(this.out);
+			computer.setCompId(this.compId);
+			
+			return computer;
+		}
+		
+		public ComputerBuilder setId(int id) {
+			this.id = id;
+			return this;
+		}
+		
+		public ComputerBuilder setName(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public ComputerBuilder setIn(Timestamp in) {
+			this.in = in;
+			return this;
+		}
+		
+		public ComputerBuilder setOut(Timestamp out) {
+			this.out = out;
+			return this;
+		}
+		
+		public ComputerBuilder setCompId(int compId) {
+			this.compId = compId;
+			return this;
+		}
 	}
 
 }

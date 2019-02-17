@@ -1,4 +1,4 @@
-package cdb.model;
+package fr.excilys.cdb.model;
 
 public class Company {
 

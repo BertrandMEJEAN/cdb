@@ -1,4 +1,4 @@
-package cdb.persistance;
+package fr.excilys.cdb.persistance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +8,14 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import cdb.exception.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import cdb.model.Computer;
+import fr.excilys.cdb.exception.*;
+import fr.excilys.cdb.model.Computer;
+
+/*import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;*/
 
 /**
  * classe faisant le liens entre les opération sur les computers et l'application.
@@ -35,7 +37,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String COMPANY_ID = "company_id";
 	private static final String COUNT = "count";
 	
-	Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	//Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	/**
 	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
@@ -77,7 +79,7 @@ public class ComputerDAO implements IDAO<Computer>{
 				result = createResult(resultSet);				
 			}
 		}catch(SQLException e){
-			logger.info("Cet ordinateur n'est pas disponible en base");
+			//logger.info("Cet ordinateur n'est pas disponible en base");
 		}		
 		return result;
 	}
@@ -101,7 +103,7 @@ public class ComputerDAO implements IDAO<Computer>{
 				result.add(createResult(resultSet));
 			}
 		}catch(SQLException e){
-			logger.info("problème lors de la récupération de la liste des ordinateur en base de donnée");
+			//logger.info("problème lors de la récupération de la liste des ordinateur en base de donnée");
 		}		
 		return result;
 	}
@@ -136,7 +138,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			}
 			
 		}catch(SQLException e){
-			logger.info("Problème lors de la creation du nouvel ordinateur en base de donnée");
+			//logger.info("Problème lors de la creation du nouvel ordinateur en base de donnée");
 		}
 		
 		return null;
@@ -172,7 +174,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			return object;
 			
 		}catch(Exception e){
-			logger.info("Problème lors de la mise à jour des détails de l'ordinateur");
+			//logger.info("Problème lors de la mise à jour des détails de l'ordinateur");
 		}
 		
 		return null;
@@ -212,7 +214,7 @@ public class ComputerDAO implements IDAO<Computer>{
 				return(true);
 				
 		}catch(SQLException e) {
-			logger.info("Problème lors de la supression de l'ordinateur en base de données");
+			//logger.info("Problème lors de la supression de l'ordinateur en base de données");
 		}
 		return false;
 	}
@@ -240,7 +242,7 @@ public class ComputerDAO implements IDAO<Computer>{
 				count = resultSet.getInt(COUNT);
 			}
 			if(count == 0) {
-				logger.info("Cet ordinateur n'est pas référencé");
+				//logger.info("Cet ordinateur n'est pas référencé");
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

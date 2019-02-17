@@ -1,4 +1,4 @@
-package cdb.persistance;
+package fr.excilys.cdb.persistance;
 
 import java.util.Collection;
 

@@ -1,18 +1,17 @@
-package cdb.app;
+package fr.excilys.cdb.app;
 
-import java.sql.SQLException;
+/*import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.Scanner;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;*/
 
-import cdb.persistance.*;
+import fr.excilys.cdb.view.View;
 
 public class Main {
 
-	public static void main(String[] args) throws SQLException, ParseException{
+	/*public static void main(String[] args){
 
-		
+		View.run();
 		boolean loop = true;
 
 		Scanner sc = new Scanner(System.in);
@@ -75,7 +74,7 @@ public class Main {
 				}
 			
 		}while(loop);
-		sc.close();
+		sc.close();*/
 	}
 
-}
+//}
