@@ -177,7 +177,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			return object;
 			
 		}catch(Exception e){
-			//logger.info("Problème lors de la mise à jour des détails de l'ordinateur");
+			//logger.info("Problème lors de la mise à jour des détails de l'ordinateur");AE
 		}
 		
 		return null;
