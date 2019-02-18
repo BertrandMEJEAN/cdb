@@ -1,4 +1,4 @@
-package cdb.persistance;
+package com.excilys.cdb.persistance;
 
 import java.sql.*;
 

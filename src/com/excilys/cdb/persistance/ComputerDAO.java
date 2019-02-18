@@ -1,4 +1,4 @@
-package cdb.persistance;
+package com.excilys.cdb.persistance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,11 +9,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import cdb.exception.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cdb.model.Computer;
+import com.excilys.cdb.exception.*;
+import com.excilys.cdb.model.Computer;
 
 /**
  * classe faisant le liens entre les opération sur les computers et l'application.

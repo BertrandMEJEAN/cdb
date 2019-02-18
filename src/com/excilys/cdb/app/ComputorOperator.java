@@ -1,4 +1,4 @@
-package cdb.app;
+package com.excilys.cdb.app;
 
 import java.util.Date;
 import java.sql.Timestamp;
@@ -8,9 +8,9 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cdb.model.Company;
-import cdb.model.Computer;
-import cdb.persistance.*;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistance.*;
 
 /**
  * classe ComputorOperator, les opérations utilisateur et les transmet au package DAO. 

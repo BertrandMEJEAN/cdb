@@ -1,4 +1,4 @@
-package cdb.app;
+package com.excilys.cdb.app;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cdb.persistance.*;
+import com.excilys.cdb.persistance.*;
 
 public class Main {
 

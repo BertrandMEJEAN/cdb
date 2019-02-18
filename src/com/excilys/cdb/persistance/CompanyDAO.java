@@ -1,4 +1,4 @@
-package cdb.persistance;
+package com.excilys.cdb.persistance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,8 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import cdb.model.Company;
+import com.excilys.cdb.model.Company;
 
 /**
  * classe faisant le liens entre les opération sur les companys et l'application.
