@@ -220,6 +220,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			//logger.info("Problème lors de la supression de l'ordinateur en base de données");
 		}
 		return false;
+		
 	}
 	
 	/**
