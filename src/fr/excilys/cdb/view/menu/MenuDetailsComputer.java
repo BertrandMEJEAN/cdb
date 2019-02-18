@@ -1,5 +1,7 @@
 package fr.excilys.cdb.view.menu;
 
+
+import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.service.ComputerService;
 
@@ -24,7 +26,7 @@ public class MenuDetailsComputer extends Menu {
 		
 		try {
 			computerDetails = ComputerService.getInstance().getDetailsByComputerId(computerId);			
-		}catch(EntityNotFound e) {
+		}catch(CustomException e) {
 			
 		}
 		
