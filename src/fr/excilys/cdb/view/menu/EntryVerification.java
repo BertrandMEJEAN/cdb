@@ -1,10 +1,13 @@
 package fr.excilys.cdb.view.menu;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import fr.excilys.cdb.service.CompanyService;
+import fr.excilys.cdb.view.View;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class EntryVerification {
 
@@ -37,24 +40,36 @@ public class EntryVerification {
 			name = EntryVerification.readString();
 			
 			if(name == "") {
-				//Logger.error("the company name should not null");
+				View.logger.error("the company name should not null");
 			}
 		}while(name == "");
 		return name;
 	}
 	
-	public static Timestamp readDate(boolean nullable) {
+	public static LocalDate readDate(boolean nullable) {
 		String dateString = null;
-		Timestamp date = null;
+		//SimpleDateFormat sdf = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss");
+		LocalDate date = null;
 		
 		do {
 			
+			dateString = EntryVerification.readString();
+			System.out.println(dateString);
+			
 			if(nullable && dateString.equals("")) {
-				date = null;
+				Optional.of(dateString);
 			}else if(!EntryVerification.isValidDate(dateString)){
-				//logger.error("The date format is not valid");
+				View.logger.error("The date format is not valid");
 			}else {
-				date = Timestamp.valueOf(dateString);
+				try {
+					System.out.println(dateString);
+					//date = sdf.parse(dateString);
+					//date = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss").parse(dateString);
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+					date = LocalDate.parse(dateString, formatter);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}while(!(EntryVerification.isValidDate(dateString) || (nullable && dateString != null)));
 		
@@ -62,12 +77,15 @@ public class EntryVerification {
 	}	
 	
 	private static boolean isValidDate(String date) {
-		try {
-			Timestamp.valueOf(date);
-		}catch(IllegalArgumentException e) {
-			return false;
-		}
 		
+		if(!date.equals("")) {
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+				LocalDate vDate = LocalDate.parse(date, formatter);
+			}catch(IllegalArgumentException e) {
+				return false;
+			}
+		}		
 		return true;
 	}
 	
@@ -79,7 +97,7 @@ public class EntryVerification {
 			companyId = EntryVerification.readInteger("The company id should be an integer");
 			
 			if(!CompanyService.getInstance().existentById(companyId)){
-				//logger.error("The company does not exist\n");
+				View.logger.error("The company does not exist\n");
 			}
 		}while(!CompanyService.getInstance().existentById(companyId));
 		

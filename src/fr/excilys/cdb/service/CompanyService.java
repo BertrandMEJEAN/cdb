@@ -53,7 +53,7 @@ public class CompanyService implements IService<Company> {
 
 	@Override
 	public boolean existentById(int id) {
-		return this.companyDAO.deleteById(id);
+		return this.companyDAO.existentById(id);
 	}
 
 	public CompanyDAO getCompanyDAO() {

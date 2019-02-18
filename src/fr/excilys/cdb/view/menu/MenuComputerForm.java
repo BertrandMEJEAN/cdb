@@ -1,31 +1,31 @@
 package fr.excilys.cdb.view.menu;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.model.Computer.ComputerBuilder;
+import fr.excilys.cdb.view.View;
 
 public abstract class MenuComputerForm extends Menu {
 
 	protected Computer form(){
 		String name = EntryVerification.readComputerName();
 		
-		System.out.println("What's the computer introduction date (YYYY-mm-dd HH:mm:ss) or null ?");
-		Timestamp in = EntryVerification.readDate(true);
+		System.out.println("What's the computer introduction date (dd-MM-yyyy) or null ?");
+		LocalDate in = EntryVerification.readDate(true);
 		
-		Timestamp out = null;
+		LocalDate out = null;
 		if(in != null) {
-			System.out.println("What's the computer discontinued date (YYYY-mm-dd HH:mm:ss) or null ?");
+			System.out.println("What's the computer discontinued date (dd-MM-yyyy) or null ?");
 			boolean validOutDate = false;
 			
 			do {
 				
 				out = EntryVerification.readDate(true);
-				validOutDate = (out != null) ? in.before(out) : true;
+				validOutDate = (out != null) ? in.isBefore(out) : true;
 				
 				if(!validOutDate) {
-					//getLogger().error("The discontinued date should be after the introduction date or null\n");
+					View.logger.error("The discontinued date should be after the introduction date or null\n");
 				}
 			}while(!validOutDate);
 		}

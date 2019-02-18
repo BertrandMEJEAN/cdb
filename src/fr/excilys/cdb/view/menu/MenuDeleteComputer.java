@@ -1,6 +1,7 @@
 package fr.excilys.cdb.view.menu;
 
 import fr.excilys.cdb.service.ComputerService;
+import fr.excilys.cdb.view.View;
 
 public class MenuDeleteComputer extends Menu {
 	
@@ -20,9 +21,9 @@ public class MenuDeleteComputer extends Menu {
 		int computerId = EntryVerification.readInteger("The computer id should be an integer");
 		
 		if(ComputerService.getInstance().deleteById(computerId)) {
-			//getLogger().info("Successsfully deleted computer %d", computerId);
+			View.logger.info("Successsfully deleted computer %d", computerId);
 		}else {
-			//getLogger().error("An error happened while trying to delete computer %d",computerId);
+			View.logger.error("An error happened while trying to delete computer %d",computerId);
 		}
 	}
 

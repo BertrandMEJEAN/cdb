@@ -1,6 +1,6 @@
 package fr.excilys.cdb.model;
 
-import java.sql.*;
+import java.time.LocalDate;
 
 /**
  * Classe computer
@@ -10,8 +10,8 @@ public class Computer {
 	
 	private int id;
 	private String name;
-	private Timestamp in;
-	private Timestamp out;
+	private LocalDate in;
+	private LocalDate out;
 	private int compId;
 	
 	/*
@@ -25,16 +25,16 @@ public class Computer {
 	 * Constructeur de la classe Computer.
 	 * @param pId Id du computer.
 	 * @param pName Nom du computer.
-	 * @param pIn Date de mise en circulation.
-	 * @param pOut Date de retour.
+	 * @param dateIn Date de mise en circulation.
+	 * @param dateOut Date de retour.
 	 * @param pComId Id de l'entreprise liée à ce computer.
 	 */
-	public Computer(int pId, String pName, Timestamp pIn, Timestamp pOut, int pComId) {
-		this.id=pId;
-		this.name=pName;
-		this.in=pIn;
-		this.out=pOut;
-		this.compId=pComId;
+	public Computer(int pId, String pName, LocalDate dateIn, LocalDate dateOut, int pComId) {
+		this.id = pId;
+		this.name = pName;
+		this.in = dateIn;
+		this.out = dateOut;
+		this.compId = pComId;
 	}
 
 	public int getId() {
@@ -53,19 +53,19 @@ public class Computer {
 		this.name = name;
 	}
 
-	public Timestamp getIn() {
+	public LocalDate getIn() {
 		return in;
 	}
 
-	public void setIn(Timestamp in) {
+	public void setIn(LocalDate in) {
 		this.in = in;
 	}
 
-	public Timestamp getOut() {
+	public LocalDate getOut() {
 		return out;
 	}
 
-	public void setOut(Timestamp out) {
+	public void setOut(LocalDate out) {
 		this.out = out;
 	}
 
@@ -85,8 +85,8 @@ public class Computer {
 	public static class ComputerBuilder{
 		private int id;
 		private String name;
-		private Timestamp in;
-		private Timestamp out;
+		private LocalDate in;
+		private LocalDate out;
 		private int compId;
 		
 		public Computer build() {
@@ -111,12 +111,12 @@ public class Computer {
 			return this;
 		}
 		
-		public ComputerBuilder setIn(Timestamp in) {
+		public ComputerBuilder setIn(LocalDate in) {
 			this.in = in;
 			return this;
 		}
 		
-		public ComputerBuilder setOut(Timestamp out) {
+		public ComputerBuilder setOut(LocalDate out) {
 			this.out = out;
 			return this;
 		}

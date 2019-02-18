@@ -16,6 +16,7 @@ public class MenuUpdateComputer extends MenuComputerForm {
 	
 	public void show() {
 		
+		System.out.println("What's the computer id ?");
 		int computerId = Integer.valueOf(EntryVerification.readString());
 		Computer computer = form();
 		computer.setId(computerId);

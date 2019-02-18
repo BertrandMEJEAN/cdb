@@ -1,8 +1,17 @@
 package fr.excilys.cdb.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.excilys.cdb.view.menu.*;
 
 public class View {
+	
+	public static Logger logger;
+	
+	static {
+		View.logger = LoggerFactory.getLogger(View.class);
+		}
 	
 	private View() {
 		
@@ -28,9 +37,9 @@ public class View {
 		System.out.printf("%d - Show computer details\n", MenuChoice.COMPUTER_DETAILS.getId());
 		System.out.printf("%d - Add a computer\n", MenuChoice.ADD_COMPUTER.getId());
 		System.out.printf("%d - Update Computer\n", MenuChoice.UPDATE_COMPUTER.getId());
-		System.out.printf("%d - Delete Computer\n", MenuChoice.ALL_COMPUTER.getId());
+		System.out.printf("%d - Delete Computer\n", MenuChoice.DELETE_COMPUTER.getId());
 		System.out.printf("%d - Exit\n", MenuChoice.QUIT.getId());
-		System.out.printf("======");
+		System.out.printf("======\n");
 		
 	}
 
@@ -45,7 +54,7 @@ public class View {
 			choice = MenuChoice.getById(choiceInt);
 			
 			if(choice == null) {
-				//logger.error("Invalid choice");
+				logger.error("Invalid choice");
 			}
 		}while(choice == null);
 		

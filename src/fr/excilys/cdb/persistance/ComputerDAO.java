@@ -6,10 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import fr.excilys.cdb.exception.*;
 import fr.excilys.cdb.model.Computer;
@@ -23,12 +26,12 @@ import org.slf4j.LoggerFactory;*/
  */
 public class ComputerDAO implements IDAO<Computer>{
 	
-	public static final String SELECT_BY_ID = "SELECT * FROM computer WHERE id = ?";
-	public static final String SELECT_QUERY = "SELECT * FROM computer";
+	public static final String SELECT_BY_ID = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id = ?";
+	public static final String SELECT_QUERY = "SELECT id,name,introduced,discontinued,company_id FROM computer";
 	public static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	public static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?";
 	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
-	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, discontinued = ? WHERE id = ?";
+	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, introduced = ?, discontinued = ? WHERE id = ?";
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
@@ -49,8 +52,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	private Computer createResult(ResultSet resultSet)throws SQLException{
 		int id = resultSet.getInt(ID);
 		String name = resultSet.getString(NAME);
-		Timestamp dateIn = (Timestamp)resultSet.getObject(IN);
-		Timestamp dateOut = (Timestamp)resultSet.getObject(OUT);
+		LocalDate dateIn = (LocalDate) resultSet.getObject(IN);
+		LocalDate dateOut = (LocalDate) resultSet.getObject(OUT);
 		int companyId = resultSet.getInt(COMPANY_ID);
 		
 		return new Computer(id,name,dateIn,dateOut,companyId);
@@ -79,7 +82,7 @@ public class ComputerDAO implements IDAO<Computer>{
 				result = createResult(resultSet);				
 			}
 		}catch(SQLException e){
-			//logger.info("Cet ordinateur n'est pas disponible en base");
+			//logger.info("The computer does not exist");
 		}		
 		return result;
 	}
@@ -123,8 +126,8 @@ public class ComputerDAO implements IDAO<Computer>{
 			connection = DAO.getConnection();
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, object.getName());
-			statement.setObject(2, object.getIn());
-			statement.setObject(3, object.getOut());
+			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
+			statement.setObject(3, convertLocalDateToTimestamp(object.getOut()));
 			statement.setInt(4, object.getCompId());
 			
 			statement.executeUpdate();
@@ -133,7 +136,6 @@ public class ComputerDAO implements IDAO<Computer>{
 			if(resultSet.next()) {
 				int insertId = resultSet.getInt(1);
 				object.setId(insertId);
-				System.out.println("L'ordinateur est ajouté");
 				return object;
 			}
 			
@@ -167,8 +169,9 @@ public class ComputerDAO implements IDAO<Computer>{
 			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
 			statement.setString(1, object.getName());
 			statement.setInt(2, object.getCompId());
-			statement.setObject(3, object.getOut());
-			statement.setInt(4, object.getId());			
+			statement.setObject(3, convertLocalDateToTimestamp(object.getIn()));
+			statement.setObject(4, convertLocalDateToTimestamp(object.getOut()));
+			statement.setInt(5, object.getId());			
 			statement.executeUpdate();
 			
 			return object;
@@ -248,5 +251,15 @@ public class ComputerDAO implements IDAO<Computer>{
 			e.printStackTrace();
 		}
 		return count != 0;
+	}
+	
+	private Timestamp convertLocalDateToTimestamp(LocalDate date) {
+		Timestamp ts = null;
+		
+		if(date != null) {
+			ts= Timestamp.valueOf(date.atStartOfDay());
+			System.out.println(ts);
+		}
+		return ts;
 	}
 }
