@@ -1,6 +1,7 @@
 package fr.excilys.cdb.service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
@@ -26,48 +27,40 @@ public class ComputerService implements IService<Computer> {
 		this.setCompanyDAO(new CompanyDAO());
 	}
 
-	@Override
-	public Computer getId(int id) {
+	public Optional<Computer> getId(int id) {
 		return this.computerDAO.getId(id);
 	}
 	
 	public ComputerDetails getDetailsByComputerId(int id) {
-		Computer computer = this.computerDAO.getId(id);
+		Optional<Computer> computer = this.computerDAO.getId(id);
 		if(computer == null) {
 			//throw new EntityNotFoundException();
 		}
+		Optional<Company> company = this.companyDao.getId(computer.get().getCompId());
 		
-		Company company = this.companyDao.getId(computer.getCompId());
-		
-		return new ComputerDetails(computer, company);
+		return new ComputerDetails(computer.get(), company.get());
 	}
 
-	@Override
 	public Collection<Computer> getAll() {
 		return this.computerDAO.getAll();
 	}
 
-	@Override
-	public Computer add(Computer object) {
+	public Optional<Computer> add(Computer object) {
 		return this.computerDAO.add(object);
 	}
 
-	@Override
-	public Computer update(Computer object) {
+	public Optional<Computer> update(Computer object) {
 		return this.computerDAO.update(object);
 	}
 
-	@Override
 	public boolean delete(Computer object) {
 		return this.computerDAO.delete(object);
 	}
 
-	@Override
 	public boolean deleteById(int id) {
 		return this.computerDAO.deleteById(id);
 	}
 
-	@Override
 	public boolean existentById(int id) {
 		return this.computerDAO.existentById(id);
 	}

@@ -1,6 +1,8 @@
 package fr.excilys.cdb.view.menu;
 
 
+import java.util.Optional;
+
 import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.service.ComputerService;
@@ -22,15 +24,15 @@ public class MenuDetailsComputer extends Menu {
 		System.out.println("Enter id of a computer :");
 		int computerId = EntryVerification.readInteger("The choice should be an integer");
 		
-		ComputerDetails computerDetails = null;
+		Optional<ComputerDetails> computerDetails = Optional.empty();
 		
 		try {
-			computerDetails = ComputerService.getInstance().getDetailsByComputerId(computerId);			
+			computerDetails = Optional.of(ComputerService.getInstance().getDetailsByComputerId(computerId));			
 		}catch(CustomException e) {
 			
 		}
 		
-		if(computerDetails != null) {
+		if(computerDetails.isPresent()) {
 			System.out.println(computerDetails);
 		}		
 	}

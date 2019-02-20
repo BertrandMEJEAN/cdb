@@ -1,6 +1,7 @@
 package fr.excilys.cdb.service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.persistance.CompanyDAO;
@@ -21,37 +22,30 @@ public class CompanyService implements IService<Company> {
 		return INSTANCE;
 	}
 
-	@Override
-	public Company getId(int id) {
+	public Optional<Company> getId(int id) {
 		return this.companyDAO.getId(id);
 	}
 
-	@Override
 	public Collection<Company> getAll() {
 		return this.companyDAO.getAll();
 	}
 
-	@Override
-	public Company add(Company object) {
+	public Optional<Company> add(Company object) {
 		return this.companyDAO.add(object);
 	}
 
-	@Override
-	public Company update(Company object) {
+	public Optional<Company> update(Company object) {
 		return this.companyDAO.update(object);
 	}
 
-	@Override
 	public boolean delete(Company object) {
 		return this.companyDAO.delete(object);
 	}
 
-	@Override
 	public boolean deleteById(int id) {
 		return this.companyDAO.deleteById(id);
 	}
 
-	@Override
 	public boolean existentById(int id) {
 		return this.companyDAO.existentById(id);
 	}

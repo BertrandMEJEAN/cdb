@@ -1,6 +1,6 @@
 package fr.excilys.cdb.view.menu;
 
-import java.text.ParseException;
+import java.util.Optional;
 
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.service.ComputerService;
@@ -20,10 +20,11 @@ public class MenuAddComputer extends MenuComputerForm {
 	public void show(){
 		Computer computer = form();
 		
-		Computer createdComputer = ComputerService.getInstance().add(computer);
 		
-		if(createdComputer != null) {
-			View.logger.info("Computer successfully added "+ createdComputer+"\n");
+		Optional<Computer> createdComputer = ComputerService.getInstance().add(computer);
+		
+		if(createdComputer.isPresent()) {
+			View.logger.info("Computer successfully added "+ createdComputer.get() +"\n");
 		}else {
 			View.logger.error("Error creating "+ computer +"\n");
 		}

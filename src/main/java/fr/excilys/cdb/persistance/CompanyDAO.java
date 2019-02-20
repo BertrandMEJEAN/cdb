@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.List;
 /*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;*/
+import java.util.Optional;
 
 import fr.excilys.cdb.model.Company;
+import fr.excilys.cdb.model.Computer;
 
 /**
  * classe faisant le liens entre les opération sur les companys et l'application.
@@ -21,6 +23,7 @@ public class CompanyDAO implements IDAO<Company>{
 
 	public static final String SELECT_QUERY = "SELECT * FROM company";
 	public static final String EXISTENT_BY_ID = "SELECT count(id) AS count FROM company WHERE id = ?";
+	public static final String SELECT_BY_ID = "SELECT id,name FROM company WHERE id = ?";
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
@@ -47,9 +50,8 @@ public class CompanyDAO implements IDAO<Company>{
 	 * @exception Génère une exception pour prévenir l'utilisateur d'un problème lors de la récupération des company dans la base donnée.
 	 * @return result Retourne une liste contenant toute les companys présentent dans la base de donnée.
 	 */
-	@Override
 	public Collection<Company> getAll(){
-		List<Company> result = new ArrayList<>();
+		List<Company> result = new ArrayList<Company>();
 		
 		try {
 			Connection connection = DAO.getConnection();
@@ -67,33 +69,41 @@ public class CompanyDAO implements IDAO<Company>{
 		return result;
 	}
 	
-	@Override
-	public Company getId(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Company> getId(int objectId) {
+	Optional<Company> result = Optional.empty();
+		
+		try {
+			Connection connection = DAO.getConnection();
+			
+			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+			statement.setInt(1, objectId);
+			ResultSet resultSet = statement.executeQuery();
+			
+			while(resultSet.next()) {
+				result= Optional.of(createResult(resultSet));				
+			}
+		}catch(SQLException e){
+			//logger.info("The computer does not exist");
+		}		
+		return result;
 	}
 	
-	@Override
-	public Company add(Company object) {
+	public Optional<Company> add(Company object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
 	public Collection<Company> addAll(Collection<Company> objects) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public Company update(Company object) {
+	public Optional<Company> update(Company object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
 	public boolean delete(Company object) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	@Override
 	public boolean deleteById(int id) {
 		// TODO Auto-generated method stub
 		return false;
@@ -104,7 +114,6 @@ public class CompanyDAO implements IDAO<Company>{
 	 * @param id Demande un id de type int.
 	 * @return count indique le nombre d'id présent dans la base donnée
 	 */
-	@Override
 	public boolean existentById(int id) {
 		int count= 0;
 		

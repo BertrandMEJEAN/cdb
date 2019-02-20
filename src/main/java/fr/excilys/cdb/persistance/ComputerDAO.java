@@ -6,11 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,10 +48,14 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
 	 */
 	private Computer createResult(ResultSet resultSet)throws SQLException{
+		
+		
 		int id = resultSet.getInt(ID);
 		String name = resultSet.getString(NAME);
-		LocalDate dateIn = (LocalDate) resultSet.getObject(IN);
-		LocalDate dateOut = (LocalDate) resultSet.getObject(OUT);
+		Timestamp timesTamp = resultSet.getTimestamp(IN);
+		LocalDate dateIn = convertTimestampToLocalDate(timesTamp);
+		timesTamp = resultSet.getTimestamp(OUT);
+		LocalDate dateOut = convertTimestampToLocalDate(timesTamp);
 		int companyId = resultSet.getInt(COMPANY_ID);
 		
 		return new Computer(id,name,dateIn,dateOut,companyId);
@@ -67,9 +69,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @param objectId Demande l'id du computer de type int.
 	 * @return result Retourne un objet de type Computer disposant des données relatives à l'id passé en paramètre.
 	 */
-	@Override
-	public Computer getId(int objectId){
-		Computer result = null;
+	public Optional<Computer> getId(int objectId){
+		Optional<Computer> result = Optional.empty();
 		
 		try {
 			Connection connection = DAO.getConnection();
@@ -79,7 +80,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			ResultSet resultSet = statement.executeQuery();
 			
 			while(resultSet.next()) {
-				result = createResult(resultSet);				
+				result= Optional.of(createResult(resultSet));				
 			}
 		}catch(SQLException e){
 			//logger.info("The computer does not exist");
@@ -92,9 +93,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @author Bertrand Méjean.
 	 * @return result Retourne une liste d'objet de type Computer contenant tout les computeurs de la base de donnée.
 	 */
-	@Override
 	public Collection<Computer> getAll(){
-		List<Computer> result = new ArrayList<>();
+		List<Computer> result = new ArrayList<Computer>();
 		
 		try {
 			
@@ -119,9 +119,10 @@ public class ComputerDAO implements IDAO<Computer>{
 	 *@return object 
 	 *@param null Si l'objet passé en param est null ou echec de la requète SQL.
 	 */
-	@Override
-	public Computer add(Computer object) {
-		Connection connection;		
+	public Optional<Computer> add(Computer object) {
+		Connection connection;
+		Optional<Computer> optional = Optional.empty();
+		
 		try {
 			connection = DAO.getConnection();
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -136,17 +137,16 @@ public class ComputerDAO implements IDAO<Computer>{
 			if(resultSet.next()) {
 				int insertId = resultSet.getInt(1);
 				object.setId(insertId);
-				return object;
+				optional = Optional.of(object);
 			}
 			
 		}catch(SQLException e){
 			//logger.info("Problème lors de la creation du nouvel ordinateur en base de donnée");
 		}
 		
-		return null;
+		return optional;
 	}
 	
-	@Override
 	public Collection<Computer> addAll(Collection<Computer> objects) {
 		throw new CustomException();
 	}
@@ -159,9 +159,9 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @return object
 	 * @return null Si l'objet passé en paramètre est null ou echec de la requète SQL.
 	 */
-	@Override
-	public Computer update(Computer object) {
+	public Optional<Computer> update(Computer object) {
 		Connection connection;
+		Optional<Computer> opt = Optional.empty();
 	
 		try {
 			connection = DAO.getConnection();
@@ -174,13 +174,13 @@ public class ComputerDAO implements IDAO<Computer>{
 			statement.setInt(5, object.getId());			
 			statement.executeUpdate();
 			
-			return object;
+			return opt = Optional.of(object);
 			
 		}catch(Exception e){
 			//logger.info("Problème lors de la mise à jour des détails de l'ordinateur");AE
 		}
 		
-		return null;
+		return opt;
 	}
 
 	/**
@@ -189,7 +189,6 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @author Bertrand Méjean.
 	 * @param object Demande un objet de type Computer.
 	 */
-	@Override
 	public boolean delete(Computer object) {
 		return deleteById(object.getId());
 	}
@@ -202,7 +201,6 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @return true Si le computer est correctement supprimé.
 	 * @return false Si aucun computer n'est retrouvé en base ou echec de la requète.
 	 */
-	@Override
 	public boolean deleteById(int id) {
 		Connection connection;
 		
@@ -230,7 +228,6 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @param id Demande un id de computer de type int.
 	 * @return count Retourne le nombre de computer trouvé corresopndant à l'id renseigné par l'utilisateur.
 	 */
-	@Override
 	public boolean existentById(int id) {
 		int count= 0;
 	
@@ -255,12 +252,20 @@ public class ComputerDAO implements IDAO<Computer>{
 	}
 	
 	private Timestamp convertLocalDateToTimestamp(LocalDate date) {
-		Timestamp ts = null;
+		Optional<Timestamp> ts = Optional.empty();
 		
 		if(date != null) {
-			ts= Timestamp.valueOf(date.atStartOfDay());
-			System.out.println(ts);
+			ts= Optional.of(Timestamp.valueOf(date.atStartOfDay()));
 		}
-		return ts;
+		return (ts.isPresent() ? ts.get() : null);
+	}
+	
+	private LocalDate convertTimestampToLocalDate(Timestamp date) {
+		Optional<LocalDate> lDate = Optional.empty();
+		
+		if(date != null) {
+			lDate= Optional.of(date.toLocalDateTime().toLocalDate());
+		}
+		return (lDate.isPresent() ? lDate.get() : null);
 	}
 }

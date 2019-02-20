@@ -1,5 +1,7 @@
 package fr.excilys.cdb.view.menu;
 
+import java.util.Optional;
+
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.service.ComputerService;
 
@@ -21,9 +23,9 @@ public class MenuUpdateComputer extends MenuComputerForm {
 		Computer computer = form();
 		computer.setId(computerId);
 		
-		Computer createdComputer = ComputerService.getInstance().update(computer);
+		Optional<Computer> createdComputer = ComputerService.getInstance().update(computer);
 		
-		if(createdComputer != null) {
+		if(createdComputer.isPresent()) {
 			System.out.println("Successfully updated "+ createdComputer);
 		}else {
 			System.out.println("Error update "+ createdComputer);
