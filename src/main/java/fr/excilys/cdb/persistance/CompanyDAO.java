@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;*/
 import java.util.Optional;
 
 import fr.excilys.cdb.model.Company;
-import fr.excilys.cdb.model.Computer;
 
 /**
  * classe faisant le liens entre les opération sur les companys et l'application.
