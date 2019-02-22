@@ -6,9 +6,9 @@ public class DAO{
 	
 	private static Connection connection;
 	
-	private static final String DB_CONF = "jdbc:mysql://localhost:3306/computer-database-db";
-	private static final String DB_USER = "admincdb";
-	private static final String DB_PASS = "qwerty1234";
+	private static String DB_CONF = "jdbc:mysql://localhost:3306/computer-database-db";
+	private static String DB_USER = "admincdb";
+	private static String DB_PASS = "qwerty1234";
 	
 	/**
 	 * Singleton pour Instancier ou récupérer l'objet de connection à la base de donnée.
@@ -22,4 +22,27 @@ public class DAO{
 		return connection;
 	}
 
+	public static String getDB_CONF() {
+		return DB_CONF;
+	}
+
+	public static void setDB_CONF(String dB_CONF) {
+		DB_CONF = dB_CONF;
+	}
+
+	public static String getDB_USER() {
+		return DB_USER;
+	}
+
+	public static void setDB_USER(String dB_USER) {
+		DB_USER = dB_USER;
+	}
+
+	public static String getDB_PASS() {
+		return DB_PASS;
+	}
+
+	public static void setDB_PASS(String dB_PASS) {
+		DB_PASS = dB_PASS;
+	}
 }

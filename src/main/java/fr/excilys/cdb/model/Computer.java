@@ -77,6 +77,50 @@ public class Computer {
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", in=" + in + ", out=" + out + ", compId=" + compId + "]";
 	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + compId;
+		result = prime * result + id;
+		result = prime * result + ((in == null) ? 0 : in.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((out == null) ? 0 : out.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Computer other = (Computer) obj;
+		if (compId != other.compId)
+			return false;
+		if (id != other.id)
+			return false;
+		if (in == null) {
+			if (other.in != null)
+				return false;
+		} else if (!in.equals(other.in))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (out == null) {
+			if (other.out != null)
+				return false;
+		} else if (!out.equals(other.out))
+			return false;
+		return true;
+	}
 
 	public void setCompId(int compId) {
 		this.compId = compId;
