@@ -1,4 +1,4 @@
-package fr.excilys.cdb;
+package fr.excilys.cdb.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
