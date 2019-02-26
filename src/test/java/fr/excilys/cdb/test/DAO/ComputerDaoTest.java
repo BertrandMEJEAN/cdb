@@ -14,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.excilys.cdb.model.Computer;
+import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.persistance.ComputerDAO;
 import fr.excilys.cdb.persistance.DAO;
 
@@ -40,11 +41,12 @@ public class ComputerDaoTest {
 
 	@Test
 	public void testGetAllComputer() {
-		ComputerDAO test = new ComputerDAO();
+		CompanyDAO company = CompanyDAO.getInstance();
+		ComputerDAO test = ComputerDAO.getInstance();
 		
-		computers.add(new Computer(1,"atari",in,out,6));
-		computers.add(new Computer(2,"Windows 98",in,out,4));
-		computers.add(new Computer(3,"Mac-S65",in,out,2));
+		computers.add(new Computer(1,"atari",in,out,company.getId(1)));
+		computers.add(new Computer(2,"Windows 98",in,out,company.getId(2)));
+		computers.add(new Computer(3,"Mac-S65",in,out,company.getId(3)));
 		for(Computer element : computers) {
 			test.add(element);
 		}
@@ -75,8 +77,9 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testAddComputer() {
-		ComputerDAO test = new ComputerDAO();
-		Computer computer = new Computer(1,"atari",in,out,6);
+		ComputerDAO test = ComputerDAO.getInstance();
+		CompanyDAO company = CompanyDAO.getInstance();
+		Computer computer = new Computer(1,"atari",in,out,company.getId(1));
 		
 		Optional<Computer> addedComputer = test.add(computer);
 		Optional<Computer> newComputer = test.getId(addedComputer.get().getId());
@@ -98,8 +101,9 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testUpdateComputer() {
-		ComputerDAO test = new ComputerDAO();
-		Computer computer = new Computer(1,"atari",in,out,6);
+		ComputerDAO test = ComputerDAO.getInstance();
+		CompanyDAO company = CompanyDAO.getInstance();
+		Computer computer = new Computer(1,"atari",in,out,company.getId(1));
 		
 		Optional<Computer> addComputer = test.add(computer);
 		Optional<Computer> addedComputer = test.getId(addComputer.get().getId());
@@ -126,8 +130,9 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testDeleteComputerById(){
-		ComputerDAO test = new ComputerDAO();
-		Computer computer = new Computer(1,"atari",in,out,6);
+		ComputerDAO test = ComputerDAO.getInstance();
+		CompanyDAO company = CompanyDAO.getInstance();
+		Computer computer = new Computer(1,"atari",in,out,company.getId(1));
 		
 		Optional<Computer> addComputer = test.add(computer);		
 		Optional<Computer> addedComputer = test.getId(addComputer.get().getId());

@@ -14,8 +14,8 @@ import org.junit.Test;
 import fr.excilys.cdb.service.ComputerService;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
-import fr.excilys.cdb.model.Computer.ComputerBuilder;
 import fr.excilys.cdb.model.ComputerDetails;
+import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.persistance.DAO;
 
 public class ComputerServiceTest {
@@ -38,15 +38,11 @@ public class ComputerServiceTest {
 	@Test
 	public void testComputersDetails(){
 		ComputerService test = ComputerService.getInstance();
+		CompanyDAO company = CompanyDAO.getInstance();
 		ComputerDetails allDetails = null;
 		Company cpyDetails = null;
 		Computer cptDetails = null;
-		Computer addCompter = new ComputerBuilder()
-							.setName("atari")
-							.setIn(in)
-							.setOut(out)
-							.setCompId(5)
-							.build();
+		Computer addCompter = new Computer(1,"atari",in,out,company.getId(1));
 		
 		Optional<Computer> addedComputer = test.add(addCompter);
 		
@@ -57,7 +53,7 @@ public class ComputerServiceTest {
 			cptDetails = allDetails.getComputer();
 			assertTrue(allDetails != null);
 			System.out.println("assertTrue computerDetails() >> OK");
-			assertEquals(cpyDetails.getId(),cptDetails.getCompId());
+			assertEquals(cpyDetails.getId(),cptDetails.getCompany().getId());
 			System.out.println("asserEquals computerDetails() >> OK");
 			test.deleteById(cptDetails.getId());
 			System.out.println("Computer correctly deleted");			

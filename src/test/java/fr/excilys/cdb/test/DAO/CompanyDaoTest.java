@@ -33,7 +33,7 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void testGetAll() throws SQLException{
-		CompanyDAO test = new CompanyDAO();
+		CompanyDAO test = CompanyDAO.getInstance();
 		Collection<Company> companies = new ArrayList<Company>();
 		int count = 0;
 		

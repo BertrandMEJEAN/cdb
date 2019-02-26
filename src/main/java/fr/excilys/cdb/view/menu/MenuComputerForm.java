@@ -3,6 +3,7 @@ package fr.excilys.cdb.view.menu;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.model.Computer.ComputerBuilder;
 import fr.excilys.cdb.view.View;
@@ -33,12 +34,9 @@ public abstract class MenuComputerForm extends Menu {
 		
 		int companyId = EntryVerification.readCompanyId();
 		
-		Computer computer = new ComputerBuilder()
-				.setName(name)
-				.setIn(in.get())
-				.setOut(out.get())
-				.setCompId(companyId)
-				.build();
+		Optional<Company> company = Optional.of(new Company(companyId,""));
+		
+		Computer computer = new Computer(0,name,in.get(),out.get(),company);
 		
 		return computer;
 	}

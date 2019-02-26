@@ -13,16 +13,21 @@ import java.util.List;
 import java.util.Optional;
 
 import fr.excilys.cdb.exception.*;
+import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
+import fr.excilys.cdb.persistance.CompanyDAO;
 
 /*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;*/
+
 
 /**
  * classe faisant le liens entre les opération sur les computers et l'application.
  * @author Bertrand Méjean.
  */
 public class ComputerDAO implements IDAO<Computer>{
+	
+	private static ComputerDAO INSTANCE;
 	
 	public static final String SELECT_BY_ID = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id = ?";
 	public static final String SELECT_QUERY = "SELECT id,name,introduced,discontinued,company_id FROM computer";
@@ -38,7 +43,14 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String COMPANY_ID = "company_id";
 	private static final String COUNT = "count";
 	
-	//Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
+	
+	public static ComputerDAO getInstance() {
+		if(INSTANCE == null) {
+			return new ComputerDAO();
+		}
+		return INSTANCE;
+	}
 	
 	/**
 	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
@@ -56,9 +68,9 @@ public class ComputerDAO implements IDAO<Computer>{
 		LocalDate dateIn = convertTimestampToLocalDate(timesTamp);
 		timesTamp = resultSet.getTimestamp(OUT);
 		LocalDate dateOut = convertTimestampToLocalDate(timesTamp);
-		int companyId = resultSet.getInt(COMPANY_ID);
+		Optional<Company> company = CompanyDAO.getInstance().getId(resultSet.getInt(COMPANY_ID));
 		
-		return new Computer(id,name,dateIn,dateOut,companyId);
+		return new Computer(id,name,dateIn,dateOut,company);
 	}
 	
 	/**
@@ -103,10 +115,11 @@ public class ComputerDAO implements IDAO<Computer>{
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
 			
 			while(resultSet.next()) {
+				
 				result.add(createResult(resultSet));
 			}
 		}catch(SQLException e){
-			//logger.info("problème lors de la récupération de la liste des ordinateur en base de donnée");
+			e.printStackTrace();
 		}		
 		return result;
 	}
@@ -129,7 +142,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			statement.setString(1, object.getName());
 			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
 			statement.setObject(3, convertLocalDateToTimestamp(object.getOut()));
-			statement.setInt(4, object.getCompId());
+			statement.setInt(4, object.getId());
 			
 			statement.executeUpdate();
 			
@@ -168,7 +181,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			
 			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
 			statement.setString(1, object.getName());
-			statement.setInt(2, object.getCompId());
+			statement.setInt(2, object.getCompany().getId());
 			statement.setObject(3, convertLocalDateToTimestamp(object.getIn()));
 			statement.setObject(4, convertLocalDateToTimestamp(object.getOut()));
 			statement.setInt(5, object.getId());			

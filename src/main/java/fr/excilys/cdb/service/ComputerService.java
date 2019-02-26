@@ -23,8 +23,8 @@ public class ComputerService implements IService<Computer> {
 	}
 	
 	public ComputerService() {
-		this.setComputerDAO(new ComputerDAO());
-		this.setCompanyDAO(new CompanyDAO());
+		this.setComputerDAO(ComputerDAO.getInstance());
+		this.setCompanyDAO(CompanyDAO.getInstance());
 	}
 
 	public Optional<Computer> getId(int id) {
@@ -36,7 +36,7 @@ public class ComputerService implements IService<Computer> {
 		if(computer == null) {
 			//throw new EntityNotFoundException();
 		}
-		Optional<Company> company = this.companyDao.getId(computer.get().getCompId());
+		Optional<Company> company = this.companyDao.getId(computer.get().getCompany().getId());
 		
 		return new ComputerDetails(computer.get(), company.get());
 	}

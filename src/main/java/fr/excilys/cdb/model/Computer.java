@@ -1,6 +1,7 @@
 package fr.excilys.cdb.model;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Classe computer
@@ -12,7 +13,7 @@ public class Computer {
 	private String name;
 	private LocalDate in;
 	private LocalDate out;
-	private int compId;
+	private Company company;
 	
 	/*
 	 * Constructeur par default de la classe Computer.
@@ -29,12 +30,12 @@ public class Computer {
 	 * @param dateOut Date de retour.
 	 * @param pComId Id de l'entreprise liée à ce computer.
 	 */
-	public Computer(int pId, String pName, LocalDate dateIn, LocalDate dateOut, int pComId) {
+	public Computer(int pId, String pName, LocalDate dateIn, LocalDate dateOut, Optional<Company> company) {
 		this.id = pId;
 		this.name = pName;
 		this.in = dateIn;
 		this.out = dateOut;
-		this.compId = pComId;
+		this.company = (company.isPresent()? company.get() : null);
 	}
 
 	public int getId() {
@@ -69,21 +70,26 @@ public class Computer {
 		this.out = out;
 	}
 
-	public int getCompId() {
-		return compId;
+	public Company getCompany() {
+		return company;
 	}
 
-	@Override
-	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", in=" + in + ", out=" + out + ", compId=" + compId + "]";
+	public void setCompany(Optional<Company> company) {
+		this.company = company.get();
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "Computer [id=" + id + ", name=" + name + ", in=" + in + ", out=" + out + ", company=" + company.getName() + "]";
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + compId;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((in == null) ? 0 : in.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -100,7 +106,10 @@ public class Computer {
 		if (getClass() != obj.getClass())
 			return false;
 		Computer other = (Computer) obj;
-		if (compId != other.compId)
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
 			return false;
 		if (id != other.id)
 			return false;
@@ -122,16 +131,13 @@ public class Computer {
 		return true;
 	}
 
-	public void setCompId(int compId) {
-		this.compId = compId;
-	}
-	
+
 	public static class ComputerBuilder{
 		private int id;
 		private String name;
 		private LocalDate in;
 		private LocalDate out;
-		private int compId;
+		private Optional<Company> company;
 		
 		public Computer build() {
 			Computer computer = new Computer();
@@ -140,7 +146,7 @@ public class Computer {
 			computer.setName(this.name);
 			computer.setIn(this.in);
 			computer.setOut(this.out);
-			computer.setCompId(this.compId);
+			computer.setCompany(this.company);
 			
 			return computer;
 		}
@@ -165,8 +171,8 @@ public class Computer {
 			return this;
 		}
 		
-		public ComputerBuilder setCompId(int compId) {
-			this.compId = compId;
+		public ComputerBuilder setCompany(Optional<Company> company) {
+			this.company = company;
 			return this;
 		}
 	}

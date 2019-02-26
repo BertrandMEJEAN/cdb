@@ -12,7 +12,7 @@ public class CompanyService implements IService<Company> {
 	private CompanyDAO companyDAO;
 	
 	public CompanyService() {
-		this.setCompanyDAO(new CompanyDAO());
+		this.setCompanyDAO(CompanyDAO.getInstance());
 	}
 	
 	public static CompanyService getInstance() {

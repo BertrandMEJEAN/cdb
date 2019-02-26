@@ -9,6 +9,7 @@ public class DAO{
 	private static String DB_CONF = "jdbc:mysql://localhost:3306/computer-database-db";
 	private static String DB_USER = "admincdb";
 	private static String DB_PASS = "qwerty1234";
+	private static final String DRIVER="com.mysql.cj.jdbc.Driver";
 	
 	/**
 	 * Singleton pour Instancier ou récupérer l'objet de connection à la base de donnée.
@@ -17,6 +18,12 @@ public class DAO{
 	 */
 	public static Connection getConnection() throws SQLException{
 		if(connection == null) {
+			
+			try {
+	            Class.forName(DRIVER);
+	        } catch (ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
 			connection = DriverManager.getConnection(DB_CONF,DB_USER,DB_PASS);
 		}			
 		return connection;
