@@ -84,11 +84,11 @@
 	                          <input type="checkbox" name="cb" class="cb" value="0">
 	                      </td>
 	                      <td>
-	                          <a href="editComputer.html" onclick="">${computer.name}</a>
+	                          <a href="editComputer.html" onclick="">${computer.getName()}</a>
 	                      </td>
-	                      <td>${computer.in}</td>
-	                      <td>${computer.out}</td>
-	                      <td>${computer.getCompany().getName()}</td>
+	                      <td>${computer.getIn()}</td>
+	                      <td>${computer.getOut()}</td>
+	                      <td>${computer.getCompName()}</td>
 	
 	                  </tr>
 	              </c:forEach>                          

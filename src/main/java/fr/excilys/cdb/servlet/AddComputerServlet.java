@@ -1,6 +1,7 @@
 package fr.excilys.cdb.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
@@ -9,8 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.excilys.cdb.dto.CompanyDto;
+import fr.excilys.cdb.dto.ComputerDto;
+import fr.excilys.cdb.mapper.CompanyMapper;
+import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Company;
+import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.persistance.CompanyDAO;
+import fr.excilys.cdb.service.ComputerService;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -32,7 +39,11 @@ public class AddComputerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Collection<Company> companies = CompanyDAO.getInstance().getAll();
-		request.setAttribute("companies", companies);
+		Collection<CompanyDto> dtoList = new ArrayList<>();
+		for(Company element : companies) {
+			dtoList.add(CompanyMapper.getInstance().companyToDto(element));
+		}
+		request.setAttribute("companies", dtoList);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 	}
 
@@ -40,8 +51,18 @@ public class AddComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		ComputerDto dto = new ComputerDto();
+		dto.setName(request.getParameter("nameCpt"));
+		dto.setIn(request.getParameter("inCpt"));
+		dto.setOut(request.getParameter("outCpt"));
+		dto.setCompId(request.getParameter("idCpy"));
+		
+		Computer computer = ComputerMapper.getInstance().dtoToComputer(dto);
+		
+		ComputerService.getInstance().add(computer);
+		
+		this.getServletContext().getRequestDispatcher("/").forward(request, response);
 	}
 
 }

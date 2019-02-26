@@ -5,6 +5,10 @@ public class Company {
 	private int id;
 	private String name;
 	
+	public Company() {
+		
+	}
+	
 	/**
 	 * Constructeur de la classe Company.
 	 * @param pId Id de la company.

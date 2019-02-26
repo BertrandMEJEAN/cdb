@@ -45,7 +45,7 @@ public class CompanyDAO implements IDAO<Company>{
 	
 	public static CompanyDAO getInstance() {
 		if(INSTANCE == null) {
-			return new CompanyDAO();
+			return INSTANCE = new CompanyDAO();
 		}
 		return INSTANCE;
 	}

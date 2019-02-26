@@ -35,7 +35,7 @@ public class Computer {
 		this.name = pName;
 		this.in = dateIn;
 		this.out = dateOut;
-		this.company = (company.isPresent()? company.get() : null);
+		this.company = (company.isPresent()? company.get() : new Company());
 	}
 
 	public int getId() {

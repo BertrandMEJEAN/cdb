@@ -47,7 +47,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	public static ComputerDAO getInstance() {
 		if(INSTANCE == null) {
-			return new ComputerDAO();
+			return INSTANCE = new ComputerDAO();
 		}
 		return INSTANCE;
 	}
@@ -142,7 +142,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			statement.setString(1, object.getName());
 			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
 			statement.setObject(3, convertLocalDateToTimestamp(object.getOut()));
-			statement.setInt(4, object.getId());
+			statement.setInt(4, object.getCompany().getId());
 			
 			statement.executeUpdate();
 			
