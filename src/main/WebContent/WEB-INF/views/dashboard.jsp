@@ -119,9 +119,10 @@
         </div>
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+        	
+	            <a href="/?name=10"><button type="button" class="btn btn-default">10</button></a>
+	            <a href="/?name=50"><button type="button" class="btn btn-default">50</button></a>
+	            <a href="/?name=100"><button type="button" class="btn btn-default">100</button></a>
         </div>
 
     </footer>

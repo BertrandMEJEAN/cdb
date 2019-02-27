@@ -16,6 +16,7 @@ import fr.excilys.cdb.exception.*;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.persistance.CompanyDAO;
+import fr.excilys.cdb.service.Pagination;
 
 /*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;*/
@@ -35,6 +36,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	public static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?";
 	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
 	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, introduced = ?, discontinued = ? WHERE id = ?";
+	public static final String COUNT_COMPUTER = "SELECT count(id) AS count FROM computer";
+	public static final String PAGE_QUERY = "SELECT id,name,introduced,discontinued,company_id FROM computer LIMIT = ? OFFSET = ?";
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
@@ -252,6 +255,48 @@ public class ComputerDAO implements IDAO<Computer>{
 			e.printStackTrace();
 		}
 		return count != 0;
+	}
+	
+	public int countComputer() {
+		
+		int count = 0;
+		
+		try(Connection connection = DAO.getConnection()) {
+
+			PreparedStatement statement = connection.prepareStatement(COUNT_COMPUTER);
+			ResultSet resultSet = statement.executeQuery();
+			
+			while(resultSet.next()) {
+				count = resultSet.getInt(COUNT);
+			}
+			if(count == 0) {
+				//logger.info("Cet ordinateur n'est pas référencé");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
+	public Collection<Computer> getPageComputer(int pLimit, int pOffSet){
+		List<Computer> computerPage = new ArrayList<>();
+		
+		try(Connection connection = DAO.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+			statement.setInt(1, pLimit);
+			statement.setInt(2, pOffSet);
+			ResultSet resultSet = statement.executeQuery();
+			
+			while(resultSet.next()) {
+				computerPage.add(createResult(resultSet));
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return computerPage;
 	}
 	
 	private Timestamp convertLocalDateToTimestamp(LocalDate date) {

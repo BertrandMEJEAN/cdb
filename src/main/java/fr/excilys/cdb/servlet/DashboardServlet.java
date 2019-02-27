@@ -10,13 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.dto.ComputerDto;
-import fr.excilys.cdb.mapper.CompanyMapper;
 import fr.excilys.cdb.mapper.ComputerMapper;
-import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
-import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.service.ComputerService;
 
 /**
@@ -40,6 +36,7 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Collection<Computer> computers = ComputerService.getInstance().getAll();
+		Collection<Computer> page = ComputerService.getInstance().getPageComputer(Integer.valueOf(request.getParameter("name")), Integer.valueOf(request.getParameter("")));
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		for(Computer element : computers) {
 			dtoList.add(ComputerMapper.getInstance().computerToDto(element));

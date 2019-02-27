@@ -3,6 +3,7 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.model.ComputerDetails;
@@ -29,6 +30,20 @@ public class ComputerService implements IService<Computer> {
 
 	public Optional<Computer> getId(int id) {
 		return this.computerDAO.getId(id);
+	}
+	
+	public int countComputer() {
+		return this.computerDAO.countComputer();
+	}
+	
+	public Collection<Computer> getPageComputer(int pPageSize, int pPage){
+		Pagination pagination = new Pagination(pPageSize, pPage);
+		
+		if(pagination.getPage()>pagination.getMaxPage()) {
+			throw new CustomException();
+		}
+		
+		return this.computerDAO.getPageComputer(pagination.getPageSize(),pagination.getOffSet());
 	}
 	
 	public ComputerDetails getDetailsByComputerId(int id) {
@@ -80,5 +95,4 @@ public class ComputerService implements IService<Computer> {
 	public void setCompanyDAO(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
 	}
-
 }
