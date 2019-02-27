@@ -65,8 +65,7 @@ public class CompanyDAO implements IDAO<Company>{
 	public Collection<Company> getAll(){
 		List<Company> result = new ArrayList<Company>();
 		
-		try {
-			Connection connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
 			
@@ -84,8 +83,7 @@ public class CompanyDAO implements IDAO<Company>{
 	public Optional<Company> getId(int objectId) {
 	Optional<Company> result = Optional.empty();
 		
-		try {
-			Connection connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);

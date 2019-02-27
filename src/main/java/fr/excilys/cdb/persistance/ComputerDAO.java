@@ -84,8 +84,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Optional<Computer> getId(int objectId){
 		Optional<Computer> result = Optional.empty();
 		
-		try {
-			Connection connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
@@ -108,9 +107,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Collection<Computer> getAll(){
 		List<Computer> result = new ArrayList<Computer>();
 		
-		try {
+		try(Connection connection = DAO.getConnection()) {
 			
-			Connection connection = DAO.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
 			
@@ -133,11 +131,9 @@ public class ComputerDAO implements IDAO<Computer>{
 	 *@param null Si l'objet passé en param est null ou echec de la requète SQL.
 	 */
 	public Optional<Computer> add(Computer object) {
-		Connection connection;
 		Optional<Computer> optional = Optional.empty();
 		
-		try {
-			connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, object.getName());
 			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
@@ -173,11 +169,9 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @return null Si l'objet passé en paramètre est null ou echec de la requète SQL.
 	 */
 	public Optional<Computer> update(Computer object) {
-		Connection connection;
 		Optional<Computer> opt = Optional.empty();
 	
-		try {
-			connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
 			statement.setString(1, object.getName());
@@ -215,10 +209,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @return false Si aucun computer n'est retrouvé en base ou echec de la requète.
 	 */
 	public boolean deleteById(int id) {
-		Connection connection;
 		
-		try {
-				connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
 				
 				PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
 				statement.setInt(1, id);
@@ -244,10 +236,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	public boolean existentById(int id) {
 		int count= 0;
 	
-		try {
-			Connection connection;
-			
-			connection = DAO.getConnection();
+		try(Connection connection = DAO.getConnection()) {
+
 			PreparedStatement statement = connection.prepareStatement(EXISTENT_QUERY);
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
