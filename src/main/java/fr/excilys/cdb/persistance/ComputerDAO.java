@@ -30,20 +30,21 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	private static ComputerDAO INSTANCE;
 	
-	public static final String SELECT_BY_ID = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id = ?";
-	public static final String SELECT_QUERY = "SELECT id,name,introduced,discontinued,company_id FROM computer";
+	public static final String SELECT_BY_ID = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE id = ?";
+	public static final String SELECT_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id";
 	public static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	public static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?";
 	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
 	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, introduced = ?, discontinued = ? WHERE id = ?";
 	public static final String COUNT_COMPUTER = "SELECT count(id) AS count FROM computer";
-	public static final String PAGE_QUERY = "SELECT id,name,introduced,discontinued,company_id FROM computer LIMIT = ? OFFSET = ?";
+	public static final String PAGE_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?";
 	
-	private static final String ID = "id";
-	private static final String NAME = "name";
+	private static final String ID = "computer.id";
+	private static final String NAME = "computer.name";
 	private static final String IN = "introduced";
 	private static final String OUT = "discontinued";
 	private static final String COMPANY_ID = "company_id";
+	private static final String COMPANY_NAME = "company.name";
 	private static final String COUNT = "count";
 	
 	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
@@ -71,7 +72,7 @@ public class ComputerDAO implements IDAO<Computer>{
 		LocalDate dateIn = convertTimestampToLocalDate(timesTamp);
 		timesTamp = resultSet.getTimestamp(OUT);
 		LocalDate dateOut = convertTimestampToLocalDate(timesTamp);
-		Optional<Company> company = CompanyDAO.getInstance().getId(resultSet.getInt(COMPANY_ID));
+		Optional<Company> company = Optional.of(new Company(resultSet.getInt(COMPANY_ID),resultSet.getString(COMPANY_NAME)));
 		
 		return new Computer(id,name,dateIn,dateOut,company);
 	}
@@ -283,13 +284,15 @@ public class ComputerDAO implements IDAO<Computer>{
 		List<Computer> computerPage = new ArrayList<>();
 		
 		try(Connection connection = DAO.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+			PreparedStatement statement = connection.prepareStatement(PAGE_QUERY);
 			statement.setInt(1, pLimit);
 			statement.setInt(2, pOffSet);
 			ResultSet resultSet = statement.executeQuery();
-			
+
 			while(resultSet.next()) {
+
 				computerPage.add(createResult(resultSet));
+
 			}
 			
 		}catch(SQLException e){

@@ -21,7 +21,12 @@ import fr.excilys.cdb.service.ComputerService;
 @WebServlet("")
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
+	private int pageNbr = 1;
+	private int pageSize = 10;
+	private int pageMax;
+	private int allComputer;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -34,13 +39,29 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int viewPageNbr = (request.getParameter("pageNbr") == null ? getPageNbr() : Integer.valueOf(request.getParameter("pageNbr")));
+		int viewPageSize = (request.getParameter("pageSize") == null ? getPageSize() : Integer.valueOf(request.getParameter("pageSize")));
 		
-		Collection<Computer> computers = ComputerService.getInstance().getAll();
-		Collection<Computer> page = ComputerService.getInstance().getPageComputer(Integer.valueOf(request.getParameter("name")), Integer.valueOf(request.getParameter("")));
+		setAllComputer(ComputerService.getInstance().countComputer());
+		setPageMax(defineMaxPage(getAllComputer()));
+		
+		if( viewPageSize != getPageSize()){
+			setPageSize(viewPageSize);
+		}else if(viewPageNbr != getPageNbr()){
+			setPageNbr(viewPageNbr);
+		}
+		
+		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr());
 		Collection<ComputerDto> dtoList = new ArrayList<>();
-		for(Computer element : computers) {
+		
+		for(Computer element : page) {
 			dtoList.add(ComputerMapper.getInstance().computerToDto(element));
 		}
+		
+		request.setAttribute("allComputer", getAllComputer());
+		request.setAttribute("pageMax", getPageMax());
+		request.setAttribute("pageSize", getPageSize());
+		request.setAttribute("pageNbr", getPageNbr());
 		request.setAttribute("computers", dtoList);
 	
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
@@ -52,6 +73,46 @@ public class DashboardServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	private int defineMaxPage(float count) {
+		
+		float tmp = (count / getPageSize());
+		int newMaxPage = (int) Math.ceil(tmp);
+			
+		return newMaxPage;
+	}
+
+	public int getPageNbr() {
+		return pageNbr;
+	}
+
+	public void setPageNbr(int pageNbr) {
+		this.pageNbr = pageNbr;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPageMax() {
+		return pageMax;
+	}
+
+	public void setPageMax(int pageMax) {
+		this.pageMax = pageMax;
+	}
+
+	public int getAllComputer() {
+		return allComputer;
+	}
+
+	public void setAllComputer(int allComputer) {
+		this.allComputer = allComputer;
 	}
 
 }

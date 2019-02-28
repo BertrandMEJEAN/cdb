@@ -22,7 +22,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${computers.size()} Computers found
+                ${allComputer} Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -105,11 +105,9 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <c:forEach begin="1" end="${pageMax}" var="i">
+              	<li><a href="?pageSize=${pageSize}&pageNbr=${i}" name="pageNbr"><c:out value="${i}"/></a></li>
+              </c:forEach>
               <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
@@ -120,9 +118,9 @@
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
         	
-	            <a href="/?name=10"><button type="button" class="btn btn-default">10</button></a>
-	            <a href="/?name=50"><button type="button" class="btn btn-default">50</button></a>
-	            <a href="/?name=100"><button type="button" class="btn btn-default">100</button></a>
+	            <a href="?pageSize=10&pageNbr=${pageNbr}" name="pageSize"><button type="button" class="btn btn-default">10</button></a>
+	            <a href="?pageSize=50&pageNbr=${pageNbr}" name="pageSize"><button type="button" class="btn btn-default">50</button></a>
+	            <a href="?pageSize=100&pageNbr=${pageNbr}" name="pageSize"><button type="button" class="btn btn-default">100</button></a>
         </div>
 
     </footer>
