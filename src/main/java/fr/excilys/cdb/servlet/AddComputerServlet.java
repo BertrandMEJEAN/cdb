@@ -41,7 +41,7 @@ public class AddComputerServlet extends HttpServlet {
 		Collection<Company> companies = CompanyDAO.getInstance().getAll();
 		Collection<CompanyDto> dtoList = new ArrayList<>();
 		for(Company element : companies) {
-			dtoList.add(CompanyMapper.getInstance().companyToDto(element));
+			dtoList.add(CompanyMapper.getInstance().objectToDto(element));
 		}
 		request.setAttribute("companies", dtoList);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
@@ -58,7 +58,7 @@ public class AddComputerServlet extends HttpServlet {
 		dto.setOut(request.getParameter("outCpt"));
 		dto.setCompId(request.getParameter("idCpy"));
 		
-		Computer computer = ComputerMapper.getInstance().dtoToComputer(dto);
+		Computer computer = ComputerMapper.getInstance().dtoToObject(dto);
 		
 		ComputerService.getInstance().add(computer);
 		

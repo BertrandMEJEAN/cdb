@@ -8,7 +8,7 @@ import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 
-public class ComputerMapper {
+public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 
 		private static ComputerMapper INSTANCE;
 		private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -25,7 +25,7 @@ public class ComputerMapper {
 			return INSTANCE;
 		}
 		
-		public Computer dtoToComputer(ComputerDto object) {
+		public Computer dtoToObject(ComputerDto object) {
 			
 			Computer computer = new Computer();
 			Company company = new Company(Integer.valueOf(object.getCompId()),object.getCompName());
@@ -40,7 +40,7 @@ public class ComputerMapper {
 			return computer;
 		}
 		
-		public ComputerDto computerToDto(Computer object) {
+		public ComputerDto objectToDto(Computer object) {
 			ComputerDto dto = new ComputerDto();
 			
 			dto.setId(object.getId());

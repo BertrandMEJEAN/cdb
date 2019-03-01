@@ -3,7 +3,7 @@ package fr.excilys.cdb.mapper;
 import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.model.Company;
 
-public class CompanyMapper {
+public class CompanyMapper implements IMapper<Company, CompanyDto>{
 	
 	private static CompanyMapper INSTANCE;
 	
@@ -18,7 +18,7 @@ public class CompanyMapper {
 		return INSTANCE;
 	}
 	
-	public CompanyDto companyToDto(Company object) {
+	public CompanyDto objectToDto(Company object) {
 		CompanyDto dto = new CompanyDto();
 		dto.setId(object.getId());
 		dto.setName(object.getName());
@@ -26,7 +26,7 @@ public class CompanyMapper {
 		return dto;		
 	}
 	
-	public Company dtoToCompany(CompanyDto object) {
+	public Company dtoToObject(CompanyDto object) {
 		Company company = new Company();
 		company.setId(object.getId());
 		company.setName(object.getName());

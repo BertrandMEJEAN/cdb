@@ -55,7 +55,7 @@ public class DashboardServlet extends HttpServlet {
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
-			dtoList.add(ComputerMapper.getInstance().computerToDto(element));
+			dtoList.add(ComputerMapper.getInstance().objectToDto(element));
 		}
 		
 		request.setAttribute("allComputer", getAllComputer());
