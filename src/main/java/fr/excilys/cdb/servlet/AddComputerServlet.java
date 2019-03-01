@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.dto.ComputerDto;
+import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.mapper.CompanyMapper;
 import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Company;
@@ -53,12 +54,17 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		ComputerDto dto = new ComputerDto();
+		Computer computer = new Computer();
 		dto.setName(request.getParameter("nameCpt"));
 		dto.setIn(request.getParameter("inCpt"));
 		dto.setOut(request.getParameter("outCpt"));
 		dto.setCompId(request.getParameter("idCpy"));
 		
-		Computer computer = ComputerMapper.getInstance().dtoToObject(dto);
+		try {
+			computer = ComputerMapper.getInstance().dtoToObject(dto);
+		}catch(ValidatorException e) {
+			//add Logger
+		}
 		
 		ComputerService.getInstance().add(computer);
 		

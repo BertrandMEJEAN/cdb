@@ -1,6 +1,7 @@
 package fr.excilys.cdb.mapper;
 
 import fr.excilys.cdb.dto.CompanyDto;
+import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.model.Company;
 
 public class CompanyMapper implements IMapper<Company, CompanyDto>{
@@ -26,7 +27,7 @@ public class CompanyMapper implements IMapper<Company, CompanyDto>{
 		return dto;		
 	}
 	
-	public Company dtoToObject(CompanyDto object) {
+	public Company dtoToObject(CompanyDto object) throws ValidatorException {
 		Company company = new Company();
 		company.setId(object.getId());
 		company.setName(object.getName());

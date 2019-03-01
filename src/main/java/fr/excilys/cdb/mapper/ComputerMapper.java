@@ -5,8 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import fr.excilys.cdb.dto.ComputerDto;
+import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
+import fr.excilys.cdb.validator.ComputerValidator;
 
 public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 
@@ -25,9 +27,10 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			return INSTANCE;
 		}
 		
-		public Computer dtoToObject(ComputerDto object) {
+		public Computer dtoToObject(ComputerDto object) throws ValidatorException {
 			
 			Computer computer = new Computer();
+			ComputerValidator validator = ComputerValidator.getInstance();
 			Company company = new Company(Integer.valueOf(object.getCompId()),object.getCompName());
 			Optional<Company> companyOpt = Optional.of(company);
 			
@@ -36,6 +39,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			computer.setIn(convertStringToLocalDate(object.getIn()));
 			computer.setOut(convertStringToLocalDate(object.getIn()));
 			computer.setCompany(companyOpt);
+			validator.validateComputer(computer);
 			
 			return computer;
 		}
