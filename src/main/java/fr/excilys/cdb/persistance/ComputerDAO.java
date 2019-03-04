@@ -142,7 +142,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			statement.setString(1, object.getName());
 			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
 			statement.setObject(3, convertLocalDateToTimestamp(object.getOut()));
-			statement.setInt(4, object.getCompany().getId());
+			statement.setObject(4, (object.getCompany().getId() != 0 ? object.getCompany().getId() : null));
 			
 			statement.executeUpdate();
 			

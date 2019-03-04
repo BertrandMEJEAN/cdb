@@ -32,7 +32,10 @@ public class ComputerValidator {
 	}
 
 	private boolean correctDateAssignemet(Computer computer) {
-		boolean check = ((computer.getOut() != null && computer.getIn() == null) || (computer.getOut().isBefore(computer.getIn())) ? true : false );
+		boolean check = ((computer.getOut() != null && computer.getIn() == null)? true : false );
+		if(computer.getIn() != null && computer.getOut() != null) {
+			check = computer.getOut().isBefore(computer.getIn());
+		}
 		return check;
 	}
 }

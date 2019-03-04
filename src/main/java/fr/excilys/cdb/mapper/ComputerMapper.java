@@ -31,7 +31,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			
 			Computer computer = new Computer();
 			ComputerValidator validator = ComputerValidator.getInstance();
-			Company company = new Company(Integer.valueOf(object.getCompId()),object.getCompName());
+			Company company = ( object.getCompId() == "" ? new Company() : new Company(Integer.valueOf(object.getCompId()),object.getCompName()));
 			Optional<Company> companyOpt = Optional.of(company);
 			
 			computer.setId(object.getId());
@@ -61,7 +61,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 		private LocalDate convertStringToLocalDate(String date) {
 			Optional<LocalDate> lDate = Optional.empty();
 			
-			if(date != null) {
+			if(date != "") {
 				lDate= Optional.of(LocalDate.parse(date, FORMATTER));
 			}
 			return (lDate.isPresent() ? lDate.get() : null);

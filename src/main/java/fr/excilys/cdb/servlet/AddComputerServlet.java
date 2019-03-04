@@ -62,11 +62,10 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			computer = ComputerMapper.getInstance().dtoToObject(dto);
+			ComputerService.getInstance().add(computer);
 		}catch(ValidatorException e) {
-			//add Logger
+			e.getMessage();
 		}
-		
-		ComputerService.getInstance().add(computer);
 		
 		this.getServletContext().getRequestDispatcher("/").forward(request, response);
 	}
