@@ -30,7 +30,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	private static ComputerDAO INSTANCE;
 	
-	public static final String SELECT_BY_ID = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE id = ?";
+	public static final String SELECT_BY_ID = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
 	public static final String SELECT_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id";
 	public static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	public static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?";
@@ -90,16 +90,19 @@ public class ComputerDAO implements IDAO<Computer>{
 		
 		try(Connection connection = DAO.getConnection()) {
 			
+			System.out.println("in try >>>"+objectId);
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
+			System.out.println(statement.toString());
 			ResultSet resultSet = statement.executeQuery();
 			
 			while(resultSet.next()) {
-				result= Optional.of(createResult(resultSet));				
+				result= Optional.of(createResult(resultSet));
+				System.out.println("Optional >>"+result.get().getId());
 			}
 		}catch(SQLException e){
 			//logger.info("The computer does not exist");
-		}		
+		}
 		return result;
 	}
 	

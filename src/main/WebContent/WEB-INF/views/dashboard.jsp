@@ -84,7 +84,7 @@
 	                          <input type="checkbox" name="cb" class="cb" value="0">
 	                      </td>
 	                      <td>
-	                          <a href="editComputer.html" onclick="">${computer.getName()}</a>
+	                          <a href="EditComputer?cptId=${computer.getId()}" onclick="">${computer.getName()}</a>
 	                      </td>
 	                      <td>${computer.getIn()}</td>
 	                      <td>${computer.getOut()}</td>

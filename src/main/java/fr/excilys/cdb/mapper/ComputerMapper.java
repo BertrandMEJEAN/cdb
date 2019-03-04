@@ -37,7 +37,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			computer.setId(object.getId());
 			computer.setName(object.getName());
 			computer.setIn(convertStringToLocalDate(object.getIn()));
-			computer.setOut(convertStringToLocalDate(object.getIn()));
+			computer.setOut(convertStringToLocalDate(object.getOut()));
 			computer.setCompany(companyOpt);
 			validator.validateComputer(computer);
 			
