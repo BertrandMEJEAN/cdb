@@ -34,7 +34,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			Company company = ( object.getCompId() == "" ? new Company() : new Company(Integer.valueOf(object.getCompId()),object.getCompName()));
 			Optional<Company> companyOpt = Optional.of(company);
 			
-			computer.setId(object.getId());
+			computer.setId(Integer.valueOf(object.getId()));
 			computer.setName(object.getName());
 			computer.setIn(convertStringToLocalDate(object.getIn()));
 			computer.setOut(convertStringToLocalDate(object.getOut()));
@@ -47,7 +47,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 		public ComputerDto objectToDto(Computer object) {
 			ComputerDto dto = new ComputerDto();
 			
-			dto.setId(object.getId());
+			dto.setId(String.valueOf(object.getId()));
 			dto.setName(object.getName());
 			dto.setIn(convertLocalDateToString(object.getIn()));
 			dto.setOut(convertLocalDateToString(object.getOut()));

@@ -19,6 +19,7 @@ import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.service.ComputerService;
+import fr.excilys.cdb.exception.ValidatorException;
 
 /**
  * Servlet implementation class EditComputerServlet
@@ -55,6 +56,7 @@ public class EditComputerServlet extends HttpServlet {
 		request.setAttribute("cptName", dtoCpt.getName());
 		request.setAttribute("cptIn", dtoCpt.getIn());
 		request.setAttribute("cptOut", dtoCpt.getOut());
+		request.setAttribute("cptCompId", dtoCpt.getCompId());
 		request.setAttribute("companies", dtoList);
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
@@ -64,8 +66,26 @@ public class EditComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		ComputerDto dto = new ComputerDto();
+		Computer computerUpdated = new Computer();
+		
+		dto.setId(request.getParameter("cptId"));
+		dto.setName(request.getParameter("nameCpt"));
+		dto.setIn(request.getParameter("introCpt"));
+		dto.setOut(request.getParameter("discontCpt"));
+		dto.setCompId(request.getParameter("idCpy"));
+		
+		System.out.println(dto.toString());
+		
+		try {
+			computerUpdated = ComputerMapper.getInstance().dtoToObject(dto);
+			ComputerService.getInstance().update(computerUpdated);
+		}catch(ValidatorException e) {
+			e.getMessage();
+		}
+		
+		this.getServletContext().getRequestDispatcher("/").forward(request, response);
 	}
 
 }

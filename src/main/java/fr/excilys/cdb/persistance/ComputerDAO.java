@@ -90,15 +90,12 @@ public class ComputerDAO implements IDAO<Computer>{
 		
 		try(Connection connection = DAO.getConnection()) {
 			
-			System.out.println("in try >>>"+objectId);
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
-			System.out.println(statement.toString());
 			ResultSet resultSet = statement.executeQuery();
 			
 			while(resultSet.next()) {
 				result= Optional.of(createResult(resultSet));
-				System.out.println("Optional >>"+result.get().getId());
 			}
 		}catch(SQLException e){
 			//logger.info("The computer does not exist");
@@ -182,7 +179,7 @@ public class ComputerDAO implements IDAO<Computer>{
 			
 			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
 			statement.setString(1, object.getName());
-			statement.setInt(2, object.getCompany().getId());
+			statement.setInt(2, (object.getCompany().getId() != 0 ? object.getCompany().getId() : null));
 			statement.setObject(3, convertLocalDateToTimestamp(object.getIn()));
 			statement.setObject(4, convertLocalDateToTimestamp(object.getOut()));
 			statement.setInt(5, object.getId());			
