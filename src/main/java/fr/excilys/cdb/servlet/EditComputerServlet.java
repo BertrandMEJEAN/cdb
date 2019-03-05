@@ -76,8 +76,6 @@ public class EditComputerServlet extends HttpServlet {
 		dto.setOut(request.getParameter("discontCpt"));
 		dto.setCompId(request.getParameter("idCpy"));
 		
-		System.out.println(dto.toString());
-		
 		try {
 			computerUpdated = ComputerMapper.getInstance().dtoToObject(dto);
 			ComputerService.getInstance().update(computerUpdated);

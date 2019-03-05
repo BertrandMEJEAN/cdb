@@ -31,10 +31,10 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			
 			Computer computer = new Computer();
 			ComputerValidator validator = ComputerValidator.getInstance();
-			Company company = ( object.getCompId() == "" ? new Company() : new Company(Integer.valueOf(object.getCompId()),object.getCompName()));
+			Company company = ( object.getCompId() == "" || object.getCompId() == null ? new Company() : new Company(Integer.valueOf(object.getCompId()),object.getCompName()));
 			Optional<Company> companyOpt = Optional.of(company);
 			
-			computer.setId(Integer.valueOf(object.getId()));
+			computer.setId((object.getId() == null ? 0 : Integer.valueOf(object.getId())));
 			computer.setName(object.getName());
 			computer.setIn(convertStringToLocalDate(object.getIn()));
 			computer.setOut(convertStringToLocalDate(object.getOut()));
@@ -61,7 +61,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 		private LocalDate convertStringToLocalDate(String date) {
 			Optional<LocalDate> lDate = Optional.empty();
 			
-			if(date != "") {
+			if(date != "" && date != null) {
 				lDate= Optional.of(LocalDate.parse(date, FORMATTER));
 			}
 			return (lDate.isPresent() ? lDate.get() : null);

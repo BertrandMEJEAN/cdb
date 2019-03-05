@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="DeleteServlet" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -81,7 +81,7 @@
 	              <c:forEach items="${computers}" var="computer">
 	                  <tr>
 	                      <td class="editMode">
-	                          <input type="checkbox" name="cb" class="cb" value="0">
+	                          <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                      </td>
 	                      <td>
 	                          <a href="EditComputer?cptId=${computer.getId()}" onclick="">${computer.getName()}</a>
