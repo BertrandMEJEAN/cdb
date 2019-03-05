@@ -2,6 +2,9 @@ package fr.excilys.cdb.persistance;
 
 import java.sql.*;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public class DAO{
 	
 	private static Connection connection;
@@ -10,6 +13,7 @@ public class DAO{
 	private static String DB_USER = "admincdb";
 	private static String DB_PASS = "qwerty1234";
 	private static final String DRIVER="com.mysql.cj.jdbc.Driver";
+	private static HikariDataSource hikari;
 	
 	/**
 	 * Singleton pour Instancier ou récupérer l'objet de connection à la base de donnée.
@@ -24,9 +28,27 @@ public class DAO{
 	        } catch (ClassNotFoundException e) {
 	            e.printStackTrace();
 	        }
-			connection = DriverManager.getConnection(DB_CONF,DB_USER,DB_PASS);
+			
+			if(hikari == null) {
+				setUpHikari();
+			}
 		}			
-		return connection;
+		return connection = hikari.getConnection();
+	}
+	
+	private static void setUpHikari() {
+		HikariConfig conf = new HikariConfig();
+		conf.setJdbcUrl(DB_CONF);
+		conf.setUsername(DB_USER);
+		conf.setPassword(DB_PASS);
+		conf.setConnectionTimeout(10000L);
+		hikari = new HikariDataSource(conf);
+	}
+	
+	public void closePool() {
+		if(hikari != null) {
+			hikari.close();
+		}
 	}
 
 	public static String getDB_CONF() {
