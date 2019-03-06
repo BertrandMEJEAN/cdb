@@ -26,6 +26,7 @@ public class DashboardServlet extends HttpServlet {
 	private int pageSize = 10;
 	private int pageMax;
 	private int allComputer;
+	private String search;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -39,19 +40,21 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int viewPageNbr = (request.getParameter("pageNbr") == null ? getPageNbr() : Integer.valueOf(request.getParameter("pageNbr")));
-		int viewPageSize = (request.getParameter("pageSize") == null ? getPageSize() : Integer.valueOf(request.getParameter("pageSize")));
+//		int viewPageNbr = (request.getParameter("pageNbr") == null ? getPageNbr() : Integer.valueOf(request.getParameter("pageNbr")));
+//		int viewPageSize = (request.getParameter("pageSize") == null ? getPageSize() : Integer.valueOf(request.getParameter("pageSize")));
+//		
+//		setAllComputer(ComputerService.getInstance().countComputer());
+//		setPageMax(defineMaxPage(getAllComputer()));
+//		
+//		if( viewPageSize != getPageSize()){
+//			setPageSize(viewPageSize);
+//		}else if(viewPageNbr != getPageNbr()){
+//			setPageNbr(viewPageNbr);
+//		}
 		
-		setAllComputer(ComputerService.getInstance().countComputer());
-		setPageMax(defineMaxPage(getAllComputer()));
+		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"));
 		
-		if( viewPageSize != getPageSize()){
-			setPageSize(viewPageSize);
-		}else if(viewPageNbr != getPageNbr()){
-			setPageNbr(viewPageNbr);
-		}
-		
-		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr());
+		Collection<Computer> page = (getSearch() == null ? ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr()) : ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), request.getParameter("search")));		
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
@@ -62,6 +65,7 @@ public class DashboardServlet extends HttpServlet {
 		request.setAttribute("pageMax", getPageMax());
 		request.setAttribute("pageSize", getPageSize());
 		request.setAttribute("pageNbr", getPageNbr());
+		request.setAttribute("search", getSearch());
 		request.setAttribute("computers", dtoList);
 	
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
@@ -71,8 +75,31 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		
+		
+		//this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	}
+	
+	private void setPage(String pPageNbr, String pPageSize, String pSearch) {
+		
+		int viewPageNbr = (pPageNbr == null ? getPageNbr() : Integer.valueOf(pPageNbr));
+		int viewPageSize = (pPageSize == null ? getPageSize() : Integer.valueOf(pPageSize));
+
+		if(pSearch != null) {
+			setSearch(pSearch);
+			setAllComputer(ComputerService.getInstance().countComputer(getSearch()));
+		}else {
+			setAllComputer(ComputerService.getInstance().countComputer());
+		}
+		
+		setPageMax(defineMaxPage(getAllComputer()));
+		
+		if( viewPageSize != getPageSize()){
+			setPageSize(viewPageSize);
+		}else if(viewPageNbr != getPageNbr()){
+			setPageNbr(viewPageNbr);
+		}
 	}
 	
 	private int defineMaxPage(float count) {
@@ -113,6 +140,14 @@ public class DashboardServlet extends HttpServlet {
 
 	public void setAllComputer(int allComputer) {
 		this.allComputer = allComputer;
+	}
+	
+	public String getSearch() {
+		return search;
+	}
+	
+	public void setSearch(String pSearch) {
+		this.search = pSearch;
 	}
 
 }

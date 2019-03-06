@@ -37,7 +37,10 @@ public class ComputerDAO implements IDAO<Computer>{
 	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
 	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, introduced = ?, discontinued = ? WHERE id = ?";
 	public static final String COUNT_COMPUTER = "SELECT count(id) AS count FROM computer";
+	public static final String COUNT_COMPUTER_SEARCHED = "SELECT count(id) AS count FROM computer WHERE name LIKE ?";
 	public static final String PAGE_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?";
+	public static final String SEARCH_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+	
 	
 	private static final String ID = "computer.id";
 	private static final String NAME = "computer.name";
@@ -280,6 +283,29 @@ public class ComputerDAO implements IDAO<Computer>{
 		return count;
 	}
 	
+	public int countComputer(String pSearch) {
+		
+		int count = 0;
+		
+		try(Connection connection = DAO.getConnection()) {
+
+			PreparedStatement statement = connection.prepareStatement(COUNT_COMPUTER_SEARCHED);
+			statement.setString(1, pSearch+"%");
+			ResultSet resultSet = statement.executeQuery();
+			
+			while(resultSet.next()) {
+				count = resultSet.getInt(COUNT);
+			}
+			if(count == 0) {
+				//logger.info("Cet ordinateur n'est pas référencé");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
 	public Collection<Computer> getPageComputer(int pLimit, int pOffSet){
 		List<Computer> computerPage = new ArrayList<>();
 		
@@ -293,6 +319,27 @@ public class ComputerDAO implements IDAO<Computer>{
 
 				computerPage.add(createResult(resultSet));
 
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return computerPage;
+	}
+	
+	public Collection<Computer> getPageComputer(int pLimit, int pOffSet, String pSearch){
+		List<Computer> computerPage = new ArrayList<>();
+		
+		try(Connection connection = DAO.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(SEARCH_QUERY);
+			statement.setString(1, pSearch+"%");
+			statement.setInt(2, pLimit);
+			statement.setInt(3, pOffSet);
+			ResultSet resultSet = statement.executeQuery();
+
+			while(resultSet.next()) {
+				computerPage.add(createResult(resultSet));
 			}
 			
 		}catch(SQLException e){

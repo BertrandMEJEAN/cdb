@@ -9,9 +9,12 @@
 	}
 	
 	intro.change(function(){
+		
+		if($("#warning").length > 0) $("#warning").remove();
+		
 		if(!intro.val()){
 			discont.prop('disabled', true);
-		}else if(!regex.test(intro.val())){
+		}else if(!regex.test(intro.val())){			
 			intro.css("border","1px solid #ff2d00").parent().append("<p id='warning' style='color:#ff2d00'>Invalid date format (dd-mm-yyyy)</p>");
 			discont.prop('disabled', true);
 		}else{

@@ -26,9 +26,15 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                    <form id="searchForm" action="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}" method="GET" class="form-inline">
+						<c:choose>
+							<c:when test="${search != null}">
+	                        	<input type="search" id="searchbox" name="search" class="form-control" value="${search}"/>
+	                        </c:when>
+	                        <c:otherwise>
+	                        	<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+	                        </c:otherwise>
+                        </c:choose>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
@@ -106,7 +112,14 @@
                   </a>
               </li>
               <c:forEach begin="1" end="${pageMax}" var="i">
-              	<li><a href="?pageSize=${pageSize}&pageNbr=${i}" name="pageNbr"><c:out value="${i}"/></a></li>
+              	<c:choose>
+              		<c:when test="${search != null}">
+              			<li><a href="?pageSize=${pageSize}&pageNbr=${i}&search=${search}" name="pageNbr"><c:out value="${i}"/></a></li>
+              		</c:when>
+              		<c:otherwise>
+              			<li><a href="?pageSize=${pageSize}&pageNbr=${i}" name="pageNbr"><c:out value="${i}"/></a></li>
+              		</c:otherwise>
+              	</c:choose>
               </c:forEach>
               <li>
                 <a href="#" aria-label="Next">

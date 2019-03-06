@@ -36,6 +36,10 @@ public class ComputerService implements IService<Computer> {
 		return this.computerDAO.countComputer();
 	}
 	
+	public int countComputer(String pSearch) {
+		return this.computerDAO.countComputer(pSearch);
+	}
+	
 	public Collection<Computer> getPageComputer(int pPageSize, int pPage){
 		Pagination pagination = new Pagination(pPageSize, pPage);
 		
@@ -44,6 +48,16 @@ public class ComputerService implements IService<Computer> {
 		}
 		
 		return this.computerDAO.getPageComputer(pagination.getPageSize(),pagination.getOffSet());
+	}
+	
+	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch){
+		Pagination pagination = new Pagination(pPageSize, pPage);
+		
+		if(pagination.getPage()>pagination.getMaxPage()) {
+			throw new CustomException();
+		}
+		
+		return this.computerDAO.getPageComputer(pagination.getPageSize(),pagination.getOffSet(), pSearch);
 	}
 	
 	public ComputerDetails getDetailsByComputerId(int id) {
