@@ -37,9 +37,9 @@ public class ComputerDAO implements IDAO<Computer>{
 	public static final String EXISTENT_QUERY = "SELECT count(id) AS count FROM computer WHERE id = ?";
 	public static final String UPDATE_QUERY = "UPDATE computer SET name = ?, company_id = ?, introduced = ?, discontinued = ? WHERE id = ?";
 	public static final String COUNT_COMPUTER = "SELECT count(id) AS count FROM computer";
-	public static final String COUNT_COMPUTER_SEARCHED = "SELECT count(id) AS count FROM computer WHERE name LIKE ?";
+	public static final String COUNT_SEARCHED = "SELECT count(computer.id) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 	public static final String PAGE_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?";
-	public static final String SEARCH_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+	public static final String SEARCH_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? OFFSET ?";
 	
 	
 	private static final String ID = "computer.id";
@@ -289,8 +289,9 @@ public class ComputerDAO implements IDAO<Computer>{
 		
 		try(Connection connection = DAO.getConnection()) {
 
-			PreparedStatement statement = connection.prepareStatement(COUNT_COMPUTER_SEARCHED);
+			PreparedStatement statement = connection.prepareStatement(COUNT_SEARCHED);
 			statement.setString(1, pSearch+"%");
+			statement.setString(2, pSearch+"%");
 			ResultSet resultSet = statement.executeQuery();
 			
 			while(resultSet.next()) {
@@ -334,8 +335,9 @@ public class ComputerDAO implements IDAO<Computer>{
 		try(Connection connection = DAO.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SEARCH_QUERY);
 			statement.setString(1, pSearch+"%");
-			statement.setInt(2, pLimit);
-			statement.setInt(3, pOffSet);
+			statement.setString(2, pSearch+"%");
+			statement.setInt(3, pLimit);
+			statement.setInt(4, pOffSet);
 			ResultSet resultSet = statement.executeQuery();
 
 			while(resultSet.next()) {
