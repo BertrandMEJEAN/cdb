@@ -67,7 +67,7 @@ public class AddComputerServlet extends HttpServlet {
 			e.getMessage();
 		}
 		
-		this.getServletContext().getRequestDispatcher("/").forward(request, response);
+		response.sendRedirect("/cdb/");
 	}
 
 }

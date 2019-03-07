@@ -56,7 +56,7 @@ public class DeleteServlet extends HttpServlet {
 			}			
 		}
 		
-		this.getServletContext().getRequestDispatcher("/").forward(request, response);
+		response.sendRedirect("/cdb/");
 	}
 
 }

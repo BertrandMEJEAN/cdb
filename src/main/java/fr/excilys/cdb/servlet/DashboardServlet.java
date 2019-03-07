@@ -40,21 +40,10 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		int viewPageNbr = (request.getParameter("pageNbr") == null ? getPageNbr() : Integer.valueOf(request.getParameter("pageNbr")));
-//		int viewPageSize = (request.getParameter("pageSize") == null ? getPageSize() : Integer.valueOf(request.getParameter("pageSize")));
-//		
-//		setAllComputer(ComputerService.getInstance().countComputer());
-//		setPageMax(defineMaxPage(getAllComputer()));
-//		
-//		if( viewPageSize != getPageSize()){
-//			setPageSize(viewPageSize);
-//		}else if(viewPageNbr != getPageNbr()){
-//			setPageNbr(viewPageNbr);
-//		}
 		
 		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"));
 		
-		Collection<Computer> page = (getSearch() == null ? ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr()) : ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), request.getParameter("search")));		
+		Collection<Computer> page = (getSearch() == null ? ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr()) : ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch()));		
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
@@ -75,10 +64,7 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		
-		//this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+
 	}
 	
 	private void setPage(String pPageNbr, String pPageSize, String pSearch) {
