@@ -1,6 +1,10 @@
 package fr.excilys.cdb.persistance;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -9,10 +13,10 @@ public class DAO{
 	
 	private static Connection connection;
 	
-	private static String DB_CONF = "jdbc:mysql://localhost:3306/computer-database-db";
-	private static String DB_USER = "admincdb";
-	private static String DB_PASS = "qwerty1234";
-	private static final String DRIVER="com.mysql.cj.jdbc.Driver";
+	private static String DB_CONF;
+	private static String DB_USER;
+	private static String DB_PASS;
+	private static String DRIVER;
 	private static HikariDataSource hikari;
 	
 	/**
@@ -24,8 +28,8 @@ public class DAO{
 		if(connection == null || connection.isClosed()) {
 			
 			try {
-	            Class.forName(DRIVER);
-	        } catch (ClassNotFoundException e) {
+				loadProperties();
+	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
 			
@@ -36,8 +40,36 @@ public class DAO{
 		return connection = hikari.getConnection();
 	}
 	
+	private static void loadProperties() throws IOException {
+		Properties prop = new Properties();
+		InputStream input = null;
+		
+		try {
+			input = new FileInputStream(System.getProperty("user.home")+"/project/cdb/ressources/config.properties");
+			
+			prop.load(input);
+			
+			setDRIVER(prop.getProperty("dbdriver"));
+			setDB_CONF(prop.getProperty("dbconf"));
+			setDB_USER(prop.getProperty("dbuser"));
+			setDB_PASS(prop.getProperty("dbpassword"));
+			
+		}catch(IOException io) {
+			io.printStackTrace();
+		}finally {
+			if(input != null) {
+				try {
+					input.close();
+				}catch(IOException io) {
+					io.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	private static void setUpHikari() {
 		HikariConfig conf = new HikariConfig();
+		conf.setDriverClassName(DRIVER);
 		conf.setJdbcUrl(DB_CONF);
 		conf.setUsername(DB_USER);
 		conf.setPassword(DB_PASS);
@@ -73,5 +105,13 @@ public class DAO{
 
 	public static void setDB_PASS(String dB_PASS) {
 		DB_PASS = dB_PASS;
+	}
+
+	public static String getDRIVER() {
+		return DRIVER;
+	}
+	
+	public static void setDRIVER(String dRIVER) {
+		DRIVER = dRIVER;
 	}
 }
