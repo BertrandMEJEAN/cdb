@@ -8,6 +8,7 @@ public class Pagination {
 	private int maxPage;
 	private String search;
 	private String order;
+	private String sort;
 	
 	private Pagination() {
 		
@@ -83,6 +84,14 @@ public class Pagination {
 	public void setOrder(String order) {
 		this.order = order;
 	}
+	
+	public String getSort() {
+		return this.sort;
+	}
+	
+	public void setSort(String pSort) {
+		this.sort = pSort;
+	}
 
 	public static class PaginationBuilder{
 		
@@ -92,6 +101,7 @@ public class Pagination {
 		private int maxPage;
 		private String search;
 		private String order;
+		private String sort;
 		
 		public Pagination build() {
 			Pagination page = new Pagination();
@@ -99,10 +109,11 @@ public class Pagination {
 			page.setPage(this.page);
 			page.setPageSize(this.pageSize);
 			page.setSearch(this.search);
+			page.setSort(this.sort);
 			page.setOrder(this.order);
 			page.setOffSet(this.offSet);
 			page.setMaxPage(this.maxPage);
-			
+						
 			return page;
 		}
 		
@@ -122,7 +133,7 @@ public class Pagination {
 		}
 		
 		public PaginationBuilder setMaxPage() {
-			float count = (this.search != null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(this.search));
+			float count = (this.search == null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(this.search));
 			float tmp = (count / this.pageSize);
 			this.maxPage = (int) Math.ceil(tmp); 
 			
@@ -136,6 +147,11 @@ public class Pagination {
 		
 		public PaginationBuilder setOrder(String order) {
 			this.order = order;
+			return this;
+		}
+		
+		public PaginationBuilder setSort(String sort) {
+			this.sort = sort;
 			return this;
 		}
 	}

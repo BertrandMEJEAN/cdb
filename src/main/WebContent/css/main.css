@@ -27,3 +27,24 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+.order{
+	float: right;
+}
+
+ .order .up, .order .down {
+	border: solid black;
+    border-width: 0 3px 3px 0;
+	display: block;
+	padding: 3px;
+}
+
+.down {
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
+
+.up {
+	transform: rotate(-135deg);
+	-webkit-transform: rotate(-135deg);
+}

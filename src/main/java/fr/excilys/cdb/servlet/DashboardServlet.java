@@ -27,6 +27,8 @@ public class DashboardServlet extends HttpServlet {
 	private int pageMax;
 	private int allComputer;
 	private String search;
+	private String order;
+	private String sort;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,9 +43,13 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"));
 		
-		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch());		
+		
+		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"), request.getParameter("order"), request.getParameter("sort"));
+		
+		System.out.println(getOrder()+ " " +getSort());
+		
+		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch(), getOrder(), getSort());		
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
@@ -67,7 +73,7 @@ public class DashboardServlet extends HttpServlet {
 
 	}
 	
-	private void setPage(String pPageNbr, String pPageSize, String pSearch) {
+	private void setPage(String pPageNbr, String pPageSize, String pSearch, String pOrder, String pSort) {
 		
 		int viewPageNbr = (pPageNbr == null ? getPageNbr() : Integer.valueOf(pPageNbr));
 		int viewPageSize = (pPageSize == null ? getPageSize() : Integer.valueOf(pPageSize));
@@ -80,6 +86,11 @@ public class DashboardServlet extends HttpServlet {
 		}
 		
 		setPageMax(defineMaxPage(getAllComputer()));
+		
+		if(pOrder != null) {
+			setOrder(pOrder);
+			setSort(pSort);
+		}
 		
 		if( viewPageSize != getPageSize()){
 			setPageSize(viewPageSize);
@@ -135,5 +146,20 @@ public class DashboardServlet extends HttpServlet {
 	public void setSearch(String pSearch) {
 		this.search = pSearch;
 	}
+	
+	public String getOrder() {
+		return this.order;
+	}
+	
+	public void setOrder(String pOrder) {
+		this.order = pOrder;
+	}
+	
+	public String getSort() {
+		return this.sort;
+	}
 
+	public void setSort(String pSort) {
+		this.sort = pSort;
+	}
 }

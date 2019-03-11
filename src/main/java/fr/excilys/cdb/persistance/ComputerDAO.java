@@ -313,17 +313,21 @@ public class ComputerDAO implements IDAO<Computer>{
 		try(Connection connection = DAO.getConnection()) {
 			PreparedStatement statement;
 			
-			if(page.getSearch() == null) {
-				statement = connection.prepareStatement(PAGE_QUERY);
+			if(page.getSearch() == null && page.getOrder() == null) {
+				statement = connection.prepareStatement(PAGE_QUERY);				
 				statement.setInt(1, page.getPageSize());
 				statement.setInt(2, page.getOffSet());
+			}else if(page.getOrder() != null){
+				statement = connection.prepareStatement(requestSortBuilder(page).toString());
 			}else {
 				statement = connection.prepareStatement(SEARCH_QUERY);
 				statement.setString(1, page.getSearch()+"%");
-				statement.setString(2, page.getSearch()+"%");
+				statement.setString(2, page.getSearch()+"%");				
 				statement.setInt(3, page.getPageSize());
 				statement.setInt(4, page.getOffSet());
 			}
+			
+			System.out.println(">>>>> "+statement);
 			
 			ResultSet resultSet = statement.executeQuery();
 
@@ -338,6 +342,37 @@ public class ComputerDAO implements IDAO<Computer>{
 		}
 		
 		return computerPage;
+	}
+	
+	private StringBuilder requestSortBuilder(Pagination page) {
+		StringBuilder sortRequest =  new StringBuilder();
+		if(page.getSearch() == null) {
+			sortRequest.append("SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer "
+					+ "LEFT JOIN company ON computer.company_id = company.id ORDER BY ");
+			sortRequest.append(page.getOrder());
+			sortRequest.append(" ");
+			sortRequest.append(page.getSort());
+			sortRequest.append(" LIMIT ");
+			sortRequest.append(page.getPageSize());
+			sortRequest.append(" OFFSET ");
+			sortRequest.append(page.getOffSet());
+		}else {
+			sortRequest.append("SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer "
+					+ "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '");
+			sortRequest.append(page.getSearch());
+			sortRequest.append("%' OR company.name LIKE '");
+			sortRequest.append(page.getSearch());
+			sortRequest.append("%' ORDER BY ");
+			sortRequest.append(page.getOrder());
+			sortRequest.append(" ");
+			sortRequest.append(page.getSort());
+			sortRequest.append(" LIMIT ");
+			sortRequest.append(page.getPageSize());
+			sortRequest.append(" OFFSET ");
+			sortRequest.append(+page.getOffSet());
+		}
+		
+		return sortRequest;
 	}
 	
 	private Timestamp convertLocalDateToTimestamp(LocalDate date) {

@@ -41,15 +41,22 @@ public class ComputerService implements IService<Computer> {
 		return this.computerDAO.countComputer(pSearch);
 	}
 	
-	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch){
+	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch, String pOrder, String pSort){
 		
 		Pagination page;
 		
-		if(pSearch == null) {
+		System.out.println("Service >>> "+ pOrder+ " " +pSort);
+		
+		if(pSearch == null && pOrder == null) {
 			page = new Pagination(pPageSize, pPage);
+		}else if(pOrder != null){
+			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setOrder(pOrder).setSort(pSort).setMaxPage().setOffSet().build();
+			System.out.println(">>> Page Builder "+page.getOrder()+ " " + page.getSort());
 		}else {
-			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setMaxPage().setOffSet().build();
+			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setOrder(pOrder).setSort(pSort).setMaxPage().setOffSet().build();
 		}
+		
+		System.out.println("page nbr: "+page.getPage()+" max pages : "+page.getMaxPage());
 		
 		if(page.getPage()>page.getMaxPage()) {
 			throw new CustomException();

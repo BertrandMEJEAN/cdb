@@ -67,17 +67,57 @@
                         </th>
                         <th>
                             Computer name
+                            <div class="order">
+                            	<c:choose>
+                            		<c:when test="${search != null}">
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&search=${search}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=computer.name&sort=DESC"><i class="down"></i></a>
+                            		</c:when>
+                            		<c:otherwise>
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=computer.name&sort=DESC"><i class="down"></i></a>
+                            		</c:otherwise>
+                            	</c:choose>
+                            </div>
                         </th>
                         <th>
                             Introduced date
+                            <div class="order">
+                            	<c:choose>
+                            		<c:when test="${search != null}">
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=introduced&sort=DESC"><i class="down"></i></a>
+                            		</c:when>
+                            		<c:otherwise>
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=introduced&sort=DESC"><i class="down"></i></a>
+                            		</c:otherwise>
+                            	</c:choose>
+                            </div>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
                             Discontinued date
+                            <div class="order">
+                            	<c:choose>
+                            		<c:when test="${search != null}">
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=discontinued&sort=DESC"><i class="down"></i></a>
+                            		</c:when>
+                            		<c:otherwise>
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=discontinued&sort=DESC"><i class="down"></i></a>
+                            		</c:otherwise>
+                            	</c:choose>
+                            </div>
                         </th>
                         <!-- Table header for Company -->
                         <th>
                             Company
+                            <div class="order">
+                            	<c:choose>
+                            		<c:when test="${search != null}">
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&search=${search}&order=company.name&sort=DESC"><i class="down"></i></a>
+                            		</c:when>
+                            		<c:otherwise>
+                            			<a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${pageSize}&pageNbr=${pageNbr}&order=company.name&sort=DESC"><i class="down"></i></a>
+                            		</c:otherwise>
+                            	</c:choose>
+                            </div>
                         </th>
 
                     </tr>
