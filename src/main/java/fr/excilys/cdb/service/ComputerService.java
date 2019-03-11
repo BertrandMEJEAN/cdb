@@ -9,6 +9,7 @@ import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.persistance.ComputerDAO;
+import fr.excilys.cdb.service.Pagination.PaginationBuilder;
 
 public class ComputerService implements IService<Computer> {
 	
@@ -40,24 +41,21 @@ public class ComputerService implements IService<Computer> {
 		return this.computerDAO.countComputer(pSearch);
 	}
 	
-	public Collection<Computer> getPageComputer(int pPageSize, int pPage){
-		Pagination pagination = new Pagination(pPageSize, pPage);
-		
-		if(pagination.getPage()>pagination.getMaxPage()) {
-			throw new CustomException();
-		}
-		
-		return this.computerDAO.getPageComputer(pagination.getPageSize(),pagination.getOffSet());
-	}
-	
 	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch){
-		Pagination pagination = new Pagination(pPageSize, pPage);
 		
-		if(pagination.getPage()>pagination.getMaxPage()) {
+		Pagination page;
+		
+		if(pSearch == null) {
+			page = new Pagination(pPageSize, pPage);
+		}else {
+			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setMaxPage().setOffSet().build();
+		}
+		
+		if(page.getPage()>page.getMaxPage()) {
 			throw new CustomException();
 		}
 		
-		return this.computerDAO.getPageComputer(pagination.getPageSize(),pagination.getOffSet(), pSearch);
+		return this.computerDAO.getPageComputer(page);
 	}
 	
 	public ComputerDetails getDetailsByComputerId(int id) {

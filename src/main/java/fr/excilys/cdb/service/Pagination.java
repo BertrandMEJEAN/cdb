@@ -6,6 +6,12 @@ public class Pagination {
 	private int pageSize;
 	private int offSet;
 	private int maxPage;
+	private String search;
+	private String order;
+	
+	private Pagination() {
+		
+	}
 	
 	public Pagination(int pPageSize, int pPage) {
 		this.pageSize = pPageSize;
@@ -16,7 +22,7 @@ public class Pagination {
 	
 	private int defineMaxPage() {
 		
-		float count = ComputerService.getInstance().countComputer();
+		float count = (getSearch() == null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(getSearch()));
 		float tmp = (count / getPageSize());
 		int newMaxPage = (int) Math.ceil(tmp);
 			
@@ -61,6 +67,77 @@ public class Pagination {
 	public void setMaxPage(int maxPage) {
 		this.maxPage = maxPage;
 	}
+	
+	public String getSearch() {
+		return search;
+	}
+	
+	public void setSearch(String search) {
+		this.search = search;
+	}
+	
+	public String getOrder() {
+		return order;
+	}
+	
+	public void setOrder(String order) {
+		this.order = order;
+	}
 
+	public static class PaginationBuilder{
+		
+		private int page;
+		private int pageSize;
+		private int offSet;
+		private int maxPage;
+		private String search;
+		private String order;
+		
+		public Pagination build() {
+			Pagination page = new Pagination();
+			
+			page.setPage(this.page);
+			page.setPageSize(this.pageSize);
+			page.setSearch(this.search);
+			page.setOrder(this.order);
+			page.setOffSet(this.offSet);
+			page.setMaxPage(this.maxPage);
+			
+			return page;
+		}
+		
+		public PaginationBuilder setPage(int page) {
+			this.page = page;
+			return this;
+		}
+		
+		public PaginationBuilder setPageSize(int pageSize) {
+			this.pageSize = pageSize;
+			return this;
+		}
+		
+		public PaginationBuilder setOffSet() {
+			this.offSet = (this.page-1)*this.pageSize;
+			return this;
+		}
+		
+		public PaginationBuilder setMaxPage() {
+			float count = (this.search != null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(this.search));
+			float tmp = (count / this.pageSize);
+			this.maxPage = (int) Math.ceil(tmp); 
+			
+			return this;
+		}
+		
+		public PaginationBuilder setSearch(String search) {
+			this.search = search;
+			return this;
+		}
+		
+		public PaginationBuilder setOrder(String order) {
+			this.order = order;
+			return this;
+		}
+	}
 	
 }

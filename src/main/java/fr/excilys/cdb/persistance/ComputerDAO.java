@@ -307,41 +307,30 @@ public class ComputerDAO implements IDAO<Computer>{
 		return count;
 	}
 	
-	public Collection<Computer> getPageComputer(int pLimit, int pOffSet){
+	public Collection<Computer> getPageComputer(Pagination page){
 		List<Computer> computerPage = new ArrayList<>();
 		
 		try(Connection connection = DAO.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(PAGE_QUERY);
-			statement.setInt(1, pLimit);
-			statement.setInt(2, pOffSet);
-			ResultSet resultSet = statement.executeQuery();
-
-			while(resultSet.next()) {
-
-				computerPage.add(createResult(resultSet));
-
+			PreparedStatement statement;
+			
+			if(page.getSearch() == null) {
+				statement = connection.prepareStatement(PAGE_QUERY);
+				statement.setInt(1, page.getPageSize());
+				statement.setInt(2, page.getOffSet());
+			}else {
+				statement = connection.prepareStatement(SEARCH_QUERY);
+				statement.setString(1, page.getSearch()+"%");
+				statement.setString(2, page.getSearch()+"%");
+				statement.setInt(3, page.getPageSize());
+				statement.setInt(4, page.getOffSet());
 			}
 			
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		
-		return computerPage;
-	}
-	
-	public Collection<Computer> getPageComputer(int pLimit, int pOffSet, String pSearch){
-		List<Computer> computerPage = new ArrayList<>();
-		
-		try(Connection connection = DAO.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SEARCH_QUERY);
-			statement.setString(1, pSearch+"%");
-			statement.setString(2, pSearch+"%");
-			statement.setInt(3, pLimit);
-			statement.setInt(4, pOffSet);
 			ResultSet resultSet = statement.executeQuery();
 
 			while(resultSet.next()) {
+
 				computerPage.add(createResult(resultSet));
+
 			}
 			
 		}catch(SQLException e){

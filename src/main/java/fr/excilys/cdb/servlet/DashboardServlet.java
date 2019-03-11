@@ -43,7 +43,7 @@ public class DashboardServlet extends HttpServlet {
 		
 		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"));
 		
-		Collection<Computer> page = (getSearch() == null ? ComputerService.getInstance().getPageComputer(getPageSize(),getPageNbr()) : ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch()));		
+		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch());		
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
