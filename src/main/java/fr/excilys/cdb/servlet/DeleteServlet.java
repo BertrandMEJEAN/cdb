@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import fr.excilys.cdb.configuration.SpringConfig;
 import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Computer;
@@ -18,8 +22,12 @@ import fr.excilys.cdb.exception.ValidatorException;
  */
 @WebServlet("/DeleteServlet")
 public class DeleteServlet extends HttpServlet {
+	private ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
 	private static final long serialVersionUID = 1L;
-       
+    
+	private ComputerService computerService = ctx.getBean(ComputerService.class);
+	private ComputerMapper computerMapper = ctx.getBean(ComputerMapper.class);
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -49,8 +57,8 @@ public class DeleteServlet extends HttpServlet {
 			dto.setId(computer);
 			
 			try {
-				deleteComp = ComputerMapper.getInstance().dtoToObject(dto);
-				ComputerService.getInstance().delete(deleteComp);
+				deleteComp = this.computerMapper.dtoToObject(dto);
+				this.computerService.delete(deleteComp);
 			}catch(ValidatorException e) {
 				e.getMessage();
 			}			

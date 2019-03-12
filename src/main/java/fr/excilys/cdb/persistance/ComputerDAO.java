@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.exception.*;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
@@ -26,9 +28,8 @@ import org.slf4j.LoggerFactory;*/
  * classe faisant le liens entre les opération sur les computers et l'application.
  * @author Bertrand Méjean.
  */
+@Component
 public class ComputerDAO implements IDAO<Computer>{
-	
-	private static ComputerDAO INSTANCE;
 	
 	public static final String SELECT_BY_ID = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
 	public static final String SELECT_QUERY = "SELECT computer.id,computer.name,introduced,discontinued,company_id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id";
@@ -51,13 +52,6 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String COUNT = "count";
 	
 	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
-	
-	public static ComputerDAO getInstance() {
-		if(INSTANCE == null) {
-			return INSTANCE = new ComputerDAO();
-		}
-		return INSTANCE;
-	}
 	
 	/**
 	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
@@ -326,8 +320,6 @@ public class ComputerDAO implements IDAO<Computer>{
 				statement.setInt(3, page.getPageSize());
 				statement.setInt(4, page.getOffSet());
 			}
-			
-			System.out.println(">>>>> "+statement);
 			
 			ResultSet resultSet = statement.executeQuery();
 

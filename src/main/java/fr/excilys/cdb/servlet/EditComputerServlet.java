@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import fr.excilys.cdb.configuration.SpringConfig;
 import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.mapper.CompanyMapper;
@@ -26,8 +30,13 @@ import fr.excilys.cdb.exception.ValidatorException;
  */
 @WebServlet("/EditComputer")
 public class EditComputerServlet extends HttpServlet {
+	private ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
 	private static final long serialVersionUID = 1L;
-       
+    
+	private CompanyService companyService = ctx.getBean(CompanyService.class);
+	private ComputerService computerService = ctx.getBean(ComputerService.class);
+	private ComputerMapper computerMapper = ctx.getBean(ComputerMapper.class);
+	private CompanyMapper companyMapper = ctx.getBean(CompanyMapper.class);
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -44,13 +53,13 @@ public class EditComputerServlet extends HttpServlet {
 		int cptId = Integer.valueOf(request.getParameter("cptId"));
 		request.setAttribute("cptId", cptId);
 		
-		Collection<Company> companies = CompanyService.getInstance().getAll();
+		Collection<Company> companies = this.companyService.getAll();
 		Collection<CompanyDto> dtoList = new ArrayList<>();
-		Optional<Computer> computer = ComputerService.getInstance().getId(cptId);
-		ComputerDto dtoCpt = ComputerMapper.getInstance().objectToDto(computer.get());
+		Optional<Computer> computer = this.computerService.getId(cptId);
+		ComputerDto dtoCpt = this.computerMapper.objectToDto(computer.get());
 		
 		for(Company company : companies) {
-			dtoList.add(CompanyMapper.getInstance().objectToDto(company));
+			dtoList.add(this.companyMapper.objectToDto(company));
 		}
 		
 		request.setAttribute("cptName", dtoCpt.getName());
@@ -77,8 +86,8 @@ public class EditComputerServlet extends HttpServlet {
 		dto.setCompId(request.getParameter("idCpy"));
 		
 		try {
-			computerUpdated = ComputerMapper.getInstance().dtoToObject(dto);
-			ComputerService.getInstance().update(computerUpdated);
+			computerUpdated = this.computerMapper.dtoToObject(dto);
+			this.computerService.update(computerUpdated);
 		}catch(ValidatorException e) {
 			e.getMessage();
 		}

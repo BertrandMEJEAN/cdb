@@ -17,10 +17,10 @@ public class MenuAllCompany extends Menu {
 	}
 	
 	public void show() {
-		Collection<Company> companies = CompanyService.getInstance().getAll();
-		if(companies != null) {
-			System.out.println(companies);
-		}
+//		Collection<Company> companies = CompanyService.getInstance().getAll();
+//		if(companies != null) {
+//			System.out.println(companies);
+//		}
 	}
 
 }

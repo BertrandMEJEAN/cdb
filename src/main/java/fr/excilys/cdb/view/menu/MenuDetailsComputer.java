@@ -26,11 +26,11 @@ public class MenuDetailsComputer extends Menu {
 		
 		Optional<ComputerDetails> computerDetails = Optional.empty();
 		
-		try {
-			computerDetails = Optional.of(ComputerService.getInstance().getDetailsByComputerId(computerId));			
-		}catch(CustomException e) {
-			
-		}
+//		try {
+//			computerDetails = Optional.of(ComputerService.getInstance().getDetailsByComputerId(computerId));			
+//		}catch(CustomException e) {
+//			
+//		}
 		
 		if(computerDetails.isPresent()) {
 			System.out.println(computerDetails);

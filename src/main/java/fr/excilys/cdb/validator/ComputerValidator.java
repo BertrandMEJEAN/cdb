@@ -1,21 +1,15 @@
 package fr.excilys.cdb.validator;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.model.Computer;
 
+@Component
 public class ComputerValidator {
-
-	private static ComputerValidator INSTANCE;
 	
-	private ComputerValidator() {
+	public ComputerValidator() {
 		
-	}
-	
-	public static ComputerValidator getInstance() {
-		if(INSTANCE == null) {
-			INSTANCE = new ComputerValidator();
-		}
-		return INSTANCE;
 	}
 	
 	public void validateComputer(Computer computer) throws ValidatorException{

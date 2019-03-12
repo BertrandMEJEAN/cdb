@@ -12,15 +12,16 @@ import java.util.List;
 import org.slf4j.LoggerFactory;*/
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.model.Company;
 
 /**
  * classe faisant le liens entre les opération sur les companys et l'application.
  * @author Bertrand Méjean.
  */
+@Component
 public class CompanyDAO implements IDAO<Company>{
-	
-	private static CompanyDAO INSTANCE;
 
 	public static final String SELECT_QUERY = "SELECT * FROM company";
 	public static final String EXISTENT_BY_ID = "SELECT count(id) AS count FROM company WHERE id = ?";
@@ -39,15 +40,8 @@ public class CompanyDAO implements IDAO<Company>{
 	 * @exception Peut levé une exception de type SQLException.
 	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
 	 */
-	private CompanyDAO() {
+	public CompanyDAO() {
 		
-	}
-	
-	public static CompanyDAO getInstance() {
-		if(INSTANCE == null) {
-			return INSTANCE = new CompanyDAO();
-		}
-		return INSTANCE;
 	}
 	
 	private Company createResult(ResultSet resultSet)throws SQLException{

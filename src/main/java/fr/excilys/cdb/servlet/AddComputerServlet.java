@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import fr.excilys.cdb.configuration.SpringConfig;
 import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.exception.ValidatorException;
@@ -18,6 +23,7 @@ import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.persistance.CompanyDAO;
+import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.service.ComputerService;
 
 /**
@@ -25,7 +31,15 @@ import fr.excilys.cdb.service.ComputerService;
  */
 @WebServlet("/AddComputer")
 public class AddComputerServlet extends HttpServlet {
+	
+	private ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
 	private static final long serialVersionUID = 1L;
+	
+	
+	private CompanyService companyService = ctx.getBean(CompanyService.class);
+	private ComputerService computerService = ctx.getBean(ComputerService.class);
+	private CompanyMapper companyMapper = ctx.getBean(CompanyMapper.class);
+	private ComputerMapper computerMapper = ctx.getBean(ComputerMapper.class);
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -39,10 +53,10 @@ public class AddComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Collection<Company> companies = CompanyDAO.getInstance().getAll();
+		Collection<Company> companies = this.companyService.getAll();
 		Collection<CompanyDto> dtoList = new ArrayList<>();
 		for(Company element : companies) {
-			dtoList.add(CompanyMapper.getInstance().objectToDto(element));
+			dtoList.add(this.companyMapper.objectToDto(element));
 		}
 		request.setAttribute("companies", dtoList);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
@@ -61,8 +75,8 @@ public class AddComputerServlet extends HttpServlet {
 		dto.setCompId(request.getParameter("idCpy"));
 		
 		try {
-			computer = ComputerMapper.getInstance().dtoToObject(dto);
-			ComputerService.getInstance().add(computer);
+			computer = this.computerMapper.dtoToObject(dto);
+			this.computerService.add(computer);
 		}catch(ValidatorException e) {
 			e.getMessage();
 		}

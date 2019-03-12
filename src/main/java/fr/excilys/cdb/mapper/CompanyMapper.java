@@ -1,22 +1,16 @@
 package fr.excilys.cdb.mapper;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.dto.CompanyDto;
 import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.model.Company;
 
+@Component
 public class CompanyMapper implements IMapper<Company, CompanyDto>{
 	
-	private static CompanyMapper INSTANCE;
-	
-	private CompanyMapper() {
+	public CompanyMapper() {
 		
-	}
-	
-	public static CompanyMapper getInstance() {
-		if(INSTANCE == null) {
-			INSTANCE = new CompanyMapper();
-		}
-		return INSTANCE;
 	}
 	
 	public CompanyDto objectToDto(Company object) {

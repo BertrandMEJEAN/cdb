@@ -93,13 +93,13 @@ public class EntryVerification {
 		System.out.println("What's the company id ?");
 		int companyId = -1;
 		
-		do {
-			companyId = EntryVerification.readInteger("The company id should be an integer");
-			
-			if(!CompanyService.getInstance().existentById(companyId)){
-				View.logger.error("The company does not exist\n");
-			}
-		}while(!CompanyService.getInstance().existentById(companyId));
+//		do {
+//			companyId = EntryVerification.readInteger("The company id should be an integer");
+//			
+//			if(!CompanyService.getInstance().existentById(companyId)){
+//				View.logger.error("The company does not exist\n");
+//			}
+//		}while(!CompanyService.getInstance().existentById(companyId));
 		
 		return companyId;
 	}

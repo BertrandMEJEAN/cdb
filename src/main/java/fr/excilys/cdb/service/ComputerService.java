@@ -3,6 +3,9 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
@@ -11,22 +14,18 @@ import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.persistance.ComputerDAO;
 import fr.excilys.cdb.service.Pagination.PaginationBuilder;
 
+@Service
 public class ComputerService implements IService<Computer> {
 	
-	private static ComputerService INSTANCE;
+	@Autowired
 	private ComputerDAO computerDAO;
+	@Autowired
 	private CompanyDAO companyDao;
-	
-	public static ComputerService getInstance() {
-		if(INSTANCE == null) {
-			INSTANCE = new ComputerService();
-		}
-		return INSTANCE;
-	}
+	@Autowired
+	private Pagination page;
 	
 	public ComputerService() {
-		this.setComputerDAO(ComputerDAO.getInstance());
-		this.setCompanyDAO(CompanyDAO.getInstance());
+		
 	}
 
 	public Optional<Computer> getId(int id) {
@@ -43,20 +42,18 @@ public class ComputerService implements IService<Computer> {
 	
 	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch, String pOrder, String pSort){
 		
-		Pagination page;
-		
-		System.out.println("Service >>> "+ pOrder+ " " +pSort);
+
 		
 		if(pSearch == null && pOrder == null) {
-			page = new Pagination(pPageSize, pPage);
+			page.setPageSize(pPageSize);
+			page.setPage(pPage);
+			page.setMaxPage(defineMaxPage(pSearch, pPageSize));
+			page.setOffSet(defineOffSet(pPage, pPageSize));
 		}else if(pOrder != null){
-			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setOrder(pOrder).setSort(pSort).setMaxPage().setOffSet().build();
-			System.out.println(">>> Page Builder "+page.getOrder()+ " " + page.getSort());
+			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setOrder(pOrder).setSort(pSort).setMaxPage(defineMaxPage(pSearch, pPageSize)).setOffSet().build();
 		}else {
-			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setOrder(pOrder).setSort(pSort).setMaxPage().setOffSet().build();
+			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setOrder(pOrder).setSort(pSort).setMaxPage(defineMaxPage(pSearch, pPageSize)).setOffSet().build();
 		}
-		
-		System.out.println("page nbr: "+page.getPage()+" max pages : "+page.getMaxPage());
 		
 		if(page.getPage()>page.getMaxPage()) {
 			throw new CustomException();
@@ -113,5 +110,21 @@ public class ComputerService implements IService<Computer> {
 
 	public void setCompanyDAO(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
+	}
+	
+	private int defineMaxPage(String pSearch, int pPageSize) {
+		
+		float count = (pSearch == null ? countComputer() : countComputer(pSearch));
+		float tmp = (count / pPageSize);
+		int newMaxPage = (int) Math.ceil(tmp);
+			
+		return newMaxPage;
+	}
+	
+	private int defineOffSet(int pPage, int pPageSize) {
+		
+		int newOffSet = (pPage-1)*pPageSize;		
+		
+		return newOffSet;
 	}
 }

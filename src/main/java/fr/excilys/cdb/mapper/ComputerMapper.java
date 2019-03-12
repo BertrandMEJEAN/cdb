@@ -4,33 +4,30 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.validator.ComputerValidator;
 
+@Component
 public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 
-		private static ComputerMapper INSTANCE;
 		private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		
-		private ComputerMapper() {
-			
-		}
+		@Autowired
+		private ComputerValidator computorValidator;
 		
-		public static ComputerMapper getInstance() {
-			if(INSTANCE == null) {
-				INSTANCE = new ComputerMapper();
-			}
+		public ComputerMapper() {
 			
-			return INSTANCE;
 		}
 		
 		public Computer dtoToObject(ComputerDto object) throws ValidatorException {
 			
 			Computer computer = new Computer();
-			ComputerValidator validator = ComputerValidator.getInstance();
 			Company company = ( object.getCompId() == "" || object.getCompId() == null ? new Company() : new Company(Integer.valueOf(object.getCompId()),object.getCompName()));
 			Optional<Company> companyOpt = Optional.of(company);
 			
@@ -39,7 +36,7 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			computer.setIn(convertStringToLocalDate(object.getIn()));
 			computer.setOut(convertStringToLocalDate(object.getOut()));
 			computer.setCompany(companyOpt);
-			validator.validateComputer(computer);
+			this.computorValidator.validateComputer(computer);
 			
 			return computer;
 		}

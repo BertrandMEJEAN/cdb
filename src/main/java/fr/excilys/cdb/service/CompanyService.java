@@ -3,23 +3,20 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.persistance.CompanyDAO;
 
+@Service
 public class CompanyService implements IService<Company> {
 	
-	private static CompanyService INSTANCE;
+	@Autowired
 	private CompanyDAO companyDAO;
 	
 	public CompanyService() {
-		this.setCompanyDAO(CompanyDAO.getInstance());
-	}
-	
-	public static CompanyService getInstance() {
-		if(INSTANCE == null) {
-			INSTANCE = new CompanyService();
-		}
-		return INSTANCE;
+		
 	}
 
 	public Optional<Company> getId(int id) {

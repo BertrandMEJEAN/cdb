@@ -23,12 +23,12 @@ public class MenuUpdateComputer extends MenuComputerForm {
 		Computer computer = form();
 		computer.setId(computerId);
 		
-		Optional<Computer> createdComputer = ComputerService.getInstance().update(computer);
-		
-		if(createdComputer.isPresent()) {
-			System.out.println("Successfully updated "+ createdComputer);
-		}else {
-			System.out.println("Error update "+ createdComputer);
-		}
+//		Optional<Computer> createdComputer = ComputerService.getInstance().update(computer);
+//		
+//		if(createdComputer.isPresent()) {
+//			System.out.println("Successfully updated "+ createdComputer);
+//		}else {
+//			System.out.println("Error update "+ createdComputer);
+//		}
 	}
 }

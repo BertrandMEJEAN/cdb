@@ -1,6 +1,12 @@
 package fr.excilys.cdb.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class Pagination {
+	
+	private ComputerService computerService;
 	
 	private int page;
 	private int pageSize;
@@ -14,27 +20,8 @@ public class Pagination {
 		
 	}
 	
-	public Pagination(int pPageSize, int pPage) {
-		this.pageSize = pPageSize;
-		this.page = pPage;
-		this.maxPage = defineMaxPage();
-		this.offSet = defineOffSet();
-	}
-	
-	private int defineMaxPage() {
-		
-		float count = (getSearch() == null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(getSearch()));
-		float tmp = (count / getPageSize());
-		int newMaxPage = (int) Math.ceil(tmp);
-			
-		return newMaxPage;
-	}
-	
-	private int defineOffSet() {
-		
-		int newOffSet = (getPage()-1)*getPageSize();		
-		
-		return newOffSet;
+	public Pagination(@Autowired ComputerService computerService) {
+		this.computerService = computerService;
 	}
 
 	public int getOffSet() {
@@ -93,6 +80,7 @@ public class Pagination {
 		this.sort = pSort;
 	}
 
+	@Service
 	public static class PaginationBuilder{
 		
 		private int page;
@@ -132,10 +120,8 @@ public class Pagination {
 			return this;
 		}
 		
-		public PaginationBuilder setMaxPage() {
-			float count = (this.search == null ? ComputerService.getInstance().countComputer() : ComputerService.getInstance().countComputer(this.search));
-			float tmp = (count / this.pageSize);
-			this.maxPage = (int) Math.ceil(tmp); 
+		public PaginationBuilder setMaxPage(int maxPage) { 
+			this.maxPage = maxPage;
 			
 			return this;
 		}

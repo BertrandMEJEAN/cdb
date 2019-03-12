@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import fr.excilys.cdb.configuration.SpringConfig;
 import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Computer;
@@ -20,8 +25,13 @@ import fr.excilys.cdb.service.ComputerService;
  */
 @WebServlet("")
 public class DashboardServlet extends HttpServlet {
+	
+	private ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
 	private static final long serialVersionUID = 1L;
     
+	private ComputerService computerService = ctx.getBean(ComputerService.class);
+	private ComputerMapper computerMapper = ctx.getBean(ComputerMapper.class);
+	
 	private int pageNbr = 1;
 	private int pageSize = 10;
 	private int pageMax;
@@ -47,13 +57,11 @@ public class DashboardServlet extends HttpServlet {
 		
 		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"), request.getParameter("order"), request.getParameter("sort"));
 		
-		System.out.println(getOrder()+ " " +getSort());
-		
-		Collection<Computer> page = ComputerService.getInstance().getPageComputer(getPageSize(), getPageNbr(), getSearch(), getOrder(), getSort());		
+		Collection<Computer> page = this.computerService.getPageComputer(getPageSize(), getPageNbr(), getSearch(), getOrder(), getSort());		
 		Collection<ComputerDto> dtoList = new ArrayList<>();
 		
 		for(Computer element : page) {
-			dtoList.add(ComputerMapper.getInstance().objectToDto(element));
+			dtoList.add(this.computerMapper.objectToDto(element));
 		}
 		
 		request.setAttribute("allComputer", getAllComputer());
@@ -80,9 +88,9 @@ public class DashboardServlet extends HttpServlet {
 
 		if(pSearch != null) {
 			setSearch(pSearch);
-			setAllComputer(ComputerService.getInstance().countComputer(getSearch()));
+			setAllComputer(this.computerService.countComputer(getSearch()));
 		}else {
-			setAllComputer(ComputerService.getInstance().countComputer());
+			setAllComputer(this.computerService.countComputer());
 		}
 		
 		setPageMax(defineMaxPage(getAllComputer()));
