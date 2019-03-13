@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.excilys.cdb.exception.*;
@@ -51,6 +52,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String COMPANY_NAME = "company.name";
 	private static final String COUNT = "count";
 	
+	@Autowired
+	private DAO dao;
 	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
 	
 	/**
@@ -85,7 +88,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Optional<Computer> getId(int objectId){
 		Optional<Computer> result = Optional.empty();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
@@ -108,7 +111,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Collection<Computer> getAll(){
 		List<Computer> result = new ArrayList<Computer>();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
@@ -134,7 +137,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Optional<Computer> add(Computer object) {
 		Optional<Computer> optional = Optional.empty();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, object.getName());
 			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
@@ -172,7 +175,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Optional<Computer> update(Computer object) {
 		Optional<Computer> opt = Optional.empty();
 	
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
 			statement.setString(1, object.getName());
@@ -211,7 +214,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	 */
 	public boolean deleteById(int id) {
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 				
 				PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
 				statement.setInt(1, id);
@@ -237,7 +240,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public boolean existentById(int id) {
 		int count= 0;
 	
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 
 			PreparedStatement statement = connection.prepareStatement(EXISTENT_QUERY);
 			statement.setInt(1, id);
@@ -259,7 +262,7 @@ public class ComputerDAO implements IDAO<Computer>{
 		
 		int count = 0;
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 
 			PreparedStatement statement = connection.prepareStatement(COUNT_COMPUTER);
 			ResultSet resultSet = statement.executeQuery();
@@ -281,7 +284,7 @@ public class ComputerDAO implements IDAO<Computer>{
 		
 		int count = 0;
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 
 			PreparedStatement statement = connection.prepareStatement(COUNT_SEARCHED);
 			statement.setString(1, pSearch+"%");
@@ -304,7 +307,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Collection<Computer> getPageComputer(Pagination page){
 		List<Computer> computerPage = new ArrayList<>();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			PreparedStatement statement;
 			
 			if(page.getSearch() == null && page.getOrder() == null) {

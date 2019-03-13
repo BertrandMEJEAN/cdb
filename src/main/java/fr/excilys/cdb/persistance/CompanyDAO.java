@@ -12,6 +12,7 @@ import java.util.List;
 import org.slf4j.LoggerFactory;*/
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.excilys.cdb.model.Company;
@@ -30,6 +31,9 @@ public class CompanyDAO implements IDAO<Company>{
 	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String COUNT = "count";
+	
+	@Autowired
+	private DAO dao;
 	
 	//Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
@@ -59,7 +63,7 @@ public class CompanyDAO implements IDAO<Company>{
 	public Collection<Company> getAll(){
 		List<Company> result = new ArrayList<Company>();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
 			
@@ -77,7 +81,7 @@ public class CompanyDAO implements IDAO<Company>{
 	public Optional<Company> getId(int objectId) {
 	Optional<Company> result = Optional.empty();
 		
-		try(Connection connection = DAO.getConnection()) {
+		try(Connection connection = dao.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
@@ -124,7 +128,7 @@ public class CompanyDAO implements IDAO<Company>{
 		try {
 			Connection connection;
 			
-			connection = DAO.getConnection();
+			connection = dao.getConnection();
 			PreparedStatement statement = connection.prepareStatement(EXISTENT_BY_ID);
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();

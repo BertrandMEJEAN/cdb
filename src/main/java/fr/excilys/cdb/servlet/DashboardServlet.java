@@ -53,8 +53,6 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		
 		setPage(request.getParameter("pageNbr"), request.getParameter("pageSize"), request.getParameter("search"), request.getParameter("order"), request.getParameter("sort"));
 		
 		Collection<Computer> page = this.computerService.getPageComputer(getPageSize(), getPageNbr(), getSearch(), getOrder(), getSort());		
