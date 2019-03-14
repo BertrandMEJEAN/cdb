@@ -7,7 +7,8 @@ public enum MenuChoice {
 	ADD_COMPUTER(4),
 	UPDATE_COMPUTER(5),
 	DELETE_COMPUTER(6),
-	QUIT(7);
+	DELETE_COMPANY(7),
+	QUIT(8);
 
 	private final int id;
 	

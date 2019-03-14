@@ -28,6 +28,9 @@ public class View {
 	@Autowired
 	private MenuDeleteComputer menuDeleteComputer;
 	
+	@Autowired
+	private MenuDeleteCompany menuDeleteCompany;
+	
 	
 	public static Logger logger;
 	
@@ -113,6 +116,9 @@ public class View {
 				case DELETE_COMPUTER:
 					this.menuDeleteComputer.show();
 				break;
+				
+				case DELETE_COMPANY:
+					this.menuDeleteCompany.show();
 				
 				case QUIT:
 					System.out.println("Good Bye");
