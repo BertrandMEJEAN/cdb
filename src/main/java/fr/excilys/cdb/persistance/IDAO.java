@@ -2,6 +2,7 @@ package fr.excilys.cdb.persistance;
 
 import java.util.Collection;
 import java.util.Optional;
+import org.springframework.jdbc.core.RowMapper;
 
 import fr.excilys.cdb.exception.DAOException;
 
@@ -9,7 +10,7 @@ import fr.excilys.cdb.exception.DAOException;
  * @author Bertrand Méjean
  * @param <T> Correspond au type d'objet à manipuler.
  */
-public interface IDAO<T> {
+public interface IDAO<T> extends RowMapper<T>{
 	
 	public Optional<T> getId(int i);
 	public Collection<T> getAll();

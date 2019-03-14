@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import fr.excilys.cdb.exception.*;
 import fr.excilys.cdb.model.Company;
@@ -54,7 +57,13 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	@Autowired
 	private DAO dao;
+	
+	JdbcTemplate jdbc;
 	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
+
+	public ComputerDAO(HikariDataSource hikariSource) {
+		jdbc = new JdbcTemplate(hikariSource);
+	}
 	
 	/**
 	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
@@ -108,22 +117,8 @@ public class ComputerDAO implements IDAO<Computer>{
 	 * @author Bertrand Méjean.
 	 * @return result Retourne une liste d'objet de type Computer contenant tout les computeurs de la base de donnée.
 	 */
-	public Collection<Computer> getAll(){
-		List<Computer> result = new ArrayList<Computer>();
-		
-		try(Connection connection = dao.getConnection()) {
-			
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
-			
-			while(resultSet.next()) {
-				
-				result.add(createResult(resultSet));
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
-		}		
-		return result;
+	public Collection<Computer> getAll(){		
+		return jdbc.query(SELECT_QUERY, this);
 	}
 	
 	/**
@@ -386,5 +381,25 @@ public class ComputerDAO implements IDAO<Computer>{
 			lDate= Optional.of(date.toLocalDateTime().toLocalDate());
 		}
 		return (lDate.isPresent() ? lDate.get() : null);
+	}
+
+	@Override
+	public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+		
+		Computer computer = new Computer();
+		
+		computer.setId(resultSet.getInt(ID));
+		computer.setName(resultSet.getString(NAME));
+		
+		Timestamp timesTamp = resultSet.getTimestamp(IN);
+		
+		computer.setIn(convertTimestampToLocalDate(timesTamp));
+		
+		timesTamp = resultSet.getTimestamp(OUT);
+		
+		computer.setOut(convertTimestampToLocalDate(timesTamp));
+		computer.setCompany(Optional.of(new Company(resultSet.getInt(COMPANY_ID),resultSet.getString(COMPANY_NAME))));
+		
+		return computer;
 	}
 }

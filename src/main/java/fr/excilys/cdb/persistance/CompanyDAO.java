@@ -169,5 +169,11 @@ public class CompanyDAO implements IDAO<Company>{
 			//logger.info("Problème lors de l'intérogation de la base de donnée");
 		}
 		return count != 0;
+	}
+
+	@Override
+	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
