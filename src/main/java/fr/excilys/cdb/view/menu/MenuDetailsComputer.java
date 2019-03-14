@@ -3,19 +3,19 @@ package fr.excilys.cdb.view.menu;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.service.ComputerService;
 
+@Component
 public class MenuDetailsComputer extends Menu {
 	
-	private static MenuDetailsComputer INSTANCE;
+	private ComputerService computerService;
 	
-	public static MenuDetailsComputer getInstance() {
-		if(INSTANCE == null) {
-			INSTANCE = new MenuDetailsComputer();
-		}		
-		return INSTANCE;
+	public MenuDetailsComputer(ComputerService computerService) {
+		this.computerService = computerService;
 	}
 
 	@Override
@@ -26,11 +26,11 @@ public class MenuDetailsComputer extends Menu {
 		
 		Optional<ComputerDetails> computerDetails = Optional.empty();
 		
-//		try {
-//			computerDetails = Optional.of(ComputerService.getInstance().getDetailsByComputerId(computerId));			
-//		}catch(CustomException e) {
-//			
-//		}
+		try {
+			computerDetails = Optional.of(this.computerService.getDetailsByComputerId(computerId));			
+		}catch(CustomException e) {
+			
+		}
 		
 		if(computerDetails.isPresent()) {
 			System.out.println(computerDetails);

@@ -3,6 +3,8 @@ package fr.excilys.cdb.view.menu;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.view.View;
 
@@ -10,6 +12,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class EntryVerification {
+	
+	@Autowired
+	private static CompanyService companyService;
 
 	public static String readString() {
 		Scanner sc = new Scanner(System.in);
@@ -48,13 +53,11 @@ public class EntryVerification {
 	
 	public static LocalDate readDate(boolean nullable) {
 		String dateString = null;
-		//SimpleDateFormat sdf = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss");
 		LocalDate date = null;
 		
 		do {
 			
 			dateString = EntryVerification.readString();
-			System.out.println(dateString);
 			
 			if(nullable && dateString.equals("")) {
 				Optional.of(dateString);
@@ -62,9 +65,6 @@ public class EntryVerification {
 				View.logger.error("The date format is not valid");
 			}else {
 				try {
-					System.out.println(dateString);
-					//date = sdf.parse(dateString);
-					//date = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss").parse(dateString);
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 					date = LocalDate.parse(dateString, formatter);
 				} catch (Exception e) {
@@ -80,8 +80,9 @@ public class EntryVerification {
 		
 		if(!date.equals("")) {
 			try {
+				LocalDate vDate;
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-				LocalDate vDate = LocalDate.parse(date, formatter);
+				vDate = LocalDate.parse(date, formatter);
 			}catch(IllegalArgumentException e) {
 				return false;
 			}
@@ -93,13 +94,13 @@ public class EntryVerification {
 		System.out.println("What's the company id ?");
 		int companyId = -1;
 		
-//		do {
-//			companyId = EntryVerification.readInteger("The company id should be an integer");
-//			
-//			if(!CompanyService.getInstance().existentById(companyId)){
-//				View.logger.error("The company does not exist\n");
-//			}
-//		}while(!CompanyService.getInstance().existentById(companyId));
+		do {
+			companyId = EntryVerification.readInteger("The company id should be an integer");
+			
+			if(!companyService.existentById(companyId)){
+				View.logger.error("The company does not exist\n");
+			}
+		}while(!companyService.existentById(companyId));
 		
 		return companyId;
 	}

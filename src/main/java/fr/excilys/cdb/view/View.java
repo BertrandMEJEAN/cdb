@@ -2,10 +2,32 @@ package fr.excilys.cdb.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import fr.excilys.cdb.view.menu.*;
 
+
 public class View {
+	
+	@Autowired
+	private MenuAllComputer menuAllComputer;
+	
+	@Autowired
+	private MenuAllCompany menuAllCompany;
+	
+	@Autowired
+	private MenuDetailsComputer menuDetailsComputer;
+	
+	@Autowired
+	private MenuAddComputer menuAddComputer;
+	
+	@Autowired
+	private MenuUpdateComputer menuUpdateComputer;
+	
+	@Autowired
+	private MenuDeleteComputer menuDeleteComputer;
+	
 	
 	public static Logger logger;
 	
@@ -13,7 +35,7 @@ public class View {
 		View.logger = LoggerFactory.getLogger(View.class);
 		}
 	
-	private View() {
+	public View() {
 		
 	}
 	
@@ -61,7 +83,7 @@ public class View {
 		return choice;
 	}
 	
-	public static void run() {
+	public void run() {
 		MenuChoice choice = null;
 		
 		do {
@@ -69,27 +91,27 @@ public class View {
 			
 			switch(choice) {
 				case ALL_COMPUTER:
-					MenuAllComputer.getInstance().show();
+					this.menuAllComputer.show();
 				break;
 				
 				case ALL_COMPANY:
-					MenuAllCompany.getInstance().show();
+					this.menuAllCompany.show();
 				break;
 				
 				case COMPUTER_DETAILS:
-					MenuDetailsComputer.getInstance().show();
+					this.menuDetailsComputer.show();
 				break;
 				
 				case ADD_COMPUTER:
-					MenuAddComputer.getInstance().show();
+					this.menuAddComputer.show();
 				break;
 				
 				case UPDATE_COMPUTER:
-					MenuUpdateComputer.getInstance().show();
+					this.menuUpdateComputer.show();
 				break;
 				
 				case DELETE_COMPUTER:
-					MenuDeleteComputer.getInstance().show();
+					this.menuDeleteComputer.show();
 				break;
 				
 				case QUIT:
