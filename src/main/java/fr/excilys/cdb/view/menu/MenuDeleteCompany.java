@@ -7,12 +7,12 @@ import fr.excilys.cdb.view.View;
 
 @Component
 public class MenuDeleteCompany extends Menu {
-	
+
 	private CompanyService companyService;
 	
 	public MenuDeleteCompany(CompanyService companyService) {
 		this.companyService = companyService;
-	}
+	}	
 
 	@Override
 	public void show() {

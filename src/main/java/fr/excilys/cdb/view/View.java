@@ -3,7 +3,6 @@ package fr.excilys.cdb.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import fr.excilys.cdb.view.menu.*;
 
@@ -63,6 +62,7 @@ public class View {
 		System.out.printf("%d - Add a computer\n", MenuChoice.ADD_COMPUTER.getId());
 		System.out.printf("%d - Update Computer\n", MenuChoice.UPDATE_COMPUTER.getId());
 		System.out.printf("%d - Delete Computer\n", MenuChoice.DELETE_COMPUTER.getId());
+		System.out.printf("%d - Delete Company\n", MenuChoice.DELETE_COMPANY.getId());
 		System.out.printf("%d - Exit\n", MenuChoice.QUIT.getId());
 		System.out.printf("======\n");
 		
@@ -119,6 +119,7 @@ public class View {
 				
 				case DELETE_COMPANY:
 					this.menuDeleteCompany.show();
+				break;
 				
 				case QUIT:
 					System.out.println("Good Bye");

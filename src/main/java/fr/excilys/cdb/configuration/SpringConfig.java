@@ -15,7 +15,9 @@ import com.zaxxer.hikari.HikariDataSource;
 		"fr.excilys.cdb.validator",
 		"fr.excilys.cdb.exception",
 		"fr.excilys.cdb.service",
-		"fr.excilys.cdb.persistance"})
+		"fr.excilys.cdb.persistance",
+		"fr.excilys.cdb.view",
+		"fr.excilys.cdb.view.menu"})
 @PropertySource("classpath:config.properties")
 public class SpringConfig {
 	

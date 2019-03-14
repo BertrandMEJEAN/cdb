@@ -3,6 +3,8 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import fr.excilys.cdb.exception.DAOException;
+
 public interface IService<T> {
 	
 	public Optional<T> getId(int id);
