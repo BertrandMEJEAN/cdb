@@ -1,11 +1,10 @@
 package fr.excilys.cdb.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -21,18 +20,27 @@ import com.zaxxer.hikari.HikariDataSource;
 @PropertySource("classpath:config.properties")
 public class SpringConfig {
 	
-	@Autowired
-	private Environment environment;
+	@Value("${dbdriver}")
+	String driver;
+	
+	@Value("${dbconf}")
+	String conf;
+	
+	@Value("${dbuser}")
+	String user;
+	
+	@Value("${dbpassword}")
+	String password;
 	
 	@Bean
 	public HikariDataSource hikariSource() {
 		
 		HikariDataSource hikariData = new HikariDataSource();
 		
-		hikariData.setDriverClassName(environment.getRequiredProperty("dbdriver"));
-		hikariData.setJdbcUrl(environment.getRequiredProperty("dbconf"));
-		hikariData.setUsername(environment.getRequiredProperty("dbuser"));
-		hikariData.setPassword(environment.getRequiredProperty("dbpassword"));
+		hikariData.setDriverClassName(driver);
+		hikariData.setJdbcUrl(conf);
+		hikariData.setUsername(user);
+		hikariData.setPassword(password);
 		hikariData.setConnectionTimeout(10000L);
 		
 		return hikariData;
