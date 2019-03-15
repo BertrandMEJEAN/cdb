@@ -17,7 +17,6 @@ public interface IDAO<T> extends RowMapper<T>{
 	public int add(T object);
 	public Collection<T> addAll(Collection<T> objects);
 	public boolean update(T object);
-	public boolean delete(T object) throws DAOException;
-	public boolean deleteById(int id) throws DAOException;
+	public int delete(T object) throws DAOException;
 	public boolean existentById(int id);	
 }

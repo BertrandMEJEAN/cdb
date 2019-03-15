@@ -20,11 +20,11 @@ public class MenuDeleteComputer extends Menu {
 		System.out.println("What's the computer id ?");
 		int computerId = EntryVerification.readInteger("The computer id should be an integer");
 		
-		if(this.computerService.deleteById(computerId)) {
+		/*if(this.computerService.deleteById(computerId) != 0) {
 			View.logger.info("Successsfully deleted computer %d", computerId);
 		}else {
 			View.logger.error("An error happened while trying to delete computer %d",computerId);
-		}
+		}*/
 	}
 
 }

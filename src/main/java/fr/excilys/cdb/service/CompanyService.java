@@ -36,12 +36,8 @@ public class CompanyService implements IService<Company> {
 		return this.companyDAO.update(object);
 	}
 
-	public boolean delete(Company object) {
+	public int delete(Company object) {
 		return this.companyDAO.delete(object);
-	}
-
-	public boolean deleteById(int id) {
-		return this.companyDAO.deleteById(id);
 	}
 
 	public boolean existentById(int id) {

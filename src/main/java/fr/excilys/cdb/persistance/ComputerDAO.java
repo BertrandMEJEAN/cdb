@@ -142,38 +142,10 @@ public class ComputerDAO implements IDAO<Computer>{
 
 	/**
 	 * Permet de supprimer un computer en lui passant un objet de type Computer.
-	 * @see cdb.persistance.ComputerDAO#deleteByID(int id).
-	 * @author Bertrand Méjean.
 	 * @param object Demande un objet de type Computer.
 	 */
-	public boolean delete(Computer object) {
-		return deleteById(object.getId());
-	}
-	
-	/**
-	 * Permet de supprimer un computer dans la base de donnée selon la saisie de l'utilisateur.
-	 * @author Bertrand Méjean.
-	 * @exception Génère une exception custom pour prévenir l'utilisateur que la supression du computer ne s'est pas éxécuter correctement.
-	 * @param id Demande un id de type int.
-	 * @return true Si le computer est correctement supprimé.
-	 * @return false Si aucun computer n'est retrouvé en base ou echec de la requète.
-	 */
-	public boolean deleteById(int id) {
-		
-		try(Connection connection = dao.getConnection()) {
-				
-				PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
-				statement.setInt(1, id);
-				statement.executeUpdate();
-				System.out.println("L'ordinateur est bien supprimé");
-				
-				return(true);
-				
-		}catch(SQLException e) {
-			//logger.info("Problème lors de la supression de l'ordinateur en base de données");
-		}
-		return false;
-		
+	public int delete(Computer object) {
+		return jdbc.update(DELETE_QUERY, new Object[] {object.getId()});
 	}
 	
 	/**

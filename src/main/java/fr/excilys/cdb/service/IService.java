@@ -11,8 +11,7 @@ public interface IService<T> {
 	public Collection<T> getAll();
 	public int add(T object);
 	public boolean update(T object);
-	public boolean delete(T object);
-	public boolean deleteById(int id);
+	public int delete(T object);
 	public boolean existentById(int id);
 
 }

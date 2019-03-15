@@ -20,11 +20,11 @@ public class MenuDeleteCompany extends Menu {
 		System.out.println("What's the company id ?");
 		int companyId = EntryVerification.readInteger("The computer id should be an integer");
 		
-		if(this.companyService.deleteById(companyId)) {
+		/*if(this.companyService.deleteById(companyId) != 0) {
 			View.logger.info("Successsfully deleted company %d", companyId);
 		}else {
 			View.logger.error("An error happened while trying to delete company %d",companyId);
-		}
+		}*/
 	}
 
 }

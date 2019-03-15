@@ -98,7 +98,7 @@ public class CompanyDAO implements IDAO<Company>{
 		return result;
 	}
 	
-	public /*Optional<Company>*/ int add(Company object) {
+	public int add(Company object) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -110,37 +110,34 @@ public class CompanyDAO implements IDAO<Company>{
 		// TODO Auto-generated method stub
 		return true;
 	}
-	public boolean delete(Company object) {
-		return deleteById(object.getId());
-	}
-	public boolean deleteById(int id){
-		
-		try(Connection connection = dao.getConnection()) {
-			
-			PreparedStatement statementComputers = connection.prepareStatement(DELETE_QUERY);
-			PreparedStatement statementCompany = connection.prepareStatement(DELETE_COMPUTER_BY_COMPANY);
-			
-			try {
-				connection.setAutoCommit(false);
-				statementComputers.setInt(1, id);
-				statementComputers.execute();
-				System.out.println("Query "+statementComputers+" has been successfull executed");
-				statementCompany.setInt(1,id);
-				statementCompany.execute();
-				System.out.println("Company number "+ id +" successfully deleted");
-				connection.commit();
-				return(true);
-			}catch(SQLException e){
-				connection.rollback();
-				e.printStackTrace();;
-			}
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-			//logger.info("Problème lors de la supression de l'ordinateur en base de données");
-		}
-		
-	return false;
+	public int delete(Company object) {		
+//		try(Connection connection = dao.getConnection()) {
+//			
+//			PreparedStatement statementComputers = connection.prepareStatement(DELETE_QUERY);
+//			PreparedStatement statementCompany = connection.prepareStatement(DELETE_COMPUTER_BY_COMPANY);
+//			
+//			try {
+//				connection.setAutoCommit(false);
+//				statementComputers.setInt(1, id);
+//				statementComputers.execute();
+//				System.out.println("Query "+statementComputers+" has been successfull executed");
+//				statementCompany.setInt(1,id);
+//				statementCompany.execute();
+//				System.out.println("Company number "+ id +" successfully deleted");
+//				connection.commit();
+//				return(true);
+//			}catch(SQLException e){
+//				connection.rollback();
+//				e.printStackTrace();;
+//			}
+//			
+//		}catch(SQLException e) {
+//			e.printStackTrace();
+//			//logger.info("Problème lors de la supression de l'ordinateur en base de données");
+//		}
+//		
+//	return false;
+		return 1; 
 	}
 	
 	/**
