@@ -28,11 +28,11 @@ public class CompanyService implements IService<Company> {
 		return this.companyDAO.getAll();
 	}
 
-	public Optional<Company> add(Company object) {
+	public int add(Company object) {
 		return this.companyDAO.add(object);
 	}
 
-	public Optional<Company> update(Company object) {
+	public boolean update(Company object) {
 		return this.companyDAO.update(object);
 	}
 

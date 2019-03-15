@@ -32,9 +32,10 @@ public class MenuUpdateComputer extends MenuComputerForm {
 		Computer computer = form();
 		computer.setId(computerId);
 		
-		Optional<Computer> createdComputer = this.computerService.update(computer);
+		//Optional<Computer> createdComputer = this.computerService.update(computer);
+		boolean createdComputer = this.computerService.update(computer);
 		
-		if(createdComputer.isPresent()) {
+		if(createdComputer) {
 			System.out.println("Successfully updated "+ createdComputer);
 		}else {
 			System.out.println("Error update "+ createdComputer);

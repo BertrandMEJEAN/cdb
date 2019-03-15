@@ -76,11 +76,11 @@ public class ComputerService implements IService<Computer> {
 		return this.computerDAO.getAll();
 	}
 
-	public Optional<Computer> add(Computer object) {
+	public int add(Computer object) {
 		return this.computerDAO.add(object);
 	}
 
-	public Optional<Computer> update(Computer object) {
+	public boolean update(Computer object) {
 		return this.computerDAO.update(object);
 	}
 

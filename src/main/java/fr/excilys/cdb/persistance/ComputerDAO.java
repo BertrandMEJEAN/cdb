@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -88,9 +90,7 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	/**
 	 * Permet de récupérer un computer dans la base de donnée via son id.
-	 * @see cdb.persistance.IDAO#getId(int).
-	 * @author Bertrand Méjean.
-	 * @exception SQLException Renvois une exception custom prévenant l'utilisateur que l'id renseigné n'est pas présent en base.
+	 * @see cdb.persistance.IDAO#getId(int)..
 	 * @param objectId Demande l'id du computer de type int.
 	 * @return result Retourne un objet de type Computer disposant des données relatives à l'id passé en paramètre.
 	 */
@@ -98,26 +98,10 @@ public class ComputerDAO implements IDAO<Computer>{
 		Optional<Computer> result = Optional.empty();
 		
 		return result = Optional.of(jdbc.queryForObject(SELECT_BY_ID, new Object[] {objectId}, this));
-		
-		/*try(Connection connection = dao.getConnection()) {
-			
-			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-			statement.setInt(1, objectId);
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				result= Optional.of(createResult(resultSet));
-			}
-		}catch(SQLException e){
-			//logger.info("The computer does not exist");
-		}
-		return result;*/
-		
 	}
 	
 	/**
 	 * Permet de construire une liste contenant tout les computers de la base de donnée.
-	 * @author Bertrand Méjean.
 	 * @return result Retourne une liste d'objet de type Computer contenant tout les computeurs de la base de donnée.
 	 */
 	public Collection<Computer> getAll(){		
@@ -125,37 +109,22 @@ public class ComputerDAO implements IDAO<Computer>{
 	}
 	
 	/**
-	 *Récupère une key auto-incrementée de la base de donnée, puis construit une requete avec les element renseignés par l'utilisateur pour en ensuite insérer un nouveau computer.
-	 *@author Bertrand Méjean.
-	 *@exception Génère une exception custom pour prévenir l'utilisateur que le computer n'a pas été rajouter en base de donnée.
+	 *Récupère une key auto-incrementée de la base de donnée, puis construit une requete avec les element renseignés par l'utilisateur pour en ensuite insérer un nouveau computer..
 	 *@param object Demande un objet de type Computer.
-	 *@return object 
-	 *@param null Si l'objet passé en param est null ou echec de la requète SQL.
+	 *@return int
 	 */
-	public Optional<Computer> add(Computer object) {
-		Optional<Computer> optional = Optional.empty();
+	public int add(Computer object) {
+		KeyHolder key = new GeneratedKeyHolder();
 		
-		try(Connection connection = dao.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, object.getName());
-			statement.setObject(2, convertLocalDateToTimestamp(object.getIn()));
-			statement.setObject(3, convertLocalDateToTimestamp(object.getOut()));
-			statement.setObject(4, (object.getCompany().getId() != 0 ? object.getCompany().getId() : null));
-			
-			statement.executeUpdate();
-			
-			ResultSet resultSet= statement.getGeneratedKeys();
-			if(resultSet.next()) {
-				int insertId = resultSet.getInt(1);
-				object.setId(insertId);
-				optional = Optional.of(object);
-			}
-			
-		}catch(SQLException e){
-			//logger.info("Problème lors de la creation du nouvel ordinateur en base de donnée");
-		}
-		
-		return optional;
+		return jdbc.update(
+				connection ->{
+					PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, new String[]{ID});
+					ps.setString(1, object.getName());
+					ps.setObject(2, convertLocalDateToTimestamp(object.getIn()));
+					ps.setObject(3, convertLocalDateToTimestamp(object.getOut()));
+					ps.setObject(4, (object.getCompany().getId() != 0 ? object.getCompany().getId() : null));
+					return ps;
+				},key);
 	}
 	
 	public Collection<Computer> addAll(Collection<Computer> objects) {
@@ -164,32 +133,11 @@ public class ComputerDAO implements IDAO<Computer>{
 
 	/**
 	 * Permet de modifier les détails d'un computer et de les appliquer en base de donnée.
-	 * @author Bertrand Méjean
-	 * @exception Génère une exception prévenant l'utilisateur que ses mise à jours ne sont pas appliquées.
 	 * @param object Demande un objet de type Computer.
-	 * @return object
-	 * @return null Si l'objet passé en paramètre est null ou echec de la requète SQL.
+	 * @return boolean to be sure about query execution
 	 */
-	public Optional<Computer> update(Computer object) {
-		Optional<Computer> opt = Optional.empty();
-	
-		try(Connection connection = dao.getConnection()) {
-			
-			PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
-			statement.setString(1, object.getName());
-			statement.setInt(2, (object.getCompany().getId() != 0 ? object.getCompany().getId() : null));
-			statement.setObject(3, convertLocalDateToTimestamp(object.getIn()));
-			statement.setObject(4, convertLocalDateToTimestamp(object.getOut()));
-			statement.setInt(5, object.getId());			
-			statement.executeUpdate();
-			
-			return opt = Optional.of(object);
-			
-		}catch(Exception e){
-			//logger.info("Problème lors de la mise à jour des détails de l'ordinateur");AE
-		}
-		
-		return opt;
+	public boolean update(Computer object) {		
+		return jdbc.update(UPDATE_QUERY, object.getName(), (object.getCompany().getId() != 0 ? object.getCompany().getId() : null), convertLocalDateToTimestamp(object.getIn()), convertLocalDateToTimestamp(object.getOut()), object.getId()) > 0;
 	}
 
 	/**

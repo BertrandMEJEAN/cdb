@@ -98,17 +98,17 @@ public class CompanyDAO implements IDAO<Company>{
 		return result;
 	}
 	
-	public Optional<Company> add(Company object) {
+	public /*Optional<Company>*/ int add(Company object) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 	public Collection<Company> addAll(Collection<Company> objects) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	public Optional<Company> update(Company object) {
+	public boolean update(Company object) {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 	public boolean delete(Company object) {
 		return deleteById(object.getId());

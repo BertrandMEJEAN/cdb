@@ -21,10 +21,10 @@ public class MenuAddComputer extends MenuComputerForm{
 		Computer computer = form();
 		
 		
-		Optional<Computer> createdComputer = this.computerService.add(computer);
+		/*Optional<Computer>*/int createdComputer = this.computerService.add(computer);
 		
-		if(createdComputer.isPresent()) {
-			View.logger.info("Computer successfully added "+ createdComputer.get() +"\n");
+		if(createdComputer != 0) {
+			View.logger.info("Computer successfully added \n");
 		}else {
 			View.logger.error("Error creating "+ computer +"\n");
 		}
