@@ -97,7 +97,9 @@ public class ComputerDAO implements IDAO<Computer>{
 	public Optional<Computer> getId(int objectId){
 		Optional<Computer> result = Optional.empty();
 		
-		try(Connection connection = dao.getConnection()) {
+		return result = Optional.of(jdbc.queryForObject(SELECT_BY_ID, new Object[] {objectId}, this));
+		
+		/*try(Connection connection = dao.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setInt(1, objectId);
@@ -109,7 +111,8 @@ public class ComputerDAO implements IDAO<Computer>{
 		}catch(SQLException e){
 			//logger.info("The computer does not exist");
 		}
-		return result;
+		return result;*/
+		
 	}
 	
 	/**
