@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;*/
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import fr.excilys.cdb.model.Company;
 
@@ -37,6 +40,8 @@ public class CompanyDAO implements IDAO<Company>{
 	@Autowired
 	private DAO dao;
 	
+	JdbcTemplate jdbc;
+	
 	//Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	/**
@@ -46,8 +51,8 @@ public class CompanyDAO implements IDAO<Company>{
 	 * @exception Peut levé une exception de type SQLException.
 	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
 	 */
-	public CompanyDAO() {
-		
+	public CompanyDAO(HikariDataSource hikariSource) {
+		this.jdbc = new JdbcTemplate(hikariSource);
 	}
 	
 	private Company createResult(ResultSet resultSet)throws SQLException{
@@ -65,7 +70,7 @@ public class CompanyDAO implements IDAO<Company>{
 	public Collection<Company> getAll(){
 		List<Company> result = new ArrayList<Company>();
 		
-		try(Connection connection = dao.getConnection()) {
+		/*try(Connection connection = dao.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
 			
@@ -75,9 +80,9 @@ public class CompanyDAO implements IDAO<Company>{
 			
 		}catch(SQLException e) {
 			//logger.info("Problème lors de la récupération de la liste des entreprises en base de donnée");
-		}
+		}*/
 		
-		return result;
+		return result = jdbc.query(SELECT_QUERY, this);
 	}
 	
 	public Optional<Company> getId(int objectId) {
@@ -169,8 +174,12 @@ public class CompanyDAO implements IDAO<Company>{
 	}
 
 	@Override
-	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+		Company company = new Company();
+		
+		company.setId(resultSet.getInt(ID));
+		company.setName(resultSet.getString(NAME));
+		
+		return company;
 	}	
 }
