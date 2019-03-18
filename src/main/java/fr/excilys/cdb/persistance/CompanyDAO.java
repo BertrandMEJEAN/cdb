@@ -70,37 +70,13 @@ public class CompanyDAO implements IDAO<Company>{
 	public Collection<Company> getAll(){
 		List<Company> result = new ArrayList<Company>();
 		
-		/*try(Connection connection = dao.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
-			
-			while(resultSet.next()) {
-				result.add(createResult(resultSet));
-			}
-			
-		}catch(SQLException e) {
-			//logger.info("Problème lors de la récupération de la liste des entreprises en base de donnée");
-		}*/
-		
 		return result = jdbc.query(SELECT_QUERY, this);
 	}
 	
 	public Optional<Company> getId(int objectId) {
-	Optional<Company> result = Optional.empty();
-		
-		try(Connection connection = dao.getConnection()) {
+		Optional<Company> result = Optional.empty();
 			
-			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-			statement.setInt(1, objectId);
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				result= Optional.of(createResult(resultSet));				
-			}
-		}catch(SQLException e){
-			//logger.info("The computer does not exist");
-		}		
-		return result;
+		return result = Optional.of(jdbc.queryForObject(SELECT_BY_ID, new Object[] {objectId}, this));
 	}
 	
 	public int add(Company object) {
