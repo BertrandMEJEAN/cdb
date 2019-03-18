@@ -55,22 +55,20 @@ public class CompanyDAO implements IDAO<Company>{
 		this.jdbc = new JdbcTemplate(hikariSource);
 	}
 	
-	private Company createResult(ResultSet resultSet)throws SQLException{
+	/*private Company createResult(ResultSet resultSet)throws SQLException{
 		int id = resultSet.getInt(ID);
 		String name = resultSet.getString(NAME);
 		
 		return new Company(id,name);		
-	}
+	}*/
 	
 	/**
 	 * Permet d'afficher toute les companys présentes dans la base de donnée.
 	 * @exception Génère une exception pour prévenir l'utilisateur d'un problème lors de la récupération des company dans la base donnée.
 	 * @return result Retourne une liste contenant toute les companys présentent dans la base de donnée.
 	 */
-	public Collection<Company> getAll(){
-		List<Company> result = new ArrayList<Company>();
-		
-		return result = jdbc.query(SELECT_QUERY, this);
+	public Collection<Company> getAll(){		
+		return jdbc.query(SELECT_QUERY, this);
 	}
 	
 	public Optional<Company> getId(int objectId) {
@@ -91,6 +89,7 @@ public class CompanyDAO implements IDAO<Company>{
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
 	public int delete(Company object) {		
 //		try(Connection connection = dao.getConnection()) {
 //			
@@ -127,26 +126,7 @@ public class CompanyDAO implements IDAO<Company>{
 	 * @return count indique le nombre d'id présent dans la base donnée
 	 */
 	public boolean existentById(int id) {
-		int count= 0;
-		
-		try {
-			Connection connection;
-			
-			connection = dao.getConnection();
-			PreparedStatement statement = connection.prepareStatement(EXISTENT_BY_ID);
-			statement.setInt(1, id);
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				count = resultSet.getInt(COUNT);
-			}			
-			if(count == 0) {
-				//logger.info("Cette compagnie n'est pas référencée");
-			}
-		}catch(SQLException e) {
-			//logger.info("Problème lors de l'intérogation de la base de donnée");
-		}
-		return count != 0;
+		return (jdbc.queryForObject(EXISTENT_BY_ID, new Object[] {id}, Integer.class) != 0 ? true : false);
 	}
 
 	@Override
