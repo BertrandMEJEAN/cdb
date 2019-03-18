@@ -55,37 +55,12 @@ public class ComputerDAO implements IDAO<Computer>{
 	private static final String OUT = "discontinued";
 	private static final String COMPANY_ID = "company_id";
 	private static final String COMPANY_NAME = "company.name";
-	private static final String COUNT = "count";
-	
-	@Autowired
-	private DAO dao;
 	
 	JdbcTemplate jdbc;
 	/*Logger logger = LoggerFactory.getLogger(ComputerDAO.class);*/
 
 	public ComputerDAO(HikariDataSource hikariSource) {
 		jdbc = new JdbcTemplate(hikariSource);
-	}
-	
-	/**
-	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
-	 * @author Bertrand Méjean.
-	 * @param resultSet Demande un objet de type ResultSet.
-	 * @exception Peut levé une exception de type SQLException.
-	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
-	 */
-	private Computer createResult(ResultSet resultSet)throws SQLException{
-		
-		
-		int id = resultSet.getInt(ID);
-		String name = resultSet.getString(NAME);
-		Timestamp timesTamp = resultSet.getTimestamp(IN);
-		LocalDate dateIn = convertTimestampToLocalDate(timesTamp);
-		timesTamp = resultSet.getTimestamp(OUT);
-		LocalDate dateOut = convertTimestampToLocalDate(timesTamp);
-		Optional<Company> company = Optional.of(new Company(resultSet.getInt(COMPANY_ID),resultSet.getString(COMPANY_NAME)));
-		
-		return new Computer(id,name,dateIn,dateOut,company);
 	}
 	
 	/**
@@ -150,108 +125,30 @@ public class ComputerDAO implements IDAO<Computer>{
 	
 	/**
 	 * Permet de vérifier si un computer est présent dans la base de donnée via son id.
-	 * @author Bertrand Méjean.
-	 * @exception Génère une exception custom pour prévenir l'utilisateur que ce computer n'est pas présent en base.
 	 * @param id Demande un id de computer de type int.
 	 * @return count Retourne le nombre de computer trouvé corresopndant à l'id renseigné par l'utilisateur.
 	 */
 	public boolean existentById(int id) {
-		int count= 0;
-	
-		try(Connection connection = dao.getConnection()) {
-
-			PreparedStatement statement = connection.prepareStatement(EXISTENT_QUERY);
-			statement.setInt(1, id);
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				count = resultSet.getInt(COUNT);
-			}
-			if(count == 0) {
-				//logger.info("Cet ordinateur n'est pas référencé");
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return count != 0;
+		return (jdbc.queryForObject(EXISTENT_QUERY,new Object [] {id}, Integer.class) != 0 ? true : false);
 	}
 	
-	public int countComputer() {
-		
-		int count = 0;
-		
-		try(Connection connection = dao.getConnection()) {
-
-			PreparedStatement statement = connection.prepareStatement(COUNT_COMPUTER);
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				count = resultSet.getInt(COUNT);
-			}
-			if(count == 0) {
-				//logger.info("Cet ordinateur n'est pas référencé");
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return count;
+	public int countComputer() {	
+		return jdbc.queryForObject(COUNT_COMPUTER, Integer.class);
 	}
 	
 	public int countComputer(String pSearch) {
-		
-		int count = 0;
-		
-		try(Connection connection = dao.getConnection()) {
-
-			PreparedStatement statement = connection.prepareStatement(COUNT_SEARCHED);
-			statement.setString(1, pSearch+"%");
-			statement.setString(2, pSearch+"%");
-			ResultSet resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				count = resultSet.getInt(COUNT);
-			}
-			if(count == 0) {
-				//logger.info("Cet ordinateur n'est pas référencé");
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return count;
+		return jdbc.queryForObject(COUNT_SEARCHED,new Object[] {pSearch+"%", pSearch+"%"}, Integer.class);
 	}
 	
 	public Collection<Computer> getPageComputer(Pagination page){
 		List<Computer> computerPage = new ArrayList<>();
 		
-		try(Connection connection = dao.getConnection()) {
-			PreparedStatement statement;
-			
-			if(page.getSearch() == null && page.getOrder() == null) {
-				statement = connection.prepareStatement(PAGE_QUERY);				
-				statement.setInt(1, page.getPageSize());
-				statement.setInt(2, page.getOffSet());
-			}else if(page.getOrder() != null){
-				statement = connection.prepareStatement(requestSortBuilder(page).toString());
-			}else {
-				statement = connection.prepareStatement(SEARCH_QUERY);
-				statement.setString(1, page.getSearch()+"%");
-				statement.setString(2, page.getSearch()+"%");				
-				statement.setInt(3, page.getPageSize());
-				statement.setInt(4, page.getOffSet());
-			}
-			
-			ResultSet resultSet = statement.executeQuery();
-
-			while(resultSet.next()) {
-
-				computerPage.add(createResult(resultSet));
-
-			}
-			
-		}catch(SQLException e){
-			e.printStackTrace();
+		if(page.getSearch() == null && page.getOrder() == null) {
+			computerPage = jdbc.query(PAGE_QUERY, this, page.getPageSize(),page.getOffSet());
+		}else if(page.getOrder() != null) {
+			computerPage = jdbc.query(requestSortBuilder(page).toString(),this);
+		}else {
+			computerPage = jdbc.query(SEARCH_QUERY, this, page.getSearch()+"%", page.getSearch()+"%", page.getPageSize(), page.getOffSet());
 		}
 		
 		return computerPage;
