@@ -1,14 +1,28 @@
 package fr.excilys.cdb.configuration;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
+@EnableWebMvc
 @ComponentScan(basePackages = {"fr.excilys.cdb.mapper",
 		"fr.excilys.cdb.servlet",
 		"fr.excilys.cdb.validator",
@@ -18,7 +32,7 @@ import com.zaxxer.hikari.HikariDataSource;
 		"fr.excilys.cdb.view",
 		"fr.excilys.cdb.view.menu"})
 @PropertySource("classpath:config.properties")
-public class SpringConfig {
+public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer {
 	
 	@Value("${dbdriver}")
 	String driver;
@@ -45,4 +59,25 @@ public class SpringConfig {
 		
 		return hikariData;
 	}
+	
+	@Bean
+	public ViewResolver viewResolver() {
+		InternalResourceViewResolver bean = new InternalResourceViewResolver();
+		
+		bean.setPrefix("/WEB-INF/views/");
+		bean.setSuffix(".jsp");
+		return bean;
+	}
+
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+		rootContext.register(SpringConfig.class);
+		servletContext.addListener(new ContextLoaderListener(rootContext));
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
+		new DispatcherServlet(rootContext));
+		servlet.setLoadOnStartup(1);
+		servlet.addMapping("/");
+	}
+	
 }
