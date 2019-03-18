@@ -35,32 +35,14 @@ public class CompanyDAO implements IDAO<Company>{
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
-	private static final String COUNT = "count";
-	
-	@Autowired
-	private DAO dao;
 	
 	JdbcTemplate jdbc;
 	
 	//Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
-	/**
-	 * Créer un objet de type Computer avec les informations du ResulSet retournées par la base de donnée.
-	 * @author Bertrand Méjean.
-	 * @param resultSet Demande un objet de type ResultSet.
-	 * @exception Peut levé une exception de type SQLException.
-	 * @return new Computer(id,name,dateIn,dateOut,companyId) Retourne un objet de type Computer construit avec les données présentes dans resultSet.
-	 */
 	public CompanyDAO(HikariDataSource hikariSource) {
 		this.jdbc = new JdbcTemplate(hikariSource);
 	}
-	
-	/*private Company createResult(ResultSet resultSet)throws SQLException{
-		int id = resultSet.getInt(ID);
-		String name = resultSet.getString(NAME);
-		
-		return new Company(id,name);		
-	}*/
 	
 	/**
 	 * Permet d'afficher toute les companys présentes dans la base de donnée.
