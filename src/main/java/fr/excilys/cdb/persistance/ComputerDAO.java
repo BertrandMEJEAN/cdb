@@ -1,18 +1,15 @@
 package fr.excilys.cdb.persistance;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collection;	
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -20,10 +17,9 @@ import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import fr.excilys.cdb.exception.*;
+import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
-import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.service.Pagination;
 
 /*import org.slf4j.Logger;
