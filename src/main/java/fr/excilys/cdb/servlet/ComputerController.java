@@ -144,7 +144,32 @@ public class ComputerController {
 		try {
 			Computer computer = this.computerMapper.dtoToObject(computerDto);
 			this.computerService.update(computer);
+			logger.info("computer successfully updated");
 			modelView.setViewName("redirect:/");
+		}catch(ValidatorException e) {
+			logger.error(e.getMessage());
+			modelView.setViewName("500");
+		}
+		
+		return modelView;
+	}
+	
+	@PostMapping(value="/delete")
+	public ModelAndView delete(@RequestParam(required = true, name = "selection") String[] computerSelected, ModelAndView modelView) {
+		
+		ComputerDto computerDto = new ComputerDto();
+		
+		try {
+			
+			Computer computer = new Computer();
+			
+			for(String computerId : computerSelected) {
+				computerDto.setId(computerId);
+				computer = this.computerMapper.dtoToObject(computerDto);
+				this.computerService.delete(computer);
+				logger.info("Computer correctly deleted");
+				modelView.setViewName("redirect:/");
+			}
 		}catch(ValidatorException e) {
 			logger.error(e.getMessage());
 			modelView.setViewName("500");
