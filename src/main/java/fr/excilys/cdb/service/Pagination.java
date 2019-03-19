@@ -108,8 +108,8 @@ public class Pagination {
 			return this;
 		}
 		
-		public PaginationBuilder setOffSet(int i) {
-			this.offSet = (this.page-1)*this.pageSize;
+		public PaginationBuilder setOffSet(int offSet) {
+			this.offSet = offSet;
 			return this;
 		}
 		
