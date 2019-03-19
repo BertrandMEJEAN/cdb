@@ -2,6 +2,7 @@ package fr.excilys.cdb.servlet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +86,7 @@ public class ComputerController {
 	public ModelAndView addPost(@RequestParam(required = true, name="nameCpt") String nameComputer,
 								@RequestParam(required = false, name="inCpt") String introduced,
 								@RequestParam(required = false, name="outCpt") String discontinued,
-								@RequestParam(required = true, name="idCpy") String companyId,
+								@RequestParam(required = false, name="idCpy") String companyId,
 								ModelAndView modelView){
 		
 		ComputerDto dto = new ComputerDto();
@@ -109,6 +110,49 @@ public class ComputerController {
 		return modelView;
 	}
 	
+	@GetMapping(value="/edit")
+	public ModelAndView edit(@RequestParam(required = true, name="cptId")String computerId) {
+		
+		Collection<Company> companies = this.companyService.getAll();
+		Collection<CompanyDto> companiesDto = new ArrayList<>();
+		Optional<Computer> computer = this.computerService.getId(Integer.valueOf(computerId));
+		ComputerDto computerDto = this.computerMapper.objectToDto(computer.get());
+			
+		for(Company company : companies) {
+			companiesDto.add(this.companyMapper.objectToDto(company));
+		}
+		
+		return editInit(computerDto, companiesDto);
+	}
+	
+	@PostMapping(value="/edit")
+	public ModelAndView editPost(@RequestParam(required = true, name = "cptId") String computerId,
+								 @RequestParam(required = true, name = "nameCpt") String computerName,
+								 @RequestParam(required = false, name = "introCpt") String computerIn,
+								 @RequestParam(required = false, name = "discontCpt") String computerOut,
+								 @RequestParam(required = false, name = "idCpy") String companyId,
+								 ModelAndView modelView) {
+		
+		ComputerDto computerDto = new ComputerDto();
+		
+		computerDto.setId(computerId);
+		computerDto.setName(computerName);
+		computerDto.setIn(computerIn);
+		computerDto.setOut(computerOut);
+		computerDto.setCompId(companyId);
+		
+		try {
+			Computer computer = this.computerMapper.dtoToObject(computerDto);
+			this.computerService.update(computer);
+			modelView.setViewName("redirect:/");
+		}catch(ValidatorException e) {
+			logger.error(e.getMessage());
+			modelView.setViewName("500");
+		}
+		
+		return modelView;
+	}
+	
 	private ModelAndView dashboardInit(int totalComputer, Pagination page, Collection<ComputerDto> dtoList) {
 		ModelAndView modelView = new ModelAndView();
 		
@@ -125,6 +169,16 @@ public class ComputerController {
 		
 		modelView.addObject("companies", companies);
 		modelView.setViewName("addComputer");
+		
+		return modelView;
+	}
+	
+	private ModelAndView editInit(ComputerDto computerDto, Collection<CompanyDto> companiesDto) {
+		ModelAndView modelView = new ModelAndView();
+		
+		modelView.addObject("computer", computerDto);
+		modelView.addObject("companies", companiesDto);
+		modelView.setViewName("editComputer");
 		
 		return modelView;
 	}

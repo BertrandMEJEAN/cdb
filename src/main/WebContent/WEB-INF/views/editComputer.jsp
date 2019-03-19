@@ -22,24 +22,24 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: ${cptId}
+                        id: ${computer.getId()}
                     </div>
                     <h1>Edit Computer</h1>
 
-                    <form action="EditComputer" method="POST">
-                        <input type="hidden" name="cptId" value="${cptId}" id="id"/> <!-- TODO: Change this value with the computer id -->
+                    <form action="edit" method="POST">
+                        <input type="hidden" name="cptId" value="${computer.getId()}" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="nameCpt" placeholder="Computer name" value="${cptName}">
+                                <input type="text" class="form-control" id="computerName" name="nameCpt" placeholder="Computer name" value="${computer.getName()}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="text" class="form-control" id="introduced" name="introCpt" placeholder="dd-MM-yyyy" value="${cptIn}">
+                                <input type="text" class="form-control" id="introduced" name="introCpt" placeholder="dd-MM-yyyy" value="${computer.getIn()}">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="text" class="form-control" id="discontinued" name="discontCpt" placeholder="dd-MM-yyyy" value="${cptOut}">
+                                <input type="text" class="form-control" id="discontinued" name="discontCpt" placeholder="dd-MM-yyyy" value="${computer.getOut()}">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -47,7 +47,7 @@
                                     <option value="">--</option>
                                     <c:forEach items="${companies}" var="company">
 	                                    <c:choose>
-	                                    	<c:when test="${company.getId() == cptCompId}">
+	                                    	<c:when test="${company.getId() == computer.getCompId()}">
 	                                    		<option selected="selected" value="${company.getId()}">${company.getName()}</option>
 	                                    	</c:when>
 	                                    	<c:otherwise>
