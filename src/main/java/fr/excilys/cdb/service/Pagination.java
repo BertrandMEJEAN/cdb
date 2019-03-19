@@ -1,12 +1,9 @@
 package fr.excilys.cdb.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Pagination {
-	
-	private ComputerService computerService;
 	
 	private int page;
 	private int pageSize;
@@ -18,10 +15,6 @@ public class Pagination {
 	
 	private Pagination() {
 		
-	}
-	
-	public Pagination(@Autowired ComputerService computerService) {
-		this.computerService = computerService;
 	}
 
 	public int getOffSet() {
@@ -115,7 +108,7 @@ public class Pagination {
 			return this;
 		}
 		
-		public PaginationBuilder setOffSet() {
+		public PaginationBuilder setOffSet(int i) {
 			this.offSet = (this.page-1)*this.pageSize;
 			return this;
 		}

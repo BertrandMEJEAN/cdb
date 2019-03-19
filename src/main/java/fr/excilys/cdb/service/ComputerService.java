@@ -40,20 +40,7 @@ public class ComputerService implements IService<Computer> {
 		return this.computerDAO.countComputer(pSearch);
 	}
 	
-	public Collection<Computer> getPageComputer(int pPageSize, int pPage, String pSearch, String pOrder, String pSort){
-		
-
-		
-		if(pSearch == null && pOrder == null) {
-			page.setPageSize(pPageSize);
-			page.setPage(pPage);
-			page.setMaxPage(defineMaxPage(pSearch, pPageSize));
-			page.setOffSet(defineOffSet(pPage, pPageSize));
-		}else if(pOrder != null){
-			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setOrder(pOrder).setSort(pSort).setMaxPage(defineMaxPage(pSearch, pPageSize)).setOffSet().build();
-		}else {
-			page = new PaginationBuilder().setPageSize(pPageSize).setPage(pPage).setSearch(pSearch).setOrder(pOrder).setSort(pSort).setMaxPage(defineMaxPage(pSearch, pPageSize)).setOffSet().build();
-		}
+	public Collection<Computer> getPageComputer(Pagination page){
 		
 		if(page.getPage()>page.getMaxPage()) {
 			throw new CustomException();
