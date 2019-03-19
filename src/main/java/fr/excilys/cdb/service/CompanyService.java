@@ -3,53 +3,50 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.excilys.cdb.exception.DAOException;
 import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.persistance.CompanyDAO;
 
 @Service
 public class CompanyService implements IService<Company> {
 	
-	@Autowired
-	private CompanyDAO companyDAO;
+	private CompanyDAO companyDao;
 	
-	public CompanyService() {
-		
+	public CompanyService(CompanyDAO companyDao) {
+		this.companyDao = companyDao;
 	}
 
 	public Optional<Company> getId(int id) {
-		return this.companyDAO.getId(id);
+		return this.companyDao.getId(id);
 	}
 
 	public Collection<Company> getAll() {
-		return this.companyDAO.getAll();
+		return this.companyDao.getAll();
 	}
 
 	public int add(Company object) {
-		return this.companyDAO.add(object);
+		return this.companyDao.add(object);
 	}
 
 	public boolean update(Company object) {
-		return this.companyDAO.update(object);
+		return this.companyDao.update(object);
 	}
 
 	public int delete(Company object) {
-		return this.companyDAO.delete(object);
+		return this.companyDao.delete(object);
 	}
 
 	public boolean existentById(int id) {
-		return this.companyDAO.existentById(id);
+		return this.companyDao.existentById(id);
 	}
 
-	public CompanyDAO getCompanyDAO() {
-		return companyDAO;
+	public CompanyDAO getCompanyDao() {
+		return companyDao;
 	}
 
-	public void setCompanyDAO(CompanyDAO companyDAO) {
-		this.companyDAO = companyDAO;
+	public void setcompanyDao(CompanyDAO companyDao) {
+		this.companyDao = companyDao;
 	}
 
 }

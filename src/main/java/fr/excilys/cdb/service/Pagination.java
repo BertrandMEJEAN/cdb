@@ -2,7 +2,6 @@ package fr.excilys.cdb.service;
 
 import org.springframework.stereotype.Service;
 
-@Service
 public class Pagination {
 	
 	private int page;

@@ -25,7 +25,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"fr.excilys.cdb.mapper",
-		"fr.excilys.cdb.servlet",
+		"fr.excilys.cdb.controller",
 		"fr.excilys.cdb.validator",
 		"fr.excilys.cdb.exception",
 		"fr.excilys.cdb.service",

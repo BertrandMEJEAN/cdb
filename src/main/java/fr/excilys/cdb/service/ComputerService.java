@@ -3,7 +3,6 @@ package fr.excilys.cdb.service;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.excilys.cdb.exception.CustomException;
@@ -12,32 +11,28 @@ import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.persistance.CompanyDAO;
 import fr.excilys.cdb.persistance.ComputerDAO;
-import fr.excilys.cdb.service.Pagination.PaginationBuilder;
 
 @Service
 public class ComputerService implements IService<Computer> {
 	
-	@Autowired
-	private ComputerDAO computerDAO;
-	@Autowired
+	private ComputerDAO computerDao;
 	private CompanyDAO companyDao;
-	@Autowired
-	private Pagination page;
 	
-	public ComputerService() {
-		
+	public ComputerService(ComputerDAO computerDao, CompanyDAO companyDao) {
+		this.companyDao = companyDao;
+		this.computerDao = computerDao;
 	}
 
 	public Optional<Computer> getId(int id) {
-		return this.computerDAO.getId(id);
+		return this.computerDao.getId(id);
 	}
 	
 	public int countComputer() {
-		return this.computerDAO.countComputer();
+		return this.computerDao.countComputer();
 	}
 	
 	public int countComputer(String pSearch) {
-		return this.computerDAO.countComputer(pSearch);
+		return this.computerDao.countComputer(pSearch);
 	}
 	
 	public Collection<Computer> getPageComputer(Pagination page){
@@ -46,11 +41,11 @@ public class ComputerService implements IService<Computer> {
 			throw new CustomException();
 		}
 		
-		return this.computerDAO.getPageComputer(page);
+		return this.computerDao.getPageComputer(page);
 	}
 	
 	public ComputerDetails getDetailsByComputerId(int id) {
-		Optional<Computer> computer = this.computerDAO.getId(id);
+		Optional<Computer> computer = this.computerDao.getId(id);
 		if(computer == null) {
 			//throw new EntityNotFoundException();
 		}
@@ -60,31 +55,31 @@ public class ComputerService implements IService<Computer> {
 	}
 
 	public Collection<Computer> getAll() {
-		return this.computerDAO.getAll();
+		return this.computerDao.getAll();
 	}
 
 	public int add(Computer object) {
-		return this.computerDAO.add(object);
+		return this.computerDao.add(object);
 	}
 
 	public boolean update(Computer object) {
-		return this.computerDAO.update(object);
+		return this.computerDao.update(object);
 	}
 
 	public int delete(Computer object) {
-		return this.computerDAO.delete(object);
+		return this.computerDao.delete(object);
 	}
 
 	public boolean existentById(int id) {
-		return this.computerDAO.existentById(id);
+		return this.computerDao.existentById(id);
 	}
 
-	public ComputerDAO getComputerDAO() {
-		return computerDAO;
+	public ComputerDAO getcomputerDao() {
+		return computerDao;
 	}
 
-	public void setComputerDAO(ComputerDAO computerDAO) {
-		this.computerDAO = computerDAO;
+	public void setcomputerDao(ComputerDAO computerDao) {
+		this.computerDao = computerDao;
 	}
 
 	public CompanyDAO getCompanyDAO() {
@@ -93,21 +88,5 @@ public class ComputerService implements IService<Computer> {
 
 	public void setCompanyDAO(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
-	}
-	
-	private int defineMaxPage(String pSearch, int pPageSize) {
-		
-		float count = (pSearch == null ? countComputer() : countComputer(pSearch));
-		float tmp = (count / pPageSize);
-		int newMaxPage = (int) Math.ceil(tmp);
-			
-		return newMaxPage;
-	}
-	
-	private int defineOffSet(int pPage, int pPageSize) {
-		
-		int newOffSet = (pPage-1)*pPageSize;		
-		
-		return newOffSet;
 	}
 }
