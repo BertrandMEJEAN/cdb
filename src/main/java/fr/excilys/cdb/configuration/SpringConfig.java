@@ -1,5 +1,7 @@
 package fr.excilys.cdb.configuration;
 
+import java.util.Locale;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -16,8 +18,11 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -87,6 +92,28 @@ public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer
 		new DispatcherServlet(rootContext));
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
+	}
+	
+	@Bean
+	public CookieLocaleResolver localeResolver() {
+		CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+		localeResolver.setDefaultLocale(Locale.FRENCH);
+		localeResolver.setCookieName("CDB-cookie");
+		localeResolver.setCookieMaxAge(3600);
+		
+		return localeResolver;
+	}
+	
+	@Bean
+	public LocaleChangeInterceptor localInterceptor() {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("language");
+		return interceptor;
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localInterceptor());
 	}
 	
 }
