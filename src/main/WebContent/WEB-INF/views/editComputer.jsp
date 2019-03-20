@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,25 +25,35 @@
                     <div class="label label-default pull-right">
                         id: ${computer.getId()}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1>
+                    	<spring:message code="edit.title"/>
+                    </h1>
 
                     <form action="edit" method="POST">
                         <input type="hidden" name="cptId" value="${computer.getId()}" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName">
+                                	<spring:message code="edit.computerName"/>
+                                </label>
                                 <input type="text" class="form-control" id="computerName" name="nameCpt" placeholder="Computer name" value="${computer.getName()}">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced">
+                               		<spring:message code="edit.introduced"/>
+                                </label>
                                 <input type="text" class="form-control" id="introduced" name="introCpt" placeholder="dd-MM-yyyy" value="${computer.getIn()}">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued">
+                                	<spring:message code="edit.discontinued"/>
+                                </label>
                                 <input type="text" class="form-control" id="discontinued" name="discontCpt" placeholder="dd-MM-yyyy" value="${computer.getOut()}">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId">
+                                	<spring:message code="edit.companyName"/>
+                                </label>
                                 <select class="form-control" id="companyId" name="idCpy">
                                     <option value="">--</option>
                                     <c:forEach items="${companies}" var="company">
@@ -59,16 +70,21 @@
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="edit.submit"/>" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="dashboard.html" class="btn btn-default"><spring:message code="edit.cancel"/></a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    <footer>
+    <footer class="navbar-fixed-bottom">
+    	<div class="container text-center">
+        	<div class="pull-left">
+        		<spring:message code = "app.lang"/> : <a href="?lang=FR&cptId=${computer.getId()}">FR</a> | <a href="?lang=EN&cptId=${computer.getId()}">EN</a>
+        	</div>
+        </div>
         <script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
     	<script src="js/formComputer.js"></script>
