@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,23 +23,33 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1>
+                    	<spring:message code="add.title"/>
+                    </h1>
                     <form action="add" method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName">
+                                	<spring:message code="add.computerName"/>
+                                </label>
                                 <input type="text" class="form-control" id="computerName" name="nameCpt" placeholder="Computer name" required>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced">
+                                	<spring:message code="add.introduced"/>
+                                </label>
                                 <input type="text" class="form-control" id="introduced" name="inCpt" placeholder="dd-MM-yyyy">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued">
+                                	<spring:message code="add.discontinued"/>
+                                </label>
                                 <input type="text" class="form-control" id="discontinued" name ="outCpt" placeholder="dd-MM-yyyy">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId">
+                                	<spring:message code="add.companyName"/>
+                                </label>
                                 <select class="form-control" id="companyId" name="idCpy" >
                                 <option value=""></option>
                                 	<c:forEach items="${companies}" var="company">
@@ -48,16 +59,21 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="add.submit"/>" class="btn btn-primary">
                             or
-                            <a href="" class="btn btn-default">Cancel</a>
+                            <a href="" class="btn btn-default"><spring:message code="add.cancel"/></a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    <footer>
+    <footer class="navbar-fixed-bottom">
+    	<div class="container text-center">
+        	<div class="pull-left">
+        		<spring:message code = "app.lang"/> : <a href="?lang=FR">FR</a> | <a href="?lang=EN">EN</a>
+        	</div>
+        </div>
     	<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
     	<script src="js/formComputer.js"></script>
