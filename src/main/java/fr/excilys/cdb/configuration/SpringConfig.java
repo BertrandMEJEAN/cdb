@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -37,8 +40,8 @@ import com.zaxxer.hikari.HikariDataSource;
 		"fr.excilys.cdb.persistance",
 		"fr.excilys.cdb.view",
 		"fr.excilys.cdb.view.menu"})
-@PropertySource("classpath:config.properties")
-public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer {
+@PropertySource(value= {"classpath:config.properties"})
+public class SpringConfig implements WebMvcConfigurer {
 	
 	@Value("${dbdriver}")
 	String driver;
@@ -66,6 +69,11 @@ public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer
 		return hikariData;
 	}
 	
+	@Bean 
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+	
 	@Bean
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver bean = new InternalResourceViewResolver();
@@ -82,22 +90,11 @@ public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer
 		registry.addResourceHandler("/js/*").addResourceLocations("/js/");
 		registry.addResourceHandler("/fonts/*").addResourceLocations("/fonts/");
 	}
-
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-		rootContext.register(SpringConfig.class);
-		servletContext.addListener(new ContextLoaderListener(rootContext));
-		ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
-		new DispatcherServlet(rootContext));
-		servlet.setLoadOnStartup(1);
-		servlet.addMapping("/");
-	}
 	
 	@Bean
 	public CookieLocaleResolver localeResolver() {
 		CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-		localeResolver.setDefaultLocale(Locale.FRENCH);
+		localeResolver.setDefaultLocale(Locale.ENGLISH);
 		localeResolver.setCookieName("CDB-cookie");
 		localeResolver.setCookieMaxAge(3600);
 		
@@ -105,9 +102,19 @@ public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer
 	}
 	
 	@Bean
+	public ReloadableResourceBundleMessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:lang");
+		messageSource.setDefaultEncoding("UTF-8");
+		
+		return messageSource;
+	}
+	
+	@Bean
 	public LocaleChangeInterceptor localInterceptor() {
 		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-		interceptor.setParamName("language");
+		interceptor.setParamName("lang");
+		
 		return interceptor;
 	}
 	

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${allComputer} Computers found
+                ${allComputer} <spring:message code="dashboard.allComputers"/>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -35,13 +36,16 @@
 	                        	<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
 	                        </c:otherwise>
                         </c:choose>
-                        <input type="submit" id="searchsubmit" value="Filter by name"
-                        class="btn btn-primary" />
+                        <input type="submit" id="searchsubmit" value="<spring:message code="dashboard.search"/>" class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="add">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="add">
+                    	<spring:message code="dashboard.add"/>
+                    </a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+                    	<spring:message code="dashboard.edit"/>
+                    </a>
                 </div>
             </div>
         </div>
@@ -66,7 +70,7 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <spring:message code="dashboard.computerName"/>
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
@@ -79,7 +83,7 @@
                             </div>
                         </th>
                         <th>
-                            Introduced date
+                            <spring:message code="dashboard.introduced"/>
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
@@ -93,7 +97,7 @@
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <spring:message code="dashboard.discontinued"/>
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
@@ -107,7 +111,7 @@
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <spring:message code="dashboard.companyName"/>
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != null}">
@@ -145,6 +149,9 @@
 
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
+        	<div class="pull-left">
+        		<spring:message code = "app.lang"/> : <a href="?lang=FR">FR</a> | <a href="?lang=EN">EN</a>
+        	</div>
             <ul class="pagination">
                 <li>
                     <a href="#" aria-label="Previous">
