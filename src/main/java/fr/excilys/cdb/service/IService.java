@@ -10,8 +10,8 @@ public interface IService<T> {
 	public Optional<T> getId(int id);
 	public Collection<T> getAll();
 	public int add(T object);
-	public boolean update(T object);
-	public int delete(T object);
+	public T update(T object);
+	public void delete(T object);
 	public boolean existentById(int id);
 
 }

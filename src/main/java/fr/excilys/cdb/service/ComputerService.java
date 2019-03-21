@@ -54,12 +54,12 @@ public class ComputerService implements IService<Computer> {
 		return 0;//this.computerDao.add(object);
 	}
 
-	public boolean update(Computer object) {
-		return true;//this.computerDao.update(object);
+	public Computer update(Computer object) {
+		return this.computerRepo.save(object);
 	}
 
-	public int delete(Computer object) {
-		return 0;//this.computerDao.delete(object);
+	public void delete(Computer object) {
+		this.computerRepo.delete(object);
 	}
 
 	public boolean existentById(int id) {
