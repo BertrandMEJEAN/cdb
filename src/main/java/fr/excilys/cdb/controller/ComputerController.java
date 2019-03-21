@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,13 +45,13 @@ public class ComputerController {
 	}
 
 	@GetMapping
-	public ModelAndView getPage(@RequestParam(required = true, defaultValue = "1") Integer pageNbr, 
-								@RequestParam(required = true, defaultValue = "10") Integer pageSize,
+	public ModelAndView getPage(@RequestParam(required = true, defaultValue = "1", name = "page") Integer pageNbr, 
+								@RequestParam(required = true, defaultValue = "10", name = "limit") Integer pageSize,
 								@RequestParam(required = false) String search,
 								@RequestParam(required = false) String order,
 								@RequestParam(required = false) String sort){
 		
-		int totalComputer = (search == null ? this.computerService.countComputer() : this.computerService.countComputer(search));
+		int totalComputer = /*(search == null ? */(int) this.computerService.countComputer()/* : this.computerService.countComputer(search))*/;
 		
 		pageBuilder = new PaginationBuilder().setPage(pageNbr)
 			.setPageSize(pageSize)

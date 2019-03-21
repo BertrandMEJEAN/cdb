@@ -23,6 +23,8 @@
   	<hikariCP.version>3.2.0</hikariCP.version>
   	<spring-jdbc.version>5.1.5.RELEASE</spring-jdbc.version>
   	<spring-MVC.version>5.1.5.RELEASE</spring-MVC.version>
+  	<spring-data-JPA.version>2.1.5.RELEASE</spring-data-JPA.version>
+  	<hibernate-core.version>5.4.1.Final</hibernate-core.version>
   </properties>
   
   <dependencies>
@@ -84,8 +86,20 @@
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>${spring-MVC.version}</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+	<dependency>
+	    <groupId>org.springframework.data</groupId>
+	    <artifactId>spring-data-jpa</artifactId>
+	    <version>${spring-data-JPA.version}</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-core</artifactId>
+	    <version>${hibernate-core.version}</version>
+	</dependency>
   </dependencies>
-    <build>
+  <build>
 	<plugins>		
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>

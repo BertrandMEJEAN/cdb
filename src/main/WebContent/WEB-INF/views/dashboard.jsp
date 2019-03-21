@@ -27,7 +27,7 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}" method="GET" class="form-inline">
+                    <form id="searchForm" action="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}" method="GET" class="form-inline">
 						<c:choose>
 							<c:when test="${page.getSearch() != ''}">
 	                        	<input type="search" id="searchbox" name="search" class="form-control" value="${page.getSearch()}"/>
@@ -74,10 +74,10 @@
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=computer.name&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=computer.name&sort=DESC"><i class="down"></i></a>
                             		</c:when>
                             		<c:otherwise>
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=computer.name&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=computer.name&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=computer.name&sort=DESC"><i class="down"></i></a>
                             		</c:otherwise>
                             	</c:choose>
                             </div>
@@ -87,10 +87,10 @@
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=introduced&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=introduced&sort=DESC"><i class="down"></i></a>
                             		</c:when>
                             		<c:otherwise>
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=introduced&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=introduced&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=introduced&sort=DESC"><i class="down"></i></a>
                             		</c:otherwise>
                             	</c:choose>
                             </div>
@@ -101,10 +101,10 @@
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != ''}">
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=discontinued&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=discontinued&sort=DESC"><i class="down"></i></a>
                             		</c:when>
                             		<c:otherwise>
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=discontinued&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=discontinued&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=discontinued&sort=DESC"><i class="down"></i></a>
                             		</c:otherwise>
                             	</c:choose>
                             </div>
@@ -115,10 +115,10 @@
                             <div class="order">
                             	<c:choose>
                             		<c:when test="${page.getSearch() != null}">
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=DESC"><i class="down"></i></a>
                             		</c:when>
                             		<c:otherwise>
-                            			<a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?pageSize=${page.getPageSize()}&pageNbr=${page.getPage()}&order=company.name&sort=DESC"><i class="down"></i></a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=ASC"><i class="up"></i></a><a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=DESC"><i class="down"></i></a>
                             		</c:otherwise>
                             	</c:choose>
                             </div>
@@ -161,10 +161,10 @@
               <c:forEach begin="1" end="${page.getMaxPage()}" var="i">
               	<c:choose>
               		<c:when test="${page.getSearch() != null}">
-              			<li><a href="?pageSize=${page.getPageSize()}&pageNbr=${i}&search=${page.getSearch()}" name="pageNbr"><c:out value="${i}"/></a></li>
+              			<li><a href="?limit=${page.getPageSize()}&page=${i}&search=${page.getSearch()}" name="pageNbr"><c:out value="${i}"/></a></li>
               		</c:when>
               		<c:otherwise>
-              			<li><a href="?pageSize=${page.getPageSize()}&pageNbr=${i}" name="pageNbr"><c:out value="${i}"/></a></li>
+              			<li><a href="?limit=${page.getPageSize()}&page=${i}" name="pageNbr"><c:out value="${i}"/></a></li>
               		</c:otherwise>
               	</c:choose>
               </c:forEach>
@@ -178,9 +178,9 @@
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
         	
-	            <a href="?pageSize=10&pageNbr=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">10</button></a>
-	            <a href="?pageSize=50&pageNbr=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">50</button></a>
-	            <a href="?pageSize=100&pageNbr=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">100</button></a>
+	            <a href="?limit=10&page=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">10</button></a>
+	            <a href="?limit=50&page=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">50</button></a>
+	            <a href="?limit=100&page=${page.getPage()}" name="pageSize"><button type="button" class="btn btn-default">100</button></a>
         </div>
 
     </footer>

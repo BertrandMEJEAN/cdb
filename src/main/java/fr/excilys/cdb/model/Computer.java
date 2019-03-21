@@ -3,16 +3,43 @@ package fr.excilys.cdb.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.ForeignKey;
+
+
 /**
  * Classe computer
  * @author Bertrand Méjean
  */
+@Entity
+@Table(name="computer")
 public class Computer {
 	
+	@Id
+	@GeneratedValue
 	private int id;
+	
+	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "introduced")
 	private LocalDate in;
+	
+	@Column(name = "discontinued")
 	private LocalDate out;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "company_id",
+				table = "computer",
+				referencedColumnName = "id",
+				foreignKey = @ForeignKey(name="fk_computer_company_1"))
 	private Company company;
 	
 	/*

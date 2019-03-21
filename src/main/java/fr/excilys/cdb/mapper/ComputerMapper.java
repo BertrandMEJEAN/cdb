@@ -48,8 +48,14 @@ public class ComputerMapper implements IMapper<Computer, ComputerDto> {
 			dto.setName(object.getName());
 			dto.setIn(convertLocalDateToString(object.getIn()));
 			dto.setOut(convertLocalDateToString(object.getOut()));
-			dto.setCompName(object.getCompany().getName());
-			dto.setCompId(String.valueOf(object.getCompany().getId()));
+			
+			if(object.getCompany() != null) {
+				dto.setCompName(object.getCompany().getName());
+				dto.setCompId(String.valueOf(object.getCompany().getId()));
+			}else {
+				dto.setCompName("");
+				dto.setCompId(null);
+			}
 			
 			return dto;
 			

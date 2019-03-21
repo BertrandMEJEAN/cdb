@@ -21,19 +21,19 @@ public class MenuDetailsComputer extends Menu {
 	@Override
 	public void show() {
 		
-		System.out.println("Enter id of a computer :");
-		int computerId = EntryVerification.readInteger("The choice should be an integer");
-		
-		Optional<ComputerDetails> computerDetails = Optional.empty();
-		
-		try {
-			computerDetails = Optional.of(this.computerService.getDetailsByComputerId(computerId));			
-		}catch(CustomException e) {
-			
-		}
-		
-		if(computerDetails.isPresent()) {
-			System.out.println(computerDetails);
-		}		
+//		System.out.println("Enter id of a computer :");
+//		int computerId = EntryVerification.readInteger("The choice should be an integer");
+//		
+//		Optional<ComputerDetails> computerDetails = Optional.empty();
+//		
+//		try {
+//			computerDetails = Optional.of(this.computerService.getDetailsByComputerId(computerId));			
+//		}catch(CustomException e) {
+//			
+//		}
+//		
+//		if(computerDetails.isPresent()) {
+//			System.out.println(computerDetails);
+//		}		
 	}
 }

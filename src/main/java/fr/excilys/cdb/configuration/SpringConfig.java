@@ -2,9 +2,7 @@ package fr.excilys.cdb.configuration;
 
 import java.util.Locale;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +11,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,18 +25,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
+@EnableJpaRepositories(basePackages = "fr.excilys.cdb.persistance")
+@EnableTransactionManagement
 @ComponentScan(basePackages = {"fr.excilys.cdb.mapper",
 		"fr.excilys.cdb.controller",
 		"fr.excilys.cdb.validator",
 		"fr.excilys.cdb.exception",
 		"fr.excilys.cdb.service",
-		"fr.excilys.cdb.persistance",
 		"fr.excilys.cdb.view",
 		"fr.excilys.cdb.view.menu"})
 @PropertySource(value= {"classpath:config.properties"})
@@ -67,6 +66,25 @@ public class SpringConfig implements WebMvcConfigurer {
 		hikariData.setConnectionTimeout(10000L);
 		
 		return hikariData;
+	}
+		
+	@Bean
+	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+		JpaTransactionManager txManager = new JpaTransactionManager();
+		txManager.setEntityManagerFactory(entityManagerFactory);
+		return txManager;
+	}
+	
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(HikariDataSource hikariSource) {
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setGenerateDdl(true);
+		
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setJpaVendorAdapter(vendorAdapter);
+		em.setPackagesToScan(new String[] {"fr.excilys.cdb.model"});
+		em.setDataSource(hikariSource);
+		return em;		
 	}
 	
 	@Bean 
