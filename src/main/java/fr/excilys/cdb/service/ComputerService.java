@@ -1,30 +1,23 @@
 package fr.excilys.cdb.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import fr.excilys.cdb.exception.CustomException;
-import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.model.Computer;
-import fr.excilys.cdb.model.ComputerDetails;
-import fr.excilys.cdb.persistance.CompanyDAO;
-import fr.excilys.cdb.persistance.ComputerDAO;
 import fr.excilys.cdb.persistance.ComputerRepo;
 
 @Service
 public class ComputerService implements IService<Computer> {
-	
-//	private ComputerDAO computerDao;
-//	private CompanyDAO companyDao;
+
 	private ComputerRepo computerRepo;
 	
-	public ComputerService(/*ComputerDAO computerDao, CompanyDAO companyDao, */ComputerRepo computerRepo) {
-//		this.companyDao = companyDao;
-//		this.computerDao = computerDao;
+	public ComputerService(ComputerRepo computerRepo) {
 		this.computerRepo = computerRepo;
 	}
 
@@ -32,26 +25,53 @@ public class ComputerService implements IService<Computer> {
 		return this.computerRepo.findById(id);
 	}
 	
-	public long countComputer() {
+	public long count() {
 		return this.computerRepo.count();
 	}
 	
-	public int countComputer(String pSearch) {
-		return 0;//this.computerDao.countComputer(pSearch);
+	public long countSearch(String pSearch) {
+		return this.computerRepo.countByNameContaining(pSearch);
 	}
 	
-	public Collection<Computer> getPageComputer(Pagination page){
+	public Collection<Computer> getPage(Pagination page){
+		List<Computer> computersPage = new ArrayList<>();
 		
-		return this.computerRepo.findAll(PageRequest.of((page.getPage()-1),page.getPageSize())).getContent();
-		}
+		computersPage = this.computerRepo.findAll(PageRequest.of((page.getPage()-1),page.getPageSize())).getContent();
+		
+		return computersPage;
+	}
+	
+	public Collection<Computer> getPageContains(Pagination page){
+		List<Computer> computersPage = new ArrayList<>();
+		
+		computersPage = this.computerRepo.findAllByNameContains(page.getSearch(), PageRequest.of((page.getPage()-1),page.getPageSize())).getContent();
+		
+		return computersPage;
+	}
+	
+	public Collection<Computer> getPageOrderBy(Pagination page){
+		List<Computer> computersPage = new ArrayList<>();
 
-	public Collection<Computer> getAll() {
-		return null; // this.computerDao.getAll();
-		//return this.computerRepo.findAll();
+		computersPage = this.computerRepo.findAllOrderBy(ascOrDesc(page)).getContent();
+		
+		return computersPage;
+	}
+	
+	public Collection<Computer> getPageContainsAndOrderBy(Pagination page){
+		List<Computer> computersPage = new ArrayList<>();
+		
+		computersPage = this.computerRepo.findAllContainsOrderBy(page.getSearch(), ascOrDesc(page)).getContent();
+		
+		return computersPage;
 	}
 
-	public int add(Computer object) {
-		return 0;//this.computerDao.add(object);
+	public Collection<Computer> getAll() {
+		return null;
+	}
+
+	public Computer add(Computer object) {
+		System.out.println(object.toString());
+		return this.computerRepo.save(object);
 	}
 
 	public Computer update(Computer object) {
@@ -63,22 +83,18 @@ public class ComputerService implements IService<Computer> {
 	}
 
 	public boolean existentById(int id) {
-		return true;//this.computerDao.existentById(id);
+		return this.computerRepo.existsById(id);
 	}
-
-//	public ComputerDAO getcomputerDao() {
-//		return computerDao;
-//	}
-//
-//	public void setcomputerDao(ComputerDAO computerDao) {
-//		this.computerDao = computerDao;
-//	}
-//
-//	public CompanyDAO getCompanyDAO() {
-//		return companyDao;
-//	}
-//
-//	public void setCompanyDAO(CompanyDAO companyDao) {
-//		this.companyDao = companyDao;
-//	}
+	
+	private PageRequest ascOrDesc(Pagination page) {
+		PageRequest request;
+		
+		if(page.getSort().equals("ASC")) {
+			request = PageRequest.of((page.getPage()-1), page.getPageSize(), Sort.by(page.getOrder()).ascending());
+		}else {
+			request = PageRequest.of((page.getPage()-1), page.getPageSize(), Sort.by(page.getOrder()).descending());
+		}
+		
+		return request;
+	}
 }

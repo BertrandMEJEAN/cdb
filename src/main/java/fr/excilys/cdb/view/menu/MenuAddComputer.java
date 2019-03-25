@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import fr.excilys.cdb.exception.CustomException;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.service.ComputerService;
 import fr.excilys.cdb.view.View;
@@ -20,12 +21,10 @@ public class MenuAddComputer extends MenuComputerForm{
 	public void show(){
 		Computer computer = form();
 		
-		
-		/*Optional<Computer>*/int createdComputer = this.computerService.add(computer);
-		
-		if(createdComputer != 0) {
+		try {
+			this.computerService.add(computer);
 			View.logger.info("Computer successfully added \n");
-		}else {
+		}catch(CustomException e) {
 			View.logger.error("Error creating "+ computer +"\n");
 		}
 	}

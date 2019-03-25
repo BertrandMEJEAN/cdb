@@ -6,7 +6,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +52,9 @@ public class ComputerController {
 								@RequestParam(required = false) String order,
 								@RequestParam(required = false) String sort){
 		
-		int totalComputer = /*(search == null ? */(int) this.computerService.countComputer()/* : this.computerService.countComputer(search))*/;
+		
+		
+		int totalComputer = (int)(search == null ? this.computerService.count() : this.computerService.countSearch(search));
 		
 		pageBuilder = new PaginationBuilder().setPage(pageNbr)
 			.setPageSize(pageSize)
@@ -63,7 +66,24 @@ public class ComputerController {
 			.build();
 		
 		Collection<ComputerDto> dtoList = new ArrayList<>();		
-		Collection<Computer> page = this.computerService.getPageComputer(pageBuilder);
+		Collection<Computer> page = new ArrayList<>();
+				
+		if(pageBuilder.getSearch() == null && pageBuilder.getOrder() == null) {
+			
+			page = this.computerService.getPage(pageBuilder);
+			
+		}else if(pageBuilder.getSearch() != null & pageBuilder.getOrder() == null) {
+			
+			page = this.computerService.getPageContains(pageBuilder);
+			
+		}else if(pageBuilder.getOrder() != null){
+			
+			if(pageBuilder.getSearch() == null) {
+				page = this.computerService.getPageOrderBy(pageBuilder);
+			}else{
+				page = this.computerService.getPageContainsAndOrderBy(pageBuilder);						
+			}
+		}
 		
 		for(Computer element : page) {
 			dtoList.add(this.computerMapper.objectToDto(element));

@@ -71,6 +71,59 @@ public class Pagination {
 	public void setSort(String pSort) {
 		this.sort = pSort;
 	}
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + maxPage;
+		result = prime * result + offSet;
+		result = prime * result + ((order == null) ? 0 : order.hashCode());
+		result = prime * result + page;
+		result = prime * result + pageSize;
+		result = prime * result + ((search == null) ? 0 : search.hashCode());
+		result = prime * result + ((sort == null) ? 0 : sort.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pagination other = (Pagination) obj;
+		if (maxPage != other.maxPage)
+			return false;
+		if (offSet != other.offSet)
+			return false;
+		if (order == null) {
+			if (other.order != null)
+				return false;
+		} else if (!order.equals(other.order))
+			return false;
+		if (page != other.page)
+			return false;
+		if (pageSize != other.pageSize)
+			return false;
+		if (search == null) {
+			if (other.search != null)
+				return false;
+		} else if (!search.equals(other.search))
+			return false;
+		if (sort == null) {
+			if (other.sort != null)
+				return false;
+		} else if (!sort.equals(other.sort))
+			return false;
+		return true;
+	}
+
+
 
 	@Service
 	public static class PaginationBuilder{

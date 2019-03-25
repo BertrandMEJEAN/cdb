@@ -2,6 +2,8 @@ package fr.excilys.cdb.view.menu;
 
 import org.springframework.stereotype.Component;
 
+import fr.excilys.cdb.exception.CustomException;
+import fr.excilys.cdb.model.Company;
 import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.view.View;
 
@@ -18,13 +20,13 @@ public class MenuDeleteCompany extends Menu {
 	public void show() {
 
 		System.out.println("What's the company id ?");
-		int companyId = EntryVerification.readInteger("The computer id should be an integer");
+		Company company = new Company(EntryVerification.readInteger("The company id should be an integer"), "");
 		
-		/*if(this.companyService.deleteById(companyId) != 0) {
-			View.logger.info("Successsfully deleted company %d", companyId);
-		}else {
-			View.logger.error("An error happened while trying to delete company %d",companyId);
-		}*/
+		try {
+			this.companyService.delete(company);
+			View.logger.info("Successsfully deleted company %d", company);
+		}catch(CustomException e){
+			View.logger.error("An error happened while trying to delete company %d",company);
+		}
 	}
-
 }
