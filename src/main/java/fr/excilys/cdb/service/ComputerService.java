@@ -9,20 +9,29 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import fr.excilys.cdb.dto.ComputerDto;
+import fr.excilys.cdb.exception.ValidatorException;
+import fr.excilys.cdb.mapper.ComputerMapper;
 import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.persistance.ComputerRepo;
 
 @Service
-public class ComputerService implements IService<Computer> {
+public class ComputerService implements IService<Computer, ComputerDto> {
 
 	private ComputerRepo computerRepo;
+	private ComputerMapper computerMapper;
 	
-	public ComputerService(ComputerRepo computerRepo) {
+	public ComputerService(ComputerRepo computerRepo, ComputerMapper computerMapper) {
 		this.computerRepo = computerRepo;
+		this.computerMapper = computerMapper;
 	}
 
-	public Optional<Computer> getId(int id) {
-		return this.computerRepo.findById(id);
+	public ComputerDto getId(int id) {
+		
+		Optional<Computer> computer = this.computerRepo.findById(id);
+		ComputerDto computerDto = this.computerMapper.objectToDto(computer.get());
+		
+		return computerDto;
 	}
 	
 	public long count() {
@@ -33,53 +42,55 @@ public class ComputerService implements IService<Computer> {
 		return this.computerRepo.countByNameContaining(pSearch);
 	}
 	
-	public Collection<Computer> getPage(Pagination page){
+	public Collection<ComputerDto> getPage(Pagination page){
 		List<Computer> computersPage = new ArrayList<>();
 		
 		computersPage = this.computerRepo.findAll(PageRequest.of((page.getPage()-1),page.getPageSize())).getContent();
 		
-		return computersPage;
+		return dtoGenerator(computersPage);
 	}
 	
-	public Collection<Computer> getPageContains(Pagination page){
+	public Collection<ComputerDto> getPageContains(Pagination page){
 		List<Computer> computersPage = new ArrayList<>();
 		
 		computersPage = this.computerRepo.findAllByNameContains(page.getSearch(), PageRequest.of((page.getPage()-1),page.getPageSize())).getContent();
 		
-		return computersPage;
+		return dtoGenerator(computersPage);
 	}
 	
-	public Collection<Computer> getPageOrderBy(Pagination page){
+	public Collection<ComputerDto> getPageOrderBy(Pagination page){
 		List<Computer> computersPage = new ArrayList<>();
 
 		computersPage = this.computerRepo.findAllOrderBy(ascOrDesc(page)).getContent();
 		
-		return computersPage;
+		return dtoGenerator(computersPage);
 	}
 	
-	public Collection<Computer> getPageContainsAndOrderBy(Pagination page){
+	public Collection<ComputerDto> getPageContainsAndOrderBy(Pagination page){
 		List<Computer> computersPage = new ArrayList<>();
 		
 		computersPage = this.computerRepo.findAllContainsOrderBy(page.getSearch(), ascOrDesc(page)).getContent();
 		
-		return computersPage;
+		return dtoGenerator(computersPage);
 	}
 
-	public Collection<Computer> getAll() {
+	public Collection<ComputerDto> getAll() {
 		return null;
 	}
 
-	public Computer add(Computer object) {
-		System.out.println(object.toString());
-		return this.computerRepo.save(object);
+	public Computer add(ComputerDto object) throws ValidatorException {		
+		
+		return this.computerRepo.save(objectGenerator(object));
 	}
 
-	public Computer update(Computer object) {
-		return this.computerRepo.save(object);
+	public Computer update(ComputerDto object) throws ValidatorException {
+		
+		return this.computerRepo.save(objectGenerator(object));
 	}
 
-	public void delete(Computer object) {
-		this.computerRepo.delete(object);
+	public void delete(ComputerDto object) throws ValidatorException {
+		
+		this.computerRepo.delete(objectGenerator(object));
 	}
 
 	public boolean existentById(int id) {
@@ -96,5 +107,28 @@ public class ComputerService implements IService<Computer> {
 		}
 		
 		return request;
+	}
+	
+	private Collection<ComputerDto> dtoGenerator(List<Computer> computers){
+		List<ComputerDto> computersDto = new ArrayList<>();
+		
+		for(Computer element : computers) {
+			computersDto.add(this.computerMapper.objectToDto(element));
+		}
+		
+		return computersDto;
+	}
+	
+	private ComputerDto dtoGenerator(Computer computer) {
+		ComputerDto computerDto = this.computerMapper.objectToDto(computer);
+		
+		return computerDto;
+	}
+	
+	private Computer objectGenerator(ComputerDto computerDto) throws ValidatorException {
+		Computer computer = this.computerMapper.dtoToObject(computerDto);
+		
+		return computer;
+		
 	}
 }

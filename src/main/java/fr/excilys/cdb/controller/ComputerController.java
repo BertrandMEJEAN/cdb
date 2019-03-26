@@ -2,12 +2,9 @@ package fr.excilys.cdb.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +17,6 @@ import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.mapper.CompanyMapper;
 import fr.excilys.cdb.mapper.ComputerMapper;
-import fr.excilys.cdb.model.Company;
-import fr.excilys.cdb.model.Computer;
 import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.service.ComputerService;
 import fr.excilys.cdb.service.Pagination;
@@ -65,42 +60,33 @@ public class ComputerController {
 			.setSort(sort)
 			.build();
 		
-		Collection<ComputerDto> dtoList = new ArrayList<>();		
-		Collection<Computer> page = new ArrayList<>();
+		Collection<ComputerDto> computersDto = new ArrayList<>();		
 				
 		if(pageBuilder.getSearch() == null && pageBuilder.getOrder() == null) {
 			
-			page = this.computerService.getPage(pageBuilder);
+			computersDto = this.computerService.getPage(pageBuilder);
 			
 		}else if(pageBuilder.getSearch() != null & pageBuilder.getOrder() == null) {
 			
-			page = this.computerService.getPageContains(pageBuilder);
+			computersDto = this.computerService.getPageContains(pageBuilder);
 			
 		}else if(pageBuilder.getOrder() != null){
 			
 			if(pageBuilder.getSearch() == null) {
-				page = this.computerService.getPageOrderBy(pageBuilder);
+				computersDto = this.computerService.getPageOrderBy(pageBuilder);
 			}else{
-				page = this.computerService.getPageContainsAndOrderBy(pageBuilder);						
+				computersDto = this.computerService.getPageContainsAndOrderBy(pageBuilder);						
 			}
 		}
-		
-		for(Computer element : page) {
-			dtoList.add(this.computerMapper.objectToDto(element));
-		}
 					
-		return dashboardInit(totalComputer, pageBuilder, dtoList);
+		return dashboardInit(totalComputer, pageBuilder, computersDto);
 	}
 	
 	@GetMapping(value="/add")
 	public ModelAndView add() {
-		Collection<Company> companies = this.companyService.getAll();
-		Collection<CompanyDto> dtoList = new ArrayList<>();
-		
-		for(Company element : companies) {
-			dtoList.add(this.companyMapper.objectToDto(element));
-		}
-		return addInit(dtoList);
+		Collection<CompanyDto> companiesDto = this.companyService.getAll();
+	
+		return addInit(companiesDto);
 	}
 	
 	@PostMapping(value="/add")
@@ -110,17 +96,15 @@ public class ComputerController {
 								@RequestParam(required = false, name="idCpy") String companyId,
 								ModelAndView modelView){
 		
-		ComputerDto dto = new ComputerDto();
-		Computer computer = new Computer();
+		ComputerDto computerDto = new ComputerDto();
 		
-		dto.setName(nameComputer);
-		dto.setIn(introduced);
-		dto.setOut(discontinued);
-		dto.setCompId(companyId);
+		computerDto.setName(nameComputer);
+		computerDto.setIn(introduced);
+		computerDto.setOut(discontinued);
+		computerDto.setCompId(companyId);
 		
 		try {
-			computer = this.computerMapper.dtoToObject(dto);
-			this.computerService.add(computer);
+			this.computerService.add(computerDto);
 			logger.info("computer added");
 			modelView.setViewName("redirect:/");
 		}catch(ValidatorException e){
@@ -134,14 +118,8 @@ public class ComputerController {
 	@GetMapping(value="/edit")
 	public ModelAndView edit(@RequestParam(required = true, name="cptId")String computerId) {
 		
-		Collection<Company> companies = this.companyService.getAll();
-		Collection<CompanyDto> companiesDto = new ArrayList<>();
-		Optional<Computer> computer = this.computerService.getId(Integer.valueOf(computerId));
-		ComputerDto computerDto = this.computerMapper.objectToDto(computer.get());
-			
-		for(Company company : companies) {
-			companiesDto.add(this.companyMapper.objectToDto(company));
-		}
+		Collection<CompanyDto> companiesDto = this.companyService.getAll();
+		ComputerDto computerDto = this.computerService.getId(Integer.valueOf(computerId));
 		
 		return editInit(computerDto, companiesDto);
 	}
@@ -163,13 +141,16 @@ public class ComputerController {
 		computerDto.setCompId(companyId);
 		
 		try {
-			Computer computer = this.computerMapper.dtoToObject(computerDto);
-			this.computerService.update(computer);
+			
+			this.computerService.update(computerDto);
 			logger.info("computer successfully updated");
 			modelView.setViewName("redirect:/");
+			
 		}catch(ValidatorException e) {
+			
 			logger.error(e.getMessage());
 			modelView.setViewName("500");
+			
 		}
 		
 		return modelView;
@@ -182,18 +163,18 @@ public class ComputerController {
 		
 		try {
 			
-			Computer computer = new Computer();
-			
 			for(String computerId : computerSelected) {
 				computerDto.setId(computerId);
-				computer = this.computerMapper.dtoToObject(computerDto);
-				this.computerService.delete(computer);
+				this.computerService.delete(computerDto);
 				logger.info("Computer correctly deleted");
 				modelView.setViewName("redirect:/");
 			}
+			
 		}catch(ValidatorException e) {
+			
 			logger.error(e.getMessage());
 			modelView.setViewName("500");
+			
 		}
 		
 		return modelView;

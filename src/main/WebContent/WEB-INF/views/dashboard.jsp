@@ -142,26 +142,26 @@
                         <!-- Table header for Company -->
                         <th>
                             <spring:message code="dashboard.companyName"/>
-<!--                             <div class="order"> -->
-<%--                             	<c:choose> --%>
-<%--                             		<c:when test="${page.getSearch() != null}"> --%>
-<%--                             			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=ASC"> --%>
-<!--                             				<i class="up"></i> -->
-<!--                             			</a> -->
-<%--                             			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=DESC"> --%>
-<!--                             				<i class="down"></i> -->
-<!--                             			</a> -->
-<%--                             		</c:when> --%>
-<%--                             		<c:otherwise> --%>
-<%--                             			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=ASC"> --%>
-<!--                             				<i class="up"></i> -->
-<!--                             			</a> -->
-<%--                             			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=DESC"> --%>
-<!--                             				<i class="down"></i> -->
-<!--                             			</a> -->
-<%--                             		</c:otherwise> --%>
-<%--                             	</c:choose> --%>
-<!--                             </div> -->
+                            <div class="order">
+                            	<c:choose>
+                            		<c:when test="${page.getSearch() != null}">
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=ASC">
+                            				<i class="up"></i>
+                            			</a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&search=${page.getSearch()}&order=company.name&sort=DESC">
+                            				<i class="down"></i>
+                            			</a>
+                            		</c:when>
+                            		<c:otherwise>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=ASC">
+                            				<i class="up"></i>
+                            			</a>
+                            			<a href="?limit=${page.getPageSize()}&page=${page.getPage()}&order=company.name&sort=DESC">
+                            				<i class="down"></i>
+                            			</a>
+                            		</c:otherwise>
+                            	</c:choose>
+                            </div>
                         </th>
 
                     </tr>

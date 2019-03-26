@@ -1,17 +1,17 @@
 package fr.excilys.cdb.service;
 
 import java.util.Collection;
-import java.util.Optional;
 
-public interface IService<T> {
+import fr.excilys.cdb.exception.ValidatorException;
+
+public interface IService<T, D> {
 	
-	public Optional<T> getId(int id);
-	public Collection<T> getAll();
-	public T add(T object);
-	public T update(T object);
-	public void delete(T object);
+	public D getId(int id);
+	public Collection<D> getAll();
+	public T add(D object) throws ValidatorException;
+	public T update(D object) throws ValidatorException;
+	public void delete(D object) throws ValidatorException;
 	public long count();
 	public long countSearch(String search);
 	public boolean existentById(int id);
-
 }
