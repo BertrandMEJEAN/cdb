@@ -2,14 +2,25 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.excilys.cdb</groupId>
-  <artifactId>cdb</artifactId>
-  <packaging>war</packaging>
+  <artifactId>parent-cdb</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>cdb</name>
+  <name>parent-cdb</name>
   <url>http://maven.apache.org</url>
+
+  <modules>
+	<module>core</module>
+	<module>persistance</module>
+	<module>binding</module>
+	<module>webapp</module>
+	<module>console</module>
+	<module>service</module>
+  </modules>
   
   <properties>
   	<!-- https://maven.apache.org/general.html -->
+	<application.version>1.0-SNAPSHOT</application.version>
+	<module.version>1.0-SNAPSHOT</module.version>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	<maven.compiler.source>1.8</maven.compiler.source>
   	<maven.compiler.target>1.8</maven.compiler.target>
@@ -46,69 +57,18 @@
 	    <artifactId>logback-classic</artifactId>
 	    <version>${logback-classic.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-	<dependency>
-	    <groupId>mysql</groupId>
-	    <artifactId>mysql-connector-java</artifactId>
-	    <version>${mysql.version}</version>
-	</dependency>
     <dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>${junit.version}</version>
 		<scope>test</scope>
     </dependency>
-    <dependency>
-		<groupId>javax.servlet</groupId>
-		<artifactId>javax.servlet-api</artifactId>
-		<version>${javax-servlet.version}</version>
-		<scope>provided</scope>
-    </dependency>       
-    <dependency>
-		<groupId>javax.servlet</groupId>
-		<artifactId>jstl</artifactId>
-		<version>${jstl.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-	<dependency>
-	    <groupId>com.zaxxer</groupId>
-	    <artifactId>HikariCP</artifactId>
-	    <version>${hikariCP.version}</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-jdbc</artifactId>
-	    <version>${spring-jdbc.version}</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+ 	<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>${spring-MVC.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
-	<dependency>
-	    <groupId>org.springframework.data</groupId>
-	    <artifactId>spring-data-jpa</artifactId>
-	    <version>${spring-data-JPA.version}</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-	<dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-core</artifactId>
-	    <version>${hibernate-core.version}</version>
-	</dependency>
   </dependencies>
-  <build>
-	<plugins>		
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-war-plugin</artifactId>
-			<version>2.6</version>
-			<configuration>
-				<webXml>/src/main/WebContent/WEB-INF/web.xml</webXml>
-			</configuration>
-		</plugin>		
-	</plugins>
-  </build>
+
 </project>
