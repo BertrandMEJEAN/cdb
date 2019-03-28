@@ -18,7 +18,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@Import({ConfigService.class})
+@Import({ConfigSpringSecurity.class,ConfigService.class})
 @ComponentScan(basePackages = "fr.excilys.cdb.controller")
 public class ConfigWebapp implements WebMvcConfigurer {
 	
