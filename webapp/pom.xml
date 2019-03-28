@@ -15,19 +15,19 @@
 
   <dependencies>
     <dependency>
-	<groupId>javax.servlet</groupId>
-	<artifactId>javax.servlet-api</artifactId>
-	<version>${javax-servlet.version}</version>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>${javax-servlet.version}</version>
     </dependency>       
     <dependency>
-	<groupId>javax.servlet</groupId>
-	<artifactId>jstl</artifactId>
-	<version>${jstl.version}</version>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+		<version>${jstl.version}</version>
     </dependency>
     <dependency>
-	<groupId>fr.excilys.cdb</groupId>
-	<artifactId>service</artifactId>
-	<version>${module.version}</version>
+		<groupId>fr.excilys.cdb</groupId>
+		<artifactId>service</artifactId>
+		<version>${module.version}</version>
     </dependency>
   </dependencies>
 

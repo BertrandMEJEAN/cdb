@@ -34,6 +34,7 @@
   	<hikariCP.version>3.2.0</hikariCP.version>
   	<spring-jdbc.version>5.1.5.RELEASE</spring-jdbc.version>
   	<spring-MVC.version>5.1.5.RELEASE</spring-MVC.version>
+  	<spring-security.version>5.1.4.RELEASE</spring-security.version>
   	<spring-data-JPA.version>2.1.5.RELEASE</spring-data-JPA.version>
   	<hibernate-core.version>5.4.1.Final</hibernate-core.version>
   </properties>
