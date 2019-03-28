@@ -21,7 +21,7 @@ public class User {
 	private int id;
 
 	@Column(name = "username")
-	private String userName;
+	private String user;
 	
 	@Column(name = "password")
 	private String password;
@@ -37,9 +37,9 @@ public class User {
 		
 	}
 	
-	public User(int pId,String pUserName, String pPassword, UserRole userRole) {
+	public User(int pId,String pUser, String pPassword, UserRole userRole) {
 		this.id = pId;
-		this.userName = pUserName;
+		this.user = pUser;
 		this.password = pPassword;
 		this.userRole = userRole;
 	}
@@ -52,12 +52,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getuser() {
+		return user;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setuser(String user) {
+		this.user = user;
 	}
 
 	public String getPassword() {
@@ -82,7 +82,7 @@ public class User {
 		int result = 1;
 		result = prime * result + id;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		result = prime * result + ((userRole == null) ? 0 : userRole.hashCode());
 		return result;
 	}
@@ -103,10 +103,10 @@ public class User {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (userName == null) {
-			if (other.userName != null)
+		if (user == null) {
+			if (other.user != null)
 				return false;
-		} else if (!userName.equals(other.userName))
+		} else if (!user.equals(other.user))
 			return false;
 		if (userRole == null) {
 			if (other.userRole != null)
@@ -118,6 +118,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", userRole=" + userRole + "]";
+		return "User [id=" + id + ", user=" + user + ", password=" + password + ", userRole=" + userRole + "]";
 	}
 }
