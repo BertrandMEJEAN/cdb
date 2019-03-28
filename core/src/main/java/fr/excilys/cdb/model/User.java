@@ -52,11 +52,11 @@ public class User {
 		this.id = id;
 	}
 
-	public String getuser() {
+	public String getUser() {
 		return user;
 	}
 
-	public void setuser(String user) {
+	public void setUser(String user) {
 		this.user = user;
 	}
 
