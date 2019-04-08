@@ -48,3 +48,9 @@ input[type='checkbox'] {
 	transform: rotate(-135deg);
 	-webkit-transform: rotate(-135deg);
 }
+
+#log {
+	float: right;
+    display: inline-block;
+    margin: 8px 0;
+}

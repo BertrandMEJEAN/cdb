@@ -43,6 +43,13 @@ public class User {
 		this.password = pPassword;
 		this.userRole = userRole;
 	}
+	
+	public User(User user) {
+		this.id = user.id;
+		this.user = user.user;
+		this.password = user.password;
+		this.userRole = user.userRole;
+	}
 
 	public int getId() {
 		return id;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import fr.excilys.cdb.exception.CustomException;
-import fr.excilys.cdb.model.ComputerDetails;
+//import fr.excilys.cdb.model.ComputerDetails;
 import fr.excilys.cdb.service.ComputerService;
 
 @Component

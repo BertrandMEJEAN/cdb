@@ -1,10 +1,13 @@
 package fr.excilys.cdb.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +20,12 @@ import fr.excilys.cdb.dto.ComputerDto;
 import fr.excilys.cdb.exception.ValidatorException;
 import fr.excilys.cdb.mapper.CompanyMapper;
 import fr.excilys.cdb.mapper.ComputerMapper;
+import fr.excilys.cdb.model.User;
 import fr.excilys.cdb.service.CompanyService;
 import fr.excilys.cdb.service.ComputerService;
 import fr.excilys.cdb.service.Pagination;
 import fr.excilys.cdb.service.Pagination.PaginationBuilder;
+import fr.excilys.cdb.service.UserService;
 
 @Controller
 @RequestMapping(value = "/")
@@ -30,14 +35,16 @@ public class ComputerController {
 	ComputerMapper computerMapper;
 	CompanyService companyService;
 	CompanyMapper companyMapper;
+	UserService userService;
 	Pagination pageBuilder;
 	private static Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
-	public ComputerController(ComputerService computerService, ComputerMapper computerMapper, CompanyService companyService, CompanyMapper companyMapper) {
+	public ComputerController(ComputerService computerService, ComputerMapper computerMapper, CompanyService companyService, CompanyMapper companyMapper, UserService userService) {
 		this.computerService = computerService;
 		this.computerMapper = computerMapper;
 		this.companyService = companyService;
 		this.companyMapper = companyMapper;
+		this.userService = userService;
 	}
 
 	@GetMapping
@@ -45,9 +52,14 @@ public class ComputerController {
 								@RequestParam(required = true, defaultValue = "10", name = "limit") Integer pageSize,
 								@RequestParam(required = false) String search,
 								@RequestParam(required = false) String order,
-								@RequestParam(required = false) String sort){
+								@RequestParam(required = false) String sort,
+								Authentication auth/*Principal principal*/){
 		
-		
+//		String userName = principal.getName();
+//		System.out.println(userName);
+		auth = SecurityContextHolder.getContext().getAuthentication();
+		String userName = auth.getName();
+		User user = (userName != null ? this.userService.getUser(userName) : null);
 		
 		int totalComputer = (int)(search == null ? this.computerService.count() : this.computerService.countSearch(search));
 		
@@ -79,7 +91,7 @@ public class ComputerController {
 			}
 		}
 					
-		return dashboardInit(totalComputer, pageBuilder, computersDto);
+		return dashboardInit(totalComputer, pageBuilder, computersDto, user);
 	}
 	
 	@GetMapping(value="/add")
@@ -180,12 +192,13 @@ public class ComputerController {
 		return modelView;
 	}
 	
-	private ModelAndView dashboardInit(int totalComputer, Pagination page, Collection<ComputerDto> dtoList) {
+	private ModelAndView dashboardInit(int totalComputer, Pagination page, Collection<ComputerDto> dtoList, User user) {
 		ModelAndView modelView = new ModelAndView();
 		
 		modelView.addObject("allComputer",totalComputer);
 		modelView.addObject("page", page);
 		modelView.addObject("computers", dtoList);
+		modelView.addObject("user", user);
 		modelView.setViewName("dashboard");
 		
 		return modelView;

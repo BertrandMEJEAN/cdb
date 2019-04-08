@@ -17,6 +17,18 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+        	<c:choose>
+        		<c:when test="${user.getUser() == null}">
+		        	<a class="btn btn-success" id="log" href="login">
+		            	<spring:message code="dashboard.login"/>
+		        	</a>
+		        </c:when>
+		        <c:otherwise>
+		        	<a class="btn btn-danger" id="log" href="logout">
+		            	<spring:message code="dashboard.logout"/>
+		        	</a>
+		        </c:otherwise>
+	        </c:choose>
         </div>
     </header>
 
@@ -40,12 +52,18 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="add">
-                    	<spring:message code="dashboard.add"/>
-                    </a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
-                    	<spring:message code="dashboard.edit"/>
-                    </a>
+                	<c:choose>
+                		<c:when test="${user.getUser() != null}">
+		                    <a class="btn btn-success" id="addComputer" href="add">
+		                    	<spring:message code="dashboard.add"/>
+		                    </a> 
+		                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+		                    	<spring:message code="dashboard.edit"/>
+		                    </a>
+		                </c:when>
+		                <c:otherwise>
+		                </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -174,7 +192,14 @@
 	                          <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                      </td>
 	                      <td>
-	                          <a href="edit?cptId=${computer.getId()}" onclick="">${computer.getName()}</a>
+	                      	<c:choose>
+	                      		<c:when test="${user.getUser() != null}">	
+	                       			<a href="edit?cptId=${computer.getId()}" onclick="">${computer.getName()}</a>
+								</c:when>
+								<c:otherwise>
+									<p>${computer.getName()}</p>
+								</c:otherwise>
+							</c:choose>
 	                      </td>
 	                      <td>${computer.getIn()}</td>
 	                      <td>${computer.getOut()}</td>
